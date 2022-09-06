@@ -23,39 +23,101 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
   // Variant Specification
   switch (props.variant) {
     case 'primary':
-    case 'success':
-    case 'warning':
-    case 'danger':
       btnVariantCssClass = `
-        text-${props.variant}-accent 
-        bg-${props.variant} 
-        hoverable:hover:bg-${props.variant}-dark 
+        text-primary-accent 
+        bg-primary
+        hoverable:hover:bg-primary-dark
         focus:ring-2
         focus:ring-offset-2
-        focus:ring-${props.variant}
+        focus:ring-primary-dark
+        `;
+      break;
+    case 'success':
+      btnVariantCssClass = `
+        text-success-accent 
+        bg-success
+        hoverable:hover:bg-success-dark
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-success-dark
+        `;
+      break;
+    case 'warning':
+      btnVariantCssClass = `
+        text-warning-accent 
+        bg-warning
+        hoverable:hover:bg-warning-dark
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-warning-dark
+        `;
+      break;
+    case 'danger':
+      btnVariantCssClass = `
+        text-danger-accent 
+        bg-danger
+        hoverable:hover:bg-danger-dark
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-danger-dark
         `;
       break;
     case 'primary-outline':
-    case 'success-outline':
-    case 'warning-outline':
-    case 'danger-outline':
-      const baseVariantName = props.variant.split('-')[0];
       btnVariantCssClass = `
-        text-${props.variant}
+        text-primary
         border-solid 
         border-2 
-        border-${baseVariantName} 
-        hoverable:hover:bg-${baseVariantName} 
+        border-primary 
+        hoverable:hover:bg-primary 
         hoverable:hover:text-light 
         focus:ring-2
         focus:ring-offset-2
-        focus:ring-${baseVariantName}
+        focus:ring-primary
+        `;
+      break;
+    case 'success-outline':
+      btnVariantCssClass = `
+        text-success
+        border-solid 
+        border-2 
+        border-success 
+        hoverable:hover:bg-success 
+        hoverable:hover:text-light 
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-success
+        `;
+      break;
+    case 'warning-outline':
+      btnVariantCssClass = `
+        text-warning
+        border-solid 
+        border-2 
+        border-warning 
+        hoverable:hover:bg-warning 
+        hoverable:hover:text-light 
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-warning
+        `;
+      break;
+    case 'danger-outline':
+      btnVariantCssClass = `
+        text-danger
+        border-solid 
+        border-2 
+        border-danger 
+        hoverable:hover:bg-danger 
+        hoverable:hover:text-light 
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-danger
         `;
       break;
     case 'link':
       btnVariantCssClass = `
-        text-${props.variant}
-        hoverable:hover:text-${props.variant}-dark 
+        text-primary
+        hoverable:hover:text-primary-dark 
         `;
     default:
       btnVariantCssClass = '';
@@ -68,7 +130,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
     <button
       type={props.type}
       className={`
-        px-5
+        px-2
         ${btnVariantCssClass} 
         ${btnIsBlockCssClass} 
         ${props.size}

@@ -25,7 +25,7 @@ export interface IInputProps {
   type: InputTypeEnum;
   placeholderText: string;
   rounded: 'rounded-lg' | 'rounded-xl' | 'rounded-2xl';
-  size: 'h-11' | 'h-14';
+  size: 'h-8' | 'h-11' | 'h-14';
   name?: string;
   id?: string;
   resetStyle?: boolean;

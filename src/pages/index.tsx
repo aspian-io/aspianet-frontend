@@ -1,16 +1,13 @@
 import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css';
-import { getUserState, userActions } from '../store/slices/userSlice';
+import { getUserState, userActions } from '../store/slices/user-slice';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import EmailSubscribe from '../components/mini-projects/email-subscribe/EmailSubscribe';
-import PricingGrids from '../components/mini-projects/pricing-grids/PricingGrids';
-import ProductModal from '../components/mini-projects/product-modal/ProductModal';
-import ImageGallery from '../components/mini-projects/image-gallery/ImageGallery';
 import Button from '../components/common/Button';
 import Input, { IInputHandle, InputTypeEnum } from '../components/common/Input';
+import { SiteNav } from '../components/site/nav/SiteNav';
+const { Item } = SiteNav;
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   const { setUserName, setPassword } = userActions;
   const dispatch = useDispatch();
   const { username, password } = useSelector(getUserState);
@@ -18,16 +15,43 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-  
-  }, [])
-  
+  }, []);
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     dispatch(setUserName(e.target.value));
   }
   return (
     <>
-      <Button
+      <SiteNav
+        logoSrc="/nav-logo.svg"
+        overlayLogoSrc="/nav-logo-different.svg"
+        loginRegisterHref="/login"
+        loginRegisterLabel="Login/Register"
+      >
+        <Item href="#" isActive={true}>
+          Home
+        </Item>
+        <Item href="#" isActive={false}>
+          Service
+        </Item>
+        <Item href="#" isActive={false}>
+          Blog
+        </Item>
+        <Item href="#" isActive={false}>
+          Portfolio
+        </Item>
+        <Item href="#" isActive={false}>
+          Team
+        </Item>
+        <Item href="#" isActive={false}>
+          Testimonials
+        </Item>
+        <Item href="#" isActive={false}>
+          Contact
+        </Item>
+      </SiteNav>
+
+      {/* <Button
         type="button"
         variant="primary"
         size="h-8"
@@ -41,13 +65,9 @@ const Home: NextPage = () => {
         rounded="rounded-xl"
         size="h-11"
         ref={inputRef}
-      />
-      {/* <EmailSubscribe /> */}
-      {/* <PricingGrids /> */}
-      {/* <ProductModal /> */}
-      {/* <ImageGallery /> */}
+      /> */}
     </>
   );
 };
 
-export default Home;
+export default HomePage;
