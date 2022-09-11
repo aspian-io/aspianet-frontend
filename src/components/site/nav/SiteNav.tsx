@@ -2,7 +2,7 @@ import React, { FC, PropsWithChildren, useState } from 'react';
 import Link from 'next/link';
 import { INavItemProps, ISiteNav, ISiteNavProps } from './site-nav.types';
 import SiteNavSearch from './sub-components/SiteNavSearch';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getLayoutState } from '../../../store/slices/layout-slice';
 import SiteNavAuthBtn from './sub-components/SiteNavAuthBtn';
 import SiteNavHamburgerBtn from './sub-components/SiteNavHamburgerBtn';
@@ -20,33 +20,28 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
 }) => {
   const { siteNav } = useSelector(getLayoutState);
   const { isSearchOpen } = siteNav;
-  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-center py-2 px-4 text-sm shadow shadow-zinc-100 bg-light sticky top-0 mb-4 min-h-[70px]">
+    <div className="flex flex-col items-center justify-center py-2 px-4 text-sm shadow shadow-zinc-100 bg-light sticky top-0">
       <div className="container mx-auto flex flex-row justify-between items-center relative">
         <SiteNavLogo
           isOpen={isOpen}
           logoSrc={logoSrc}
           overlayLogoSrc={overlayLogoSrc}
         />
-
         <SiteNavItemsWrapper isOpen={isOpen}>{children}</SiteNavItemsWrapper>
-
         <div
           className={`hidden lg:flex lg:flex-row justify-end items-center text-primary divide-x lg:w-auto ${
             isSearchOpen ? 'grow' : ''
           }`}
         >
           <div className="flex flex-row items-center justify-end w-full">
-            {/* Search Form */}
             <SiteNavSearch
               responsive={false}
               searchPlaceholderLabel="Search..."
             />
-
             <SiteNavOpenSearchBtn />
           </div>
           <SiteNavAuthBtn
@@ -55,13 +50,9 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
             loginRegisterLabel={loginRegisterLabel}
           />
         </div>
-
-        {/* Mobile Menu Button */}
         <SiteNavHamburgerBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-      {/* Responsive Search Bar Wrapper */}
       <div className="container mx-auto flex flex-row justify-between items-center pb-1 pt-4 lg:hidden">
-        {/* Search Form */}
         <SiteNavSearch responsive={true} searchPlaceholderLabel="Search..." />
         <div className="flex flex-row justify-end items-center pl-2">
           <SiteNavAuthBtn

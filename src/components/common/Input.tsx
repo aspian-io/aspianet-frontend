@@ -23,11 +23,14 @@ export enum InputTypeEnum {
 
 export interface IInputProps {
   type: InputTypeEnum;
+  minLength?: number;
+  maxLength?: number;
   placeholderText: string;
-  rounded: 'rounded-lg' | 'rounded-xl' | 'rounded-2xl';
-  size: 'h-8' | 'h-11' | 'h-14';
+  rounded: 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | any;
+  size: 'h-8' | 'h-11' | 'h-14' | any;
   name?: string;
   id?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetStyle?: boolean;
   block?: boolean;
   extraCSSClasses?: string;
@@ -55,9 +58,12 @@ const Input = forwardRef<IInputHandle, IInputProps>((props, ref) => {
     <input
       type={props.type}
       name={props.name}
+      minLength={props.minLength}
+      maxLength={props.maxLength}
       id={props.id}
       placeholder={props.placeholderText}
       ref={inputRef}
+      onChange={props.onChange}
       className={`
         ${inputIsBlockCssClass}
         ${extraCSSClasses}

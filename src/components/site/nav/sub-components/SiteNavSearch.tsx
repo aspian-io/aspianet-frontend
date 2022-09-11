@@ -23,7 +23,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
     'items-center flex justify-start flex-row bg-light pr-2 w-full relative transition-all ease-linear duration-200';
 
   const searchWrapperNormalCss = `${
-    isSearchOpen ? 'opacity-100' : 'opacity-0 w-0 pr-0 px-0 overflow-hidden'
+    isSearchOpen ? 'opacity-100' : 'opacity-0 w-0 px-0 overflow-hidden'
   } items-center flex justify-center flex-row bg-light px-4 w-full relative transition-all ease-linear duration-200`;
 
   const searchWrapperCss = responsive

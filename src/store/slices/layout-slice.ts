@@ -13,7 +13,7 @@ const initialState: ILayoutState = {
   }
 } as const;
 
-export const layoutSlice = createSlice({
+const layoutSlice = createSlice({
   name: SlicesEnum.LAYOUT,
   initialState,
   reducers: {

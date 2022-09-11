@@ -11,10 +11,13 @@ export interface IButtonProps {
     | 'danger-outline'
     | 'warning'
     | 'warning-outline'
+    | 'light-outline'
     | 'link';
-  size: 'h-8' | 'h-11' | 'h-14';
-  rounded: 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-full';
+  size: any;
+  rounded: any;
   block?: boolean;
+  disabled?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   extraCSSClasses?: string;
 }
 
@@ -68,6 +71,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2 
         border-primary 
+        focus:border-primary/20
         hoverable:hover:bg-primary 
         hoverable:hover:text-light 
         focus:ring-2
@@ -114,11 +118,28 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         focus:ring-danger
         `;
       break;
+    case 'light-outline':
+      btnVariantCssClass = `
+        text-light
+        border-solid 
+        border-2
+        border-light 
+        hoverable:hover:bg-light 
+        hoverable:hover:text-dark 
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-offset-primary/60
+        focus:bg-light
+        focus:text-dark
+        focus:ring-light
+          `;
+      break;
     case 'link':
       btnVariantCssClass = `
         text-primary
         hoverable:hover:text-primary-dark 
         `;
+      break;
     default:
       btnVariantCssClass = '';
       break;
@@ -137,6 +158,8 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         ${props.rounded}
         ${props.extraCSSClasses}
         `}
+      onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.children}
     </button>

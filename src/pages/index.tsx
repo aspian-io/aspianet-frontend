@@ -4,7 +4,9 @@ import SiteLayout from '../components/site/layout/SiteLayout';
 const HomePage: NextPage = () => {
   return (
     <>
-      <SiteLayout></SiteLayout>
+      <SiteLayout>
+        
+      </SiteLayout>
     </>
   );
 };
