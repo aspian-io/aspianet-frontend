@@ -24,7 +24,7 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-center py-2 px-4 text-sm shadow shadow-zinc-100 bg-light sticky top-0">
+    <div className="flex flex-col items-center justify-center py-2 px-4 text-sm shadow shadow-zinc-100 bg-light sticky top-0 z-10">
       <div className="container mx-auto flex flex-row justify-between items-center relative">
         <SiteNavLogo
           isOpen={isOpen}

@@ -30,6 +30,8 @@ export interface IInputProps {
   size: 'h-8' | 'h-11' | 'h-14' | any;
   name?: string;
   id?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetStyle?: boolean;
   block?: boolean;
@@ -63,6 +65,8 @@ const Input = forwardRef<IInputHandle, IInputProps>((props, ref) => {
       id={props.id}
       placeholder={props.placeholderText}
       ref={inputRef}
+      onBlur={props.onBlur}
+      onFocus={props.onFocus}
       onChange={props.onChange}
       className={`
         ${inputIsBlockCssClass}

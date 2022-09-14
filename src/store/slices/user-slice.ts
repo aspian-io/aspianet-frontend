@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
-import { SlicesEnum } from "./slices";
+import { SlicesEnum } from "./slices.type";
 
 export interface IUserState {
   username: string;
