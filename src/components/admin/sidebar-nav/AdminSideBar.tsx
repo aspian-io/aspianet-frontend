@@ -1,6 +1,6 @@
-import React, {FC, PropsWithChildren, useState} from 'react';
+import React, { FC, PropsWithChildren, useState } from 'react';
 import Image from 'next/image';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import {
   IAdminSideBar,
@@ -10,7 +10,7 @@ import {
   IAdminSideBarProps,
   IAdminSideBarSubItemProps,
 } from './admin-sidebar.types';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getAdminLayoutState,
   setDisplaySidebarBtnCss,
@@ -32,14 +32,8 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
 
-  const sidebarDisplayModeCss1 = 'left-2 md:left-4'
-  const sidebarDisplayModeCss2 = '-left-[300px]'
-
-  const displaySidebarBtnCssMode1 = 'opacity-1 z-10 transition-all delay-300 duration-300 md:opacity-0 md:-z-10 md:delay-0'
-  const displaySidebarBtnCssMode2 = 'opacity-0 -z-10 transition-all duration-300 md:opacity-1 md:z-10 md:delay-300'
-
-  const layoutCssMode1 = 'w-full md:w-[calc(100%-272px)] md:ml-[272px]';
-  const layoutCssMode2 = 'w-full'
+  const sidebarDisplayModeCss1 = 'ltr:left-2 ltr:md:left-4 rtl:right-2 rtl:md:right-4';
+  const sidebarDisplayModeCss2 = 'ltr:-left-[300px] rtl:-right-[300px]';
 
   return (
     <>
@@ -51,11 +45,15 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
             <div className="flex items-center justify-between">
               <Logo src={logo.src} href={logo.href} />
               <button
-                className="flex items-center justify-center p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light"
+                className="flex items-center justify-center p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light rtl:rotate-180"
                 onClick={(e) => {
                   dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss2));
-                  dispatch(setDisplaySidebarBtnCss('transition-all duration-300 opacity-1 z-10 delay-300'));
-                  dispatch(setSidebarSideLayoutCss('w-full'))
+                  dispatch(
+                    setDisplaySidebarBtnCss(
+                      'transition-all duration-300 opacity-1 z-10 delay-300'
+                    )
+                  );
+                  dispatch(setSidebarSideLayoutCss('w-full'));
                 }}
               >
                 <svg
@@ -93,7 +91,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
               <input
                 type="text"
                 className="w-full rounded-xl pl-8 px-4 py-2.5 text-xs font-light bg-gray-800 text-gray-400 placeholder-gray-500 border-0 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800"
-                placeholder={t("search")}
+                placeholder={t('search')}
               />
             </div>
           </div>
@@ -103,7 +101,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
           </div>
 
           {/* SideBar Items */}
-          <div className="px-6 min-h-[150px] max-h-[calc(100vh-362px)] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 mr-2.5">
+          <div className="px-6 py-2 min-h-[150px] max-h-[calc(100vh-362px)] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 ltr:mr-2.5 rtl:ml-2.5">
             <ul className="flex flex-col space-y-2">{children}</ul>
           </div>
 
@@ -116,7 +114,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
               <ul className="flex flex-col space-y-2">
                 <li>
                   <div className="relative text-gray-500 group">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500">
+                    <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-2 rtl:pr-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -139,15 +137,15 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                     </div>
                     <a
                       href="#"
-                      className="inline-block w-full pl-9 pr-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
+                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
                     >
-                      {t("settings")}
+                      {t('settings')}
                     </a>
                   </div>
                 </li>
                 <li>
                   <div className="relative text-gray-500 group">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500">
+                    <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-2 rtl:pr-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -165,19 +163,19 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                     </div>
                     <a
                       href="#"
-                      className="inline-block w-full pl-9 pr-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
+                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
                     >
-                      {t("notifications")}
+                      {t('notifications')}
                     </a>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <div className="py-4 bg-gray-800 flex flex-col items-start justify-between bottom-0 rounded-b-3xl">
+            <div className="py-4 bg-gray-800 flex flex-col items-start justify-center bottom-0 rounded-b-3xl">
               <div className="flex justify-between items-center w-full pl-6 pr-8">
                 <div className="flex items-center">
-                  <div className="relative w-8 h-8 rounded-full before:absolute before:w-2 before:h-2 before:bg-success before:rounded-full before:right-0 before:bottom-0 before:ring-1 before:ring-light before:z-10">
+                  <div className="relative w-8 h-8 rounded-full before:absolute before:w-2 before:h-2 before:bg-success before:rounded-full ltr:before:right-0 rtl:before:left-0 before:bottom-0 before:ring-1 before:ring-light before:z-10">
                     {userPhotoSrc ? (
                       <Image
                         className="rounded-full"
@@ -193,7 +191,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col pl-3">
+                  <div className="flex flex-col ltr:pl-3 rtl:pr-3">
                     <div className="text-sm text-gray-50">
                       {userFirstName} {userLastName}
                     </div>
@@ -204,7 +202,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                 </div>
                 <button
                   className={`text-gray-400 bg-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light ${
-                    userTabOpen ? "-rotate-90" : "rotate-0"
+                    userTabOpen ? '-rotate-90' : 'ltr:rotate-0 rtl:rotate-180'
                   } transition-transform duration-300`}
                   onClick={(e) => setUSerTabOpen(!userTabOpen)}
                 >
@@ -222,43 +220,43 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                   </svg>
                 </button>
               </div>
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex justify-start items-center w-full">
                 <div
-                  className={`pt-2 overflow-hidden ${
-                    userTabOpen ? "max-h-36" : "max-h-0"
-                  } transition-all duration-300`}
+                  className={`flex flex-col justify-center pt-8 pb-8 overflow-hidden ${
+                    userTabOpen ? 'max-h-40' : 'max-h-0 pt-0 pb-0'
+                  } w-full transition-all duration-300`}
                 >
-                  <div className={`flex flex-col text-gray-500 ml-14`}>
+                  <div className={`flex flex-col text-gray-500 ltr:pl-14 rtl:pr-14 space-y-1 px-10`}>
                     <div>
                       <a
                         href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
+                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
                       >
-                        {t("profile")}
+                        {t('profile')}
                       </a>
                     </div>
                     <div>
                       <a
                         href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
+                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
                       >
-                        {t("security")}
+                        {t('security')}
                       </a>
                     </div>
                     <div>
                       <a
                         href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
+                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
                       >
-                        {t("bookmarks")}
+                        {t('bookmarks')}
                       </a>
                     </div>
                     <div>
                       <a
                         href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
+                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
                       >
-                        {t("logout")}
+                        {t('logout')}
                       </a>
                     </div>
                   </div>
@@ -269,15 +267,19 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
         </div>
       </div>
       <button
-        className={`${sidebar.displaySidebarBtnCss} flex items-center justify-center fixed top-12 left-10 p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light`}
+        className={`${sidebar.displaySidebarBtnCss} flex items-center justify-center fixed top-12 ltr:left-10 rtl:right-10 p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light`}
         onClick={(e) => {
           dispatch(
             setDisplaySidebarBtnCss(
-              "opacity-0 -z-10 transition-all duration-300"
+              'opacity-0 -z-10 transition-all duration-300'
             )
           );
           dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss1));
-          dispatch(setSidebarSideLayoutCss('w-full md:w-[calc(100%-272px)] md:ml-[272px]'))
+          dispatch(
+            setSidebarSideLayoutCss(
+              'w-full md:w-[calc(100%-272px)] ltr:md:ml-[272px] rtl:md:mr-[272px]'
+            )
+          );
         }}
       >
         <svg
@@ -328,19 +330,22 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
   const [tabOpen, setTabOpen] = useState(false);
 
   return (
-    <li onClick={(e) => setTabOpen(!tabOpen)}>
+    <li>
       <div className="relative text-gray-500 flex justify-between items-center group">
-        <div className="flex items-center w-full">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-300">
+        <div
+          className="flex items-center w-full"
+          onClick={(e) => setTabOpen(!tabOpen)}
+        >
+          <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center px-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-300">
             {itemIcon}
           </div>
           {!itemHref ? (
-            <div className="inline-block cursor-pointer w-full pl-9 pr-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none group-focus:ring-1 group-focus:ring-gray-500 group-focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
+            <div className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
               {itemTitle}
             </div>
           ) : (
             <Link href={itemHref!}>
-              <a className="inline-block cursor-pointer w-full pl-9 pr-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none group-focus:ring-1 group-focus:ring-gray-500 group-focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
+              <a className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
                 {itemTitle}
               </a>
             </Link>
@@ -348,9 +353,10 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
         </div>
         {hasSubItems && (
           <button
-            className={`absolute right-0 p-1 flex items-center ${
+            className={`absolute ltr:right-0 rtl:left-0 p-1 flex items-center ${
               tabOpen ? '-rotate-90' : 'rotate-0'
             } transition-transform duration-300`}
+            onClick={(e) => setTabOpen(!tabOpen)}
             tabIndex={-1}
           >
             <svg
@@ -370,12 +376,12 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
       </div>
       {hasSubItems && (
         <div
-          className={`pt-2 pl-4 overflow-hidden ${
-            tabOpen ? 'max-h-36' : 'max-h-0'
+          className={`pt-2 ltr:pl-4 rtl:pr-4 overflow-hidden ${
+            tabOpen ? 'max-h-40' : 'max-h-0'
           } transition-all duration-300`}
         >
           <div
-            className={`flex flex-col pl-2 text-gray-500 border-l border-gray-700`}
+            className={`flex flex-col p-2 text-gray-500 space-y-1 ltr:border-l rtl:border-r border-gray-700`}
           >
             {children}
           </div>
@@ -395,7 +401,7 @@ const SubItem: FC<PropsWithChildren<IAdminSideBarSubItemProps>> = ({
   return (
     <div>
       <Link href={href}>
-        <a className="inline-block w-full px-4 py-2 text-xs rounded-xl hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500">
+        <a className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 focus:text-light transition-all duration-500">
           {children}
         </a>
       </Link>

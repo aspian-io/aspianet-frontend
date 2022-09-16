@@ -40,8 +40,8 @@ module.exports = {
         sans: ['Rubik', 'sans-serif'],
       },
       transitionDelay: {
-        '0': '0ms',
-      }
+        0: '0ms',
+      },
     },
   },
   plugins: [
