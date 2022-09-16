@@ -28,15 +28,32 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   children,
 }) => {
   const { t } = useTranslation('sidebar');
+  const [backdropCss, setBackDropCss] = useState(
+    'fixed inset-0 h-0 w-0 md:hidden md:h-0 md:w-0'
+  );
   const [userTabOpen, setUSerTabOpen] = useState(false);
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
 
-  const sidebarDisplayModeCss1 = 'ltr:left-2 ltr:md:left-4 rtl:right-2 rtl:md:right-4';
+  const sidebarDisplayModeCss1 =
+    'ltr:left-2 ltr:md:left-4 rtl:right-2 rtl:md:right-4';
   const sidebarDisplayModeCss2 = 'ltr:-left-[300px] rtl:-right-[300px]';
 
   return (
     <>
+      <div
+        className={backdropCss}
+        onClick={(e) => {
+          setBackDropCss('hidden inset-0 h-0 w-0 md:hidden md:h-0 md:w-0');
+          dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss2));
+          dispatch(
+            setDisplaySidebarBtnCss(
+              'transition-all duration-300 opacity-1 z-10 delay-300'
+            )
+          );
+          dispatch(setSidebarSideLayoutCss('w-full'));
+        }}
+      ></div>
       <div
         className={`fixed bottom-2 top-2 md:top-4 md:bottom-4 bg-gray-900 rounded-3xl overflow-hidden ${sidebar.minimizeSidebarCss} transition-all duration-300 ease-in-out`}
       >
@@ -47,6 +64,9 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
               <button
                 className="flex items-center justify-center p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light rtl:rotate-180"
                 onClick={(e) => {
+                  setBackDropCss(
+                    'hidden inset-0 h-0 w-0 bg-dark/50 md:hidden md:h-0 md:w-0'
+                  );
                   dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss2));
                   dispatch(
                     setDisplaySidebarBtnCss(
@@ -226,7 +246,9 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                     userTabOpen ? 'max-h-40' : 'max-h-0 pt-0 pb-0'
                   } w-full transition-all duration-300`}
                 >
-                  <div className={`flex flex-col text-gray-500 ltr:pl-14 rtl:pr-14 space-y-1 px-10`}>
+                  <div
+                    className={`flex flex-col text-gray-500 ltr:pl-14 rtl:pr-14 space-y-1 px-10`}
+                  >
                     <div>
                       <a
                         href="#"
@@ -269,6 +291,9 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
       <button
         className={`${sidebar.displaySidebarBtnCss} flex items-center justify-center fixed top-12 ltr:left-10 rtl:right-10 p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light`}
         onClick={(e) => {
+          setBackDropCss(
+            'fixed inset-0 h-screen w-screen md:hidden md:h-0 md:w-0'
+          );
           dispatch(
             setDisplaySidebarBtnCss(
               'opacity-0 -z-10 transition-all duration-300'
