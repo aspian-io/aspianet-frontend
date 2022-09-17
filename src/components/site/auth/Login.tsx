@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import Button from '../../../common/Button';
-import Input, { InputTypeEnum } from '../../../common/Input';
+import Button from '../../common/Button';
+import Input, { InputTypeEnum } from '../../common/Input';
 
 const Login = () => {
   return (
@@ -48,7 +48,7 @@ const Login = () => {
             />
           </div>
           <div className="flex justify-start self-start items-center mt-4">
-            <Link href="#">
+            <Link href="/forget-password">
               <a className="text-blue-600 text-xs hoverable:hover:underline">
                 Forget password?
               </a>
@@ -67,24 +67,24 @@ const Login = () => {
             </Button>
           </div>
           <div className="flex w-full h-full items-end justify-center mt-4 sm:hidden">
-                <Link href="#">
-                  <a className="w-full">
-                    <Button
-                      rounded="rounded-xl"
-                      size="h-11"
-                      type="button"
-                      block
-                      variant="primary-outline"
-                      extraCSSClasses='text-sm'
-                    >
-                      Register
-                    </Button>
-                  </a>
-                </Link>
-              </div>
+            <Link href="#">
+              <a className="w-full">
+                <Button
+                  rounded="rounded-xl"
+                  size="h-11"
+                  type="button"
+                  block
+                  variant="primary-outline"
+                  extraCSSClasses="text-sm"
+                >
+                  Register
+                </Button>
+              </a>
+            </Link>
+          </div>
           <div className="flex justify-center items-center mt-4 sm:mt-8">
             <Link href="/">
-              <a className='flex items-center justify-center'>
+              <a className="flex items-center justify-center">
                 <Button
                   rounded="rounded-xl"
                   size="h-11"
@@ -107,7 +107,9 @@ const Login = () => {
                     />
                   </svg>
 
-                  <span className="ml-1 sm:ml-2 text-sm sm:text-base">Back</span>
+                  <span className="ml-1 sm:ml-2 text-sm sm:text-base">
+                    Back
+                  </span>
                 </Button>
               </a>
             </Link>
@@ -132,7 +134,7 @@ const Login = () => {
                 Create your account to access all our services
               </p>
               <div className="flex w-full h-full items-end justify-center pb-8 mt-6 sm:pb-[6.2rem] sm:mt-auto">
-                <Link href="#">
+                <Link href="/register">
                   <a className="w-full">
                     <Button
                       rounded="rounded-lg sm:rounded-xl"
@@ -149,7 +151,6 @@ const Login = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
