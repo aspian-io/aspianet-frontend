@@ -1,8 +1,4 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 
 export enum InputTypeEnum {
   text = 'text',
@@ -40,6 +36,7 @@ export interface IInputProps {
 
 export interface IInputHandle {
   focus: () => void | undefined;
+  value: string | undefined;
 }
 
 const Input = forwardRef<IInputHandle, IInputProps>((props, ref) => {
@@ -54,6 +51,7 @@ const Input = forwardRef<IInputHandle, IInputProps>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     focus,
+    value: inputRef.current?.value,
   }));
 
   return (

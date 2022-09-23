@@ -1,32 +1,43 @@
-import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { IUserAuth } from "../../models/users/auth";
 import { SlicesEnum } from "./slices.type";
 
 export interface IUserState {
-  username: string;
-  password: string;
+  loading: boolean;
+  user: IUserAuth | null;
+  error: SerializedError | null;
 }
 
-const initialState: IUserState = {
-  username: '',
-  password: ''
+const internalInitialState: IUserState = {
+  loading: false,
+  user: null,
+  error: null
 } as const;
 
 export const userSlice = createSlice( {
   name: SlicesEnum.USER,
-  initialState,
+  initialState: internalInitialState,
   reducers: {
-    setUserName: (
+    updateUserLoadingState: (
       state: Draft<IUserState>,
-      action: PayloadAction<typeof initialState.username>
+      action: PayloadAction<typeof internalInitialState.loading>
     ) => {
-      state.username = action.payload;
+      state.loading = action.payload;
     },
-    setPassword (
+    updateUser: (
       state: Draft<IUserState>,
-      action: PayloadAction<typeof initialState.password>
-    ) {
-      state.password = action.payload;
-    }
+      action: PayloadAction<typeof internalInitialState.user>
+    ) => {
+      state.user = action.payload;
+      state.error = null;
+    },
+    updateUserError: (
+      state: Draft<IUserState>,
+      action: PayloadAction<typeof internalInitialState.error>
+    ) => {
+      state.error = action.payload;
+    },
+    resetUserState: () => internalInitialState
   }
 } );
 
@@ -34,7 +45,7 @@ export const userSlice = createSlice( {
 export const getUserState = ( state: { user: IUserState; } ) => state.user;
 
 // Exports all actions
-export const userActions = userSlice.actions;
+export const { updateUserLoadingState, updateUser, resetUserState, updateUserError } = userSlice.actions;
 
 // Export reducer
 export const userReducer = userSlice.reducer;

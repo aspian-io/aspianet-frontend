@@ -14,7 +14,7 @@ const SiteNavAuthBtn: FC<ISiteNavAuthBtnProps> = ({
   loginRegisterLabel,
 }) => {
   return (
-    <>
+    <div>
       {!responsive && (
         <Link href={loginRegisterHref} passHref>
           <a className="space-x-1 pl-5 flex flex-row">
@@ -71,7 +71,7 @@ const SiteNavAuthBtn: FC<ISiteNavAuthBtnProps> = ({
           </a>
         </Link>
       )}
-    </>
+    </div>
   );
 };
 

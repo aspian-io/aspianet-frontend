@@ -1,12 +1,17 @@
 import { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import AdminLayout from '../../components/admin/layout/AdminLayout';
+import { AuthGuard } from '../../components/common/AuthGuard';
+import { ClaimsEnum } from '../../models/users/common';
 
-const AdminPage: NextPage = () => {
+const AdminPage: NextPage = (props) => {
+  const { data: session } = useSession();
+
   return (
     <>
-      <AdminLayout>
-        
-      </AdminLayout>
+      <AuthGuard claims={Object.values(ClaimsEnum)}>
+        <AdminLayout>{session?.user.firstName}</AdminLayout>
+      </AuthGuard>
     </>
   );
 };

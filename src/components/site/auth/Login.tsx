@@ -1,10 +1,35 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { UserLogin } from '../../../models/users/login';
+import { login } from '../../../store/actions/user-action';
+import { getUserState } from '../../../store/slices/user-slice';
+import { useAppDispatch } from '../../../store/store';
 import Button from '../../common/Button';
-import Input, { InputTypeEnum } from '../../common/Input';
+import Input, { IInputHandle, InputTypeEnum } from '../../common/Input';
 
 const Login = () => {
+  const { user } = useSelector(getUserState);
+  const dispatch = useAppDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user?.accessToken) router.push('/');
+  }, [router, user?.accessToken]);
+
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    try {
+      await dispatch(login(new UserLogin({ username, password })));
+      router.push('/');
+    } catch (error) {}
+  };
+
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
       <div className="flex flex-col sm:flex-row w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-light rounded-2xl">
@@ -34,6 +59,7 @@ const Login = () => {
               size="h-11"
               block
               type={InputTypeEnum.email}
+              onChange={(e) => setUsername(e.target.value)}
               extraCSSClasses="text-xs sm:text-sm"
             />
           </div>
@@ -44,6 +70,7 @@ const Login = () => {
               size="h-11"
               block
               type={InputTypeEnum.password}
+              onChange={(e) => setPassword(e.target.value)}
               extraCSSClasses="text-xs sm:text-sm"
             />
           </div>
@@ -59,15 +86,16 @@ const Login = () => {
               rounded="rounded-xl"
               size="h-11"
               variant="primary"
-              type="submit"
+              type="button"
               block={true}
+              onClick={handleSubmit}
               extraCSSClasses="text-sm sm:text-base"
             >
               Login
             </Button>
           </div>
           <div className="flex w-full h-full items-end justify-center mt-4 sm:hidden">
-            <Link href="#">
+            <Link href="/register">
               <a className="w-full">
                 <Button
                   rounded="rounded-xl"

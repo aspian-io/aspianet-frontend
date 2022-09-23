@@ -9,6 +9,10 @@ import SiteNavHamburgerBtn from './sub-components/SiteNavHamburgerBtn';
 import SiteNavLogo from './sub-components/SiteNavLogo';
 import SiteNavItemsWrapper from './sub-components/SiteNavItemsWrapper';
 import SiteNavOpenSearchBtn from './sub-components/SiteNavOpenSearchBtn';
+import { getUserState } from '../../../store/slices/user-slice';
+import SiteNavAuthUser from './sub-components/SiteNavAuthUser';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import { useSession } from 'next-auth/react';
 
 // Site Navigation Menu Component
 const SiteNav: ISiteNav<ISiteNavProps> = ({
@@ -19,8 +23,8 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
   children,
 }) => {
   const { siteNav } = useSelector(getLayoutState);
+  const { data: session, status } = useSession();
   const { isSearchOpen } = siteNav;
-
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -33,32 +37,44 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
         />
         <SiteNavItemsWrapper isOpen={isOpen}>{children}</SiteNavItemsWrapper>
         <div
-          className={`hidden lg:flex lg:flex-row justify-end items-center text-primary divide-x lg:w-auto ${
+          className={`hidden lg:flex lg:flex-row justify-end items-center text-primary lg:w-auto ${
             isSearchOpen ? 'grow' : ''
           }`}
         >
-          <div className="flex flex-row items-center justify-end w-full">
+          <div className="flex flex-row items-center justify-end w-full border-r">
             <SiteNavSearch
               responsive={false}
               searchPlaceholderLabel="Search..."
             />
             <SiteNavOpenSearchBtn />
           </div>
-          <SiteNavAuthBtn
-            responsive={false}
-            loginRegisterHref={loginRegisterHref}
-            loginRegisterLabel={loginRegisterLabel}
-          />
+          {status === 'loading' && <LoadingSpinner className="h-7 w-7 ml-5" />}
+          {status === 'authenticated' && session && (
+            <SiteNavAuthUser user={session.user} responsive={false} />
+          )}
+          {status === 'unauthenticated' && !session && (
+            <SiteNavAuthBtn
+              responsive={false}
+              loginRegisterHref={loginRegisterHref}
+              loginRegisterLabel={loginRegisterLabel}
+            />
+          )}
         </div>
         <SiteNavHamburgerBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <div className="container mx-auto flex flex-row justify-between items-center pb-1 pt-4 lg:hidden">
         <SiteNavSearch responsive={true} searchPlaceholderLabel="Search..." />
         <div className="flex flex-row justify-end items-center pl-2">
-          <SiteNavAuthBtn
-            responsive={true}
-            loginRegisterHref={loginRegisterHref}
-          />
+          {status === 'loading' && <LoadingSpinner className="h-5 w-5 mx-1" />}
+          {status === 'authenticated' && session && (
+            <SiteNavAuthUser user={session.user} responsive={true} />
+          )}
+          {status === 'unauthenticated' && !session && (
+            <SiteNavAuthBtn
+              responsive={true}
+              loginRegisterHref={loginRegisterHref}
+            />
+          )}
         </div>
       </div>
     </div>
