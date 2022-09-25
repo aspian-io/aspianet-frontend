@@ -3,7 +3,16 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['adrian-profile.s3.ir-thr-at1.arvanstorage.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.arvanstorage.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+      },
+    ],
   },
 };
 

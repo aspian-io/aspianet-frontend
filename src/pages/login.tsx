@@ -1,34 +1,44 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useState } from 'react';
-import { signIn, getCsrfToken } from 'next-auth/react';
-import { Formik, Field, ErrorMessage } from 'formik';
+import { useEffect } from 'react';
+import { signIn, getCsrfToken, useSession } from 'next-auth/react';
+import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../components/common/Button';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import { toast } from 'react-toastify';
 
 interface IProps {
   csrfToken: string;
 }
 
 const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
+  const { status } = useSession();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === 'authenticated') router.push('/');
+  }, [router, status]);
+
+  if (status === 'authenticated') return <></>;
 
   return (
     <>
       <Formik
         initialValues={{ email: '', password: '' }}
-        // validationSchema={Yup.object({
-        //   username: Yup.string()
-        //     .max(30, 'Must be 30 characters or less')
-        //     .email('Invalid email address')
-        //     .required('Please enter your email'),
-        //   password: Yup.string().required('Please enter your password'),
-        // })}
-        onSubmit={async (values, { setSubmitting }) => {
-          console.log('Submitting');
+        validationSchema={Yup.object({
+          email: Yup.string()
+            .max(50, 'Email address should be less than 50 characters')
+            .email('Invalid email address')
+            .required('Please enter your email address'),
+          password: Yup.string()
+            .required('Please enter your password')
+            .min(6, 'Password must be more than 6 characters')
+            .max(50, 'Password address should be less than 50 characters'),
+        })}
+        onSubmit={async (values) => {
           const res = await signIn('credentials', {
             redirect: false,
             username: values.email,
@@ -36,18 +46,15 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
             callbackUrl: `${window.location.origin}`,
           });
           if (res?.error) {
-            console.log('RES Error: ', res.error);
-            setError(res.error);
-          } else {
-            console.log('NO ERROR');
-            setError(null);
+            toast.error(res.error, {
+              className: 'bg-danger text-light',
+            });
           }
           if (res?.url) router.push(res.url);
-          setSubmitting(false);
         }}
       >
-        {(formik) => (
-          <form onSubmit={formik.handleSubmit}>
+        {({ errors, touched, setSubmitting, isSubmitting }) => (
+          <Form>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
               <div className="flex flex-col sm:flex-row w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-light rounded-2xl">
                 <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8 sm:w-3/4">
@@ -69,27 +76,53 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       </h1>
                     </div>
                   </div>
-                  <input
-                    name="csrfToken"
+                  <Field
                     type="hidden"
+                    name="csrfToken"
                     defaultValue={csrfToken}
                   />
-                  <div className="flex justify-center items-center w-full mt-6">
+                  <div className="flex flex-col justify-center items-center w-full mt-6">
                     <Field
                       name="email"
                       placeholder="Email Address"
                       aria-required="true"
                       type="text"
-                      className="block w-full bg-zinc-100 placeholder-zinc-400 text-zinc-800 border-0 focus:border-2 focus:border-primary focus:bg-light h-11 rounded-xl text-xs sm:text-sm"
+                      className={`block w-full bg-zinc-100 
+                      placeholder-zinc-400 text-zinc-800 
+                        border-0 
+                        ${
+                          errors.email && touched.email
+                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+                            : 'focus:border-2 focus:border-primary focus:bg-light'
+                        } 
+                        h-11 rounded-xl text-xs sm:text-sm`}
+                    />
+                    <ErrorMessage
+                      name="email"
+                      className="mt-2 text-danger text-xs"
+                      component="div"
                     />
                   </div>
-                  <div className="flex justify-center items-center w-full mt-4 sm:mt-6">
+                  <div className="flex flex-col justify-center items-center w-full mt-4 sm:mt-6">
                     <Field
                       name="password"
                       placeholder="Password"
                       aria-required="true"
                       type="password"
-                      className="block w-full bg-zinc-100 placeholder-zinc-400 text-zinc-800 border-0 focus:border-2 focus:border-primary focus:bg-light h-11 rounded-xl text-xs sm:text-sm"
+                      className={`block w-full bg-zinc-100 
+                                placeholder-zinc-400 text-zinc-800 
+                                  border-0 
+                                  ${
+                                    errors.password && touched.password
+                                      ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+                                      : 'focus:border-2 focus:border-primary focus:bg-light'
+                                  } 
+                                  h-11 rounded-xl text-xs sm:text-sm`}
+                    />
+                    <ErrorMessage
+                      name="password"
+                      className="mt-2 text-danger text-xs"
+                      component="div"
                     />
                   </div>
                   <div className="flex justify-start self-start items-center mt-4">
@@ -102,9 +135,44 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                   <div className="flex justify-center items-center w-full mt-10">
                     <button
                       type="submit"
-                      className="block w-full text-primary-accent bg-primary hoverable:hover:bg-primary-dark focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark rounded-xl h-11 text-sm sm:text-base"
+                      className="flex justify-center items-center w-full text-primary-accent bg-primary hoverable:hover:bg-primary-dark focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-primary-light disabled:hoverable:hover:bg-primary-light"
+                      disabled={isSubmitting}
                     >
-                      Login
+                      {isSubmitting ? (
+                        <LoadingSpinner className="h-5 w-5" />
+                      ) : (
+                        'Login'
+                      )}
+                    </button>
+                  </div>
+                  <div className="flex justify-center items-center w-full mt-4">
+                    <button
+                      type="button"
+                      className="flex justify-center items-center w-full text-light bg-danger hoverable:hover:bg-danger-dark focus:ring-2 focus:ring-offset-2 focus:ring-danger-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-danger-light disabled:hoverable:hover:bg-danger-light fill-light"
+                      onClick={async () => {
+                        setSubmitting(true);
+                        await signIn('google', {
+                          redirect: false,
+                          callbackUrl: '/',
+                        });
+                        setSubmitting(false);
+                      }}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <LoadingSpinner className="h-5 w-5" />
+                      ) : (
+                        <>
+                          <svg
+                            width="34px"
+                            height="34px"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z" />
+                          </svg>
+                        </>
+                      )}
                     </button>
                   </div>
                   <div className="flex w-full h-full items-end justify-center mt-4 sm:hidden">
@@ -194,7 +262,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                 </div>
               </div>
             </div>
-          </form>
+          </Form>
         )}
       </Formik>
     </>

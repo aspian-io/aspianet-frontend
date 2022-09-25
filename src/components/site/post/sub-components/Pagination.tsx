@@ -37,24 +37,25 @@ const Pagination: FC<IPaginationProps> = ({
       )}
 
       {!mainIncludesFirstPage && (
-        <>
-          <Link href={`${baseUrl}?page=1&${queryString}`} key={1}>
-            <a>
-              <div
-                className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
-                  appliedCurrentPage === 1
-                    ? 'text-light bg-primary'
-                    : 'border-2 border-primary text-primary'
-                } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
-              >
-                1
-              </div>
-            </a>
-          </Link>
-          <div className="flex justify-center items-center w-4 h-7 pb-2 text-primary">
-            ...
-          </div>
-        </>
+        <Link href={`${baseUrl}?page=1&${queryString}`} key={1}>
+          <a>
+            <div
+              className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
+                appliedCurrentPage === 1
+                  ? 'text-light bg-primary'
+                  : 'border-2 border-primary text-primary'
+              } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
+            >
+              1
+            </div>
+          </a>
+        </Link>
+      )}
+
+      {!mainIncludesFirstPage && appliedCurrentPage > 3 && (
+        <div className="flex justify-center items-center w-4 h-7 pb-2 text-primary">
+          ...
+        </div>
       )}
 
       {mainSegmentNumbers.map((p) => {
@@ -75,28 +76,29 @@ const Pagination: FC<IPaginationProps> = ({
         );
       })}
 
+      {!mainIncludesLastPage && appliedCurrentPage < totalPages - 2 && (
+        <div className="flex justify-center items-center w-4 h-7 pb-2 text-primary">
+          ...
+        </div>
+      )}
+
       {!mainIncludesLastPage && (
-        <>
-          <div className="flex justify-center items-center w-4 h-7 pb-2 text-primary">
-            ...
-          </div>
-          <Link
-            href={`${baseUrl}?page=${totalPages}&${queryString}`}
-            key={totalPages}
-          >
-            <a>
-              <div
-                className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
-                  appliedCurrentPage === totalPages
-                    ? 'text-light bg-primary'
-                    : 'border-2 border-primary text-primary'
-                } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
-              >
-                {totalPages}
-              </div>
-            </a>
-          </Link>
-        </>
+        <Link
+          href={`${baseUrl}?page=${totalPages}&${queryString}`}
+          key={totalPages}
+        >
+          <a>
+            <div
+              className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
+                appliedCurrentPage === totalPages
+                  ? 'text-light bg-primary'
+                  : 'border-2 border-primary text-primary'
+              } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
+            >
+              {totalPages}
+            </div>
+          </a>
+        </Link>
       )}
 
       {appliedCurrentPage < totalPages && (

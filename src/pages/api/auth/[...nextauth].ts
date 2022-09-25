@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken';
 import { IJwt } from "../../../components/common/types/jwt";
 import { JWT } from "next-auth/jwt";
 import { AvatarSourceEnum } from "../../../models/users/common";
+import GoogleProvider from "next-auth/providers/google";
 
 async function refreshAccessToken ( token: JWT ): Promise<JWT> {
   try {
@@ -42,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         username: { label: 'Email', type: 'text', placeholder: 'Email' },
         password: { label: 'Password', type: 'password', placeholder: 'Password' }
       },
-      async authorize ( credentials, req ) {
+      async authorize ( credentials ) {
         const payload = {
           username: credentials?.username,
           password: credentials?.password
@@ -52,15 +53,18 @@ export const authOptions: NextAuthOptions = {
           const { data: user } = await axios.post<IUserAuth>(
             `${ process.env.EXTERNAL_API_BASE_URL }/users/login-by-email`,
             payload,
-            req.headers
           );
 
           return user;
         } catch ( error ) {
           const err = error as AxiosError;
-          throw new Error( err.response?.status && err.response.status === 401 ? 'Unauthorized' : 'Something went wrong' );
+          throw new Error( err.response?.status && err.response.status === 401 ? 'Email or password is incorrect' : 'Something went wrong' );
         }
       }
+    } ),
+    GoogleProvider( {
+      clientId: process.env.OAUTH_GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
     } )
   ],
   secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
@@ -70,16 +74,70 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt ( { token, user, account } ) {
       if ( account && user ) {
-        const decodedJwt = jwt.decode( user.accessToken ) as IJwt;
-        account.access_token = user.accessToken;
-        account.refresh_token = user.refreshToken;
-        account.expires_at = decodedJwt.exp;
-        
-        return {
-          ...token,
-          ...user,
-          accessTokenExpires: decodedJwt.exp
-        };
+        if ( account.provider === 'credentials' ) {
+          const decodedJwt = jwt.decode( user.accessToken ) as IJwt;
+          account.access_token = user.accessToken;
+          account.refresh_token = user.refreshToken;
+          account.expires_at = decodedJwt.exp;
+
+          return {
+            ...token,
+            ...user,
+            accessTokenExpires: decodedJwt.exp
+          };
+        }
+
+        if ( account.provider === 'google' ) {
+          const googleAccessTokenExpires = account.expires_at;
+          let firstName = 'user';
+          let lastName = 'user';
+          const email = user.email;
+          const avatar = user.image;
+          if ( user?.name ) {
+            const nameParts = user.name.split( ' ' );
+            if ( nameParts.length > 1 ) {
+              firstName = nameParts[ 0 ];
+              lastName = nameParts[ nameParts.length - 1 ];
+            } else {
+              firstName = nameParts[ 0 ];
+            }
+          }
+
+          if ( ( Math.floor( Date.now() / 1000 ) < Number( googleAccessTokenExpires ) ) ) {
+            const authServerAccessToken = jwt.sign(
+              { sub: account.providerAccountId, email, clms: [] },
+              process.env.AUTH_ACCESS_TOKEN_SECRET!,
+              { expiresIn: process.env.OAUTH_SERVER_ACCESS_TOKEN_EXPIRATION }
+            );
+            
+            try {
+              const { data: userFromServer } = await axios.post<IUserAuth>(
+                `${ process.env.EXTERNAL_API_BASE_URL }/users/oauth2-login`,
+                { firstName, lastName, username: email, avatar },
+                {
+                  headers: {
+                    Authorization: `Bearer ${ authServerAccessToken }`
+                  }
+                }
+              );
+
+              const decodedJwt = jwt.decode( userFromServer.accessToken ) as IJwt;
+              token.accessToken = userFromServer.accessToken;
+              token.refreshToken = userFromServer.refreshToken;
+              token.email = userFromServer.email;
+              token.sub = userFromServer.id;
+              token.accessTokenExpires = decodedJwt.exp;
+
+              return {
+                ...token,
+                ...userFromServer,
+              };
+            } catch ( error ) {
+              const err = error as AxiosError;
+              console.log( err.response?.data! );
+            }
+          }
+        }
       }
 
       if ( ( Math.floor( Date.now() / 1000 ) > Number( token.accessTokenExpires ) ) ) {

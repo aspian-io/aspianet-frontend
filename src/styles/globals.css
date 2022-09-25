@@ -13,18 +13,86 @@
   }
 }
 
+/* Toastify */
+:root {
+  --toastify-color-light: #fff;
+  --toastify-color-dark: #091069;
+  --toastify-color-info: #8479e1;
+  --toastify-color-success: #06d6a0;
+  --toastify-color-warning: #ffc233;
+  --toastify-color-error: #ef476f;
+  --toastify-color-transparent: rgba(255, 255, 255, 0.7);
+
+  --toastify-icon-color-info: var(--toastify-color-light);
+  --toastify-icon-color-success: var(--toastify-color-light);
+  --toastify-icon-color-warning: var(--toastify-color-light);
+  --toastify-icon-color-error: var(--toastify-color-light);
+
+  --toastify-toast-width: 320px;
+  --toastify-toast-background: #fff;
+  --toastify-toast-min-height: 64px;
+  --toastify-toast-max-height: 800px;
+  --toastify-font-family: sans-serif;
+  --toastify-z-index: 9999;
+
+  --toastify-text-color-light: var(--toastify-color-light);
+  --toastify-text-color-dark: var(--toastify-color-dark);
+
+  /* Used only for colored theme */
+  --toastify-text-color-info: #fff;
+  --toastify-text-color-success: #fff;
+  --toastify-text-color-warning: #fff;
+  --toastify-text-color-error: #fff;
+
+  --toastify-spinner-color: var(--toastify-color-info);
+  --toastify-spinner-color-empty-area: #e0e0e0;
+
+  /* Used when no type is provided */
+  /* toast("**hello**") */
+  --toastify-color-progress-light: linear-gradient(
+    to right,
+    #05a87d,
+    #5ac8fa,
+    #007aff,
+    #34aadc,
+    #5e4fd8,
+    #eb184a
+  );
+  /* Used when no type is provided */
+  --toastify-color-progress-dark: #5e4fd8;
+  --toastify-color-progress-info: #a29ae8;
+  --toastify-color-progress-success: #17f8be;
+  --toastify-color-progress-warning: #ffe8b3;
+  --toastify-color-progress-error: #ff7595;
+}
+
+.Toastify__toast {
+  @apply rounded-xl;
+}
+
+/* NProgress */
+#nprogress .bar {
+  background: #5e4fd8;
+  height: 3px;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+  box-shadow: 0 0 10px #5e4fd8, 0 0 5px #5e4fd8;
+}
+
 /* placeholder text style */
-.date-input[type="date"]::-webkit-datetime-edit-text,
-.date-input[type="date"]::-webkit-datetime-edit-month-field,
-.date-input[type="date"]::-webkit-datetime-edit-day-field,
-.date-input[type="date"]::-webkit-datetime-edit-year-field {
-  @apply text-zinc-400
+.date-input[type='date']::-webkit-datetime-edit-text,
+.date-input[type='date']::-webkit-datetime-edit-month-field,
+.date-input[type='date']::-webkit-datetime-edit-day-field,
+.date-input[type='date']::-webkit-datetime-edit-year-field {
+  @apply text-zinc-400;
 }
 
 /* regular text style */
-input[type="date"].date-input--has-value::-webkit-datetime-edit-text,
-input[type="date"].date-input--has-value::-webkit-datetime-edit-month-field,
-input[type="date"].date-input--has-value::-webkit-datetime-edit-day-field,
-input[type="date"].date-input--has-value::-webkit-datetime-edit-year-field {
-  @apply text-dark
+input[type='date'].date-input--has-value::-webkit-datetime-edit-text,
+input[type='date'].date-input--has-value::-webkit-datetime-edit-month-field,
+input[type='date'].date-input--has-value::-webkit-datetime-edit-day-field,
+input[type='date'].date-input--has-value::-webkit-datetime-edit-year-field {
+  @apply text-dark;
 }
