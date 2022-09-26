@@ -35,7 +35,7 @@ export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
     if (status === 'unauthenticated') signIn();
     if (
       status === 'authenticated' &&
-      !claims.some((c) => userClaims.includes(c))
+      !claims?.some((c) => userClaims?.includes(c))
     )
       router.push('/403');
   }, [claims, router, status, userClaims]);
@@ -47,9 +47,9 @@ export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
       </>
     );
 
-  if (!claims.length && status === 'authenticated') return <>{children}</>;
+  if (!claims?.length && status === 'authenticated') return <>{children}</>;
 
-  if (userClaims.length && claims.some((c) => userClaims.includes(c))) {
+  if (userClaims?.length && claims?.some((c) => userClaims.includes(c))) {
     return <>{children}</>;
   }
 
