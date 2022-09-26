@@ -151,10 +151,16 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       className="flex justify-center items-center w-full text-light bg-danger hoverable:hover:bg-danger-dark focus:ring-2 focus:ring-offset-2 focus:ring-danger-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-danger-light disabled:hoverable:hover:bg-danger-light fill-light"
                       onClick={async () => {
                         setSubmitting(true);
-                        await signIn('google', {
+                        const res = await signIn('google', {
                           redirect: false,
-                          callbackUrl: '/',
+                          callbackUrl: `${window.location.origin}`,
                         });
+                        if (res?.error) {
+                          toast.error(res.error, {
+                            className: 'bg-danger text-light',
+                          });
+                        }
+                        if (res?.url) router.push(res.url);
                         setSubmitting(false);
                       }}
                       disabled={isSubmitting}

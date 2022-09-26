@@ -109,7 +109,7 @@ export const authOptions: NextAuthOptions = {
               process.env.AUTH_ACCESS_TOKEN_SECRET!,
               { expiresIn: process.env.OAUTH_SERVER_ACCESS_TOKEN_EXPIRATION }
             );
-            
+
             try {
               const { data: userFromServer } = await axios.post<IUserAuth>(
                 `${ process.env.EXTERNAL_API_BASE_URL }/users/oauth2-login`,
@@ -134,7 +134,7 @@ export const authOptions: NextAuthOptions = {
               };
             } catch ( error ) {
               const err = error as AxiosError;
-              console.log( err.response?.data! );
+              throw new Error( err.response?.status && err.response.status === 401 ? 'Email or password is incorrect' : 'Something went wrong' );
             }
           }
         }
