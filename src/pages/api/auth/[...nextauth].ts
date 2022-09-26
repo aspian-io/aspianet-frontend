@@ -67,11 +67,22 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.OAUTH_GOOGLE_SECRET!,
     } )
   ],
+
   secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
+
   pages: {
-    signIn: '/login'
+    signIn: '/login',
+    error: '/nextauth-error'
   },
+
   callbacks: {
+    async redirect ( { url, baseUrl } ) {
+      // Allows relative callback URLs
+      if ( url.startsWith( "/" ) ) return `${ baseUrl }${ url }`;
+      // Allows callback URLs on the same origin
+      else if ( new URL( url ).origin === baseUrl ) return url;
+      return baseUrl;
+    },
     async jwt ( { token, user, account } ) {
       if ( account && user ) {
         if ( account.provider === 'credentials' ) {

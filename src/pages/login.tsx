@@ -20,6 +20,11 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
+    if (router.query['error']) {
+      toast.error('Something went wrong', {
+        className: 'bg-danger text-light',
+      });
+    }
   }, [router, status]);
 
   if (status === 'authenticated') return <></>;
@@ -43,14 +48,12 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
             redirect: false,
             username: values.email,
             password: values.password,
-            callbackUrl: `${window.location.origin}`,
           });
           if (res?.error) {
             toast.error(res.error, {
               className: 'bg-danger text-light',
             });
           }
-          if (res?.url) router.push(res.url);
         }}
       >
         {({ errors, touched, setSubmitting, isSubmitting }) => (
@@ -149,19 +152,17 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                     <button
                       type="button"
                       className="flex justify-center items-center w-full text-light bg-danger hoverable:hover:bg-danger-dark focus:ring-2 focus:ring-offset-2 focus:ring-danger-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-danger-light disabled:hoverable:hover:bg-danger-light fill-light"
-                      onClick={async () => {
+                      onClick={async (e) => {
                         setSubmitting(true);
-                        const res = await signIn('google', {
-                          redirect: false,
-                          callbackUrl: `${window.location.origin}`,
-                        });
-                        if (res?.error) {
-                          toast.error(res.error, {
+                        try {
+                          await signIn('google', {
+                            redirect: false,
+                          });
+                        } catch (error) {
+                          toast.error('Something went wrong', {
                             className: 'bg-danger text-light',
                           });
                         }
-                        if (res?.url) router.push(res.url);
-                        setSubmitting(false);
                       }}
                       disabled={isSubmitting}
                     >

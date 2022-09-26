@@ -27,6 +27,10 @@ function MyApp({
     router.events.on('routeChangeComplete', (url) => {
       NProgress.done(false);
     });
+
+    router.events.on('routeChangeError', (url) => {
+      NProgress.done(false);
+    });
   }, [router.events]);
 
   return (
