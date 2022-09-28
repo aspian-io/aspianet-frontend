@@ -20,7 +20,7 @@ const SiteHeader = () => {
       <SiteNav
         logoSrc="/nav-logo.svg"
         overlayLogoSrc="/nav-logo-different.svg"
-        loginRegisterHref="/login"
+        loginRegisterHref="/auth/login"
         loginRegisterLabel={'Login/Register'}
       >
         <Item href="#" isActive={true}>

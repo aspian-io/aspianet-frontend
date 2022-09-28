@@ -1,6 +1,6 @@
 import { Dispatch, SerializedError } from "@reduxjs/toolkit";
 import axios from "axios";
-import axiosInstance from "../../lib/axios";
+import axiosInstance from "../../lib/agent";
 import { IUserAuth } from "../../models/users/auth";
 import { resetUserState, updateUser, updateUserError, updateUserLoadingState } from "../slices/user-slice";
 

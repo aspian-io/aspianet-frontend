@@ -45,7 +45,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
           </div>
         ) : (
           <div className="flex justify-center items-center h-8 w-8 lg:h-10 lg:w-10 rounded-full overflow-hidden bg-primary text-light">
-            {user.firstName[0]}
+            {user.firstName[0].toUpperCase()}
           </div>
         )}
       </div>
@@ -73,7 +73,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
             <span className="inline-block pl-1">Admin</span>
           </a>
         </Link>
-        <Link href="/profile">
+        <Link href="/auth/profile">
           <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"

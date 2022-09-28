@@ -1,0 +1,122 @@
+import { NextPage } from 'next';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { Form, Formik } from 'formik';
+import Button from '../../components/common/Button';
+import Link from 'next/link';
+import Input, { InputTypeEnum } from '../../components/common/Input';
+import Image from 'next/image';
+import * as Yup from 'yup';
+
+const ForgetPasswordPage: NextPage = () => {
+  const { status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'authenticated') router.push('/');
+  }, [router, status]);
+
+  if (status === 'authenticated') return <></>;
+
+  return (
+    <Formik
+      initialValues={{ email: '' }}
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .max(50, 'Email address should be less than 50 characters')
+          .email('Invalid email address')
+          .required('Please enter your email address'),
+      })}
+      onSubmit={async (values) => {}}
+    >
+      {({ errors, touched, setSubmitting, isSubmitting, values }) => (
+        <Form>
+          <fieldset>
+            <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
+              <div className="flex flex-col w-11/12 sm:w-3/4 md:w-1/2 xl:w-1/3 bg-light rounded-2xl">
+                <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8">
+                  <div className="flex justify-center items-center w-48 h-14 relative">
+                    <Image
+                      src="/nav-logo.svg"
+                      layout="fill"
+                      objectFit="contain"
+                      objectPosition="center"
+                      priority
+                      alt="Site Logo"
+                    />
+                  </div>
+                  <div className="flex justify-center items-center w-full my-5">
+                    <div className="relative text-center">
+                      <h1 className="text-dark sm:text-xl">
+                        <span className="absolute before:absolute before:w-8 before:h-8 sm:before:w-9 sm:before:h-9 before:rounded-lg before:bg-primary-light/30 before:-left-5 before:-top-2 sm:before:-left-6 sm:before:-top-2 before:-z-10"></span>
+                        Trouble Logging In?
+                      </h1>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center w-full mt-6">
+                    <Input
+                      placeholderText="Email Address"
+                      rounded="rounded-xl"
+                      size="h-11"
+                      block
+                      type={InputTypeEnum.email}
+                      extraCSSClasses="text-xs sm:text-sm"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center items-center w-full mt-8">
+                    <Link href="/reset-password">
+                      <a className="flex w-full pb-6">
+                        <Button
+                          rounded="rounded-xl"
+                          size="h-11"
+                          variant="primary"
+                          type="submit"
+                          block
+                          extraCSSClasses="text-sm sm:text-base"
+                        >
+                          Send Email
+                        </Button>
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <Button
+                      rounded="rounded-xl"
+                      size="h-11"
+                      variant="link"
+                      type="button"
+                      extraCSSClasses="flex text-primary"
+                      onClick={(e) => router.push('/auth/login')}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5 sm:w-6 sm:h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                        />
+                      </svg>
+
+                      <span className="ml-1 sm:ml-2 text-sm sm:text-base">
+                        Back
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </Form>
+      )}
+    </Formik>
+  );
+};
+
+export default ForgetPasswordPage;

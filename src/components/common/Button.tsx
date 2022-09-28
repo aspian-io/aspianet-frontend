@@ -30,6 +30,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-primary-accent 
         bg-primary
         hoverable:hover:bg-primary-dark
+        disabled:hoverable:hover:bg-primary
         focus:ring-2
         focus:ring-offset-2
         focus:ring-primary-dark
@@ -40,6 +41,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-success-accent 
         bg-success
         hoverable:hover:bg-success-dark
+        disabled:hoverable:hover:bg-success
         focus:ring-2
         focus:ring-offset-2
         focus:ring-success-dark
@@ -50,6 +52,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-warning-accent 
         bg-warning
         hoverable:hover:bg-warning-dark
+        disabled:hoverable:hover:bg-warning
         focus:ring-2
         focus:ring-offset-2
         focus:ring-warning-dark
@@ -60,6 +63,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-danger-accent 
         bg-danger
         hoverable:hover:bg-danger-dark
+        disabled:hoverable:hover:bg-danger
         focus:ring-2
         focus:ring-offset-2
         focus:ring-danger-dark
@@ -74,6 +78,8 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         focus:border-primary/20
         hoverable:hover:bg-primary 
         hoverable:hover:text-light 
+        disabled:hoverable:hover:bg-light
+        disabled:hoverable:hover:text-primary
         focus:ring-2
         focus:ring-offset-2
         focus:ring-primary
@@ -87,6 +93,8 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-success 
         hoverable:hover:bg-success 
         hoverable:hover:text-light 
+        disabled:hoverable:hover:bg-light
+        disabled:hoverable:hover:text-success
         focus:ring-2
         focus:ring-offset-2
         focus:ring-success
@@ -100,6 +108,8 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-warning 
         hoverable:hover:bg-warning 
         hoverable:hover:text-light 
+        disabled:hoverable:hover:bg-light
+        disabled:hoverable:hover:text-warning
         focus:ring-2
         focus:ring-offset-2
         focus:ring-warning
@@ -113,6 +123,8 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-danger 
         hoverable:hover:bg-danger 
         hoverable:hover:text-light 
+        disabled:hoverable:hover:bg-light
+        disabled:hoverable:hover:text-danger
         focus:ring-2
         focus:ring-offset-2
         focus:ring-danger

@@ -41,35 +41,6 @@ const ResetPassword = () => {
     };
   }, [getRemainingMinutes, getRemainingSeconds, timer]);
 
-  // const [timer, setTimer] = useState(122);
-
-  // const getRemainingMinutes = useCallback(
-  //   (seconds: number) => {
-  //     return Math.floor(timer / 60);
-  //   },
-  //   [timer]
-  // );
-  // const getRemainingSeconds = useCallback(
-  //   (seconds: number) => {
-  //     return timer - Math.floor(timer / 60) * 60;
-  //   },
-  //   [timer]
-  // );
-
-  // const [timerMinutes, setTimerMinutes] = useState(getRemainingMinutes(timer));
-  // const [timerSeconds, setTimerSeconds] = useState(getRemainingSeconds(timer));
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setTimer(timer - 1);
-  //     setTimerMinutes(getRemainingMinutes(timer));
-  //     setTimerSeconds(getRemainingSeconds(timer));
-  //   }, 1000);
-
-  //   if (timer < 0) clearInterval(interval);
-
-  //   return () => clearInterval(interval);
-  // }, [getRemainingMinutes, getRemainingSeconds, timer]);
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">

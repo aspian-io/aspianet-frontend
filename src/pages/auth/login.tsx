@@ -1,14 +1,19 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn, getCsrfToken, useSession } from 'next-auth/react';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
-import Button from '../components/common/Button';
-import LoadingSpinner from '../components/common/LoadingSpinner';
+import Button from '../../components/common/Button';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { toast } from 'react-toastify';
+import { IUserLogin, UserLogin } from '../../models/users/login';
+import {
+  IUserError,
+  UserErrorsInternalCodeEnum,
+} from '../../models/users/auth-error';
 
 interface IProps {
   csrfToken: string;
@@ -17,6 +22,8 @@ interface IProps {
 const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
   const { status } = useSession();
   const router = useRouter();
+  const [done, setDone] = useState(false);
+  const initialValues: IUserLogin = new UserLogin();
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
@@ -30,34 +37,57 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
   if (status === 'authenticated') return <></>;
 
   return (
-    <>
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        validationSchema={Yup.object({
-          email: Yup.string()
-            .max(50, 'Email address should be less than 50 characters')
-            .email('Invalid email address')
-            .required('Please enter your email address'),
-          password: Yup.string()
-            .required('Please enter your password')
-            .min(6, 'Password must be more than 6 characters')
-            .max(50, 'Password address should be less than 50 characters'),
-        })}
-        onSubmit={async (values) => {
-          const res = await signIn('credentials', {
-            redirect: false,
-            username: values.email,
-            password: values.password,
-          });
-          if (res?.error) {
-            toast.error(res.error, {
-              className: 'bg-danger text-light',
-            });
+    <Formik
+      initialValues={initialValues}
+      validationSchema={Yup.object({
+        username: Yup.string()
+          .max(50, 'Email address should be less than 50 characters')
+          .email('Invalid email address')
+          .required('Please enter your email address'),
+        password: Yup.string()
+          .required('Please enter your password')
+          .min(6, 'Password must be more than 6 characters')
+          .max(50, 'Password address should be less than 50 characters'),
+      })}
+      onSubmit={async (values) => {
+        const res = await signIn('credentials', {
+          redirect: false,
+          username: values.username,
+          password: values.password,
+        });
+        if (res?.error) {
+          const err = JSON.parse(res.error) as IUserError;
+          if (
+            err.internalCode === UserErrorsInternalCodeEnum.INACTIVE_ACCOUNT
+          ) {
+            toast.error(
+              'Your Account has not been activated. Redirecting to account activation page...',
+              {
+                className: 'bg-danger text-light text-sm',
+              }
+            );
+            setTimeout(() => {
+              router.push(`/auth/verify-email?email=${values.username}`);
+            }, 5000);
+            return;
           }
-        }}
-      >
-        {({ errors, touched, setSubmitting, isSubmitting }) => (
-          <Form>
+          if (
+            err.internalCode === UserErrorsInternalCodeEnum.SUSPENDED_ACCOUNT
+          ) {
+            toast.error('Your Account has been suspended', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          toast.error('Something went wrong', {
+            className: 'bg-danger text-light text-sm',
+          });
+        }
+      }}
+    >
+      {({ errors, touched, setSubmitting, isSubmitting }) => (
+        <Form>
+          <fieldset disabled={isSubmitting || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
               <div className="flex flex-col sm:flex-row w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-light rounded-2xl">
                 <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8 sm:w-3/4">
@@ -86,7 +116,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                   />
                   <div className="flex flex-col justify-center items-center w-full mt-6">
                     <Field
-                      name="email"
+                      name="username"
                       placeholder="Email Address"
                       aria-required="true"
                       type="text"
@@ -94,14 +124,14 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       placeholder-zinc-400 text-zinc-800 
                         border-0 
                         ${
-                          errors.email && touched.email
+                          errors.username && touched.username
                             ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
                             : 'focus:border-2 focus:border-primary focus:bg-light'
                         } 
                         h-11 rounded-xl text-xs sm:text-sm`}
                     />
                     <ErrorMessage
-                      name="email"
+                      name="username"
                       className="mt-2 text-danger text-xs"
                       component="div"
                     />
@@ -129,29 +159,38 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                     />
                   </div>
                   <div className="flex justify-start self-start items-center mt-4">
-                    <Link href="/forget-password">
+                    <Link href="/auth/forget-password">
                       <a className="text-blue-600 text-xs hoverable:hover:underline">
                         Forget password?
                       </a>
                     </Link>
                   </div>
                   <div className="flex justify-center items-center w-full mt-10">
-                    <button
+                    <Button
+                      rounded="rounded-xl"
+                      size="h-11"
                       type="submit"
-                      className="flex justify-center items-center w-full text-primary-accent bg-primary hoverable:hover:bg-primary-dark focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-primary-light disabled:hoverable:hover:bg-primary-light"
+                      variant="primary"
+                      block
                       disabled={isSubmitting}
+                      extraCSSClasses="flex justify-center items-center"
                     >
                       {isSubmitting ? (
                         <LoadingSpinner className="h-5 w-5" />
                       ) : (
                         'Login'
                       )}
-                    </button>
+                    </Button>
                   </div>
                   <div className="flex justify-center items-center w-full mt-4">
-                    <button
+                    <Button
+                      rounded="rounded-xl"
+                      size="h-11"
                       type="button"
-                      className="flex justify-center items-center w-full text-light bg-danger hoverable:hover:bg-danger-dark focus:ring-2 focus:ring-offset-2 focus:ring-danger-dark rounded-xl h-11 text-sm sm:text-base disabled:bg-danger-light disabled:hoverable:hover:bg-danger-light fill-light"
+                      variant="danger"
+                      block
+                      disabled={isSubmitting}
+                      extraCSSClasses="flex justify-center items-center fill-light"
                       onClick={async (e) => {
                         setSubmitting(true);
                         try {
@@ -164,7 +203,6 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                           });
                         }
                       }}
-                      disabled={isSubmitting}
                     >
                       {isSubmitting ? (
                         <LoadingSpinner className="h-5 w-5" />
@@ -180,10 +218,10 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                           </svg>
                         </>
                       )}
-                    </button>
+                    </Button>
                   </div>
                   <div className="flex w-full h-full items-end justify-center mt-4 sm:hidden">
-                    <Link href="/register">
+                    <Link href="/auth/register">
                       <a className="w-full">
                         <Button
                           rounded="rounded-xl"
@@ -250,7 +288,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                         Create your account to access all our services
                       </p>
                       <div className="flex w-full h-full items-end justify-center pb-8 mt-6 sm:pb-[6.2rem] sm:mt-auto">
-                        <Link href="/register">
+                        <Link href="/auth/register">
                           <a className="w-full">
                             <Button
                               rounded="rounded-lg sm:rounded-xl"
@@ -269,10 +307,10 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                 </div>
               </div>
             </div>
-          </Form>
-        )}
-      </Formik>
-    </>
+          </fieldset>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

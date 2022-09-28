@@ -7,12 +7,14 @@ import { IJwt } from "../../../components/common/types/jwt";
 import { JWT } from "next-auth/jwt";
 import { AvatarSourceEnum } from "../../../models/users/common";
 import GoogleProvider from "next-auth/providers/google";
+import { INestError } from "../../../models/common/error";
+import { UserErrorsEnum, UserErrorsInternalCodeEnum } from "../../../models/users/auth-error";
 
 async function refreshAccessToken ( token: JWT ): Promise<JWT> {
   try {
 
     const { data } = await axios.post<IUserAuth>(
-      `${ process.env.EXTERNAL_API_BASE_URL }/users/refresh-tokens`,
+      `${ process.env.NEXT_PUBLIC_EXTERNAL_API_URL }/users/refresh-tokens`,
       undefined,
       {
         headers: {
@@ -30,7 +32,6 @@ async function refreshAccessToken ( token: JWT ): Promise<JWT> {
       accessTokenExpires: decodedJwt.exp,
     };
   } catch ( error ) {
-    console.log( "Refresh Token Error" );
     return token;
   }
 }
@@ -51,14 +52,25 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const { data: user } = await axios.post<IUserAuth>(
-            `${ process.env.EXTERNAL_API_BASE_URL }/users/login-by-email`,
+            `${ process.env.NEXT_PUBLIC_EXTERNAL_API_URL }/users/login-by-email`,
             payload,
           );
 
           return user;
         } catch ( error ) {
-          const err = error as AxiosError;
-          throw new Error( err.response?.status && err.response.status === 401 ? 'Email or password is incorrect' : 'Something went wrong' );
+          const err = error as AxiosError<INestError>;
+
+          if ( err.response?.status === 401 ) throw new Error( 'Email or password is incorrect' );
+
+          const internalCode = err.response?.data.internalCode;
+          if ( internalCode && internalCode === UserErrorsInternalCodeEnum.INACTIVE_ACCOUNT ) {
+            throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.INACTIVE_ACCOUNT } ) );
+          }
+          if ( internalCode && internalCode === UserErrorsInternalCodeEnum.SUSPENDED_ACCOUNT ) {
+            throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
+          }
+
+          throw new Error( JSON.stringify( { internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
         }
       }
     } ),
@@ -71,8 +83,8 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
 
   pages: {
-    signIn: '/login',
-    error: '/nextauth-error'
+    signIn: '/auth/login',
+    error: '/auth/nextauth-error'
   },
 
   callbacks: {
@@ -123,7 +135,7 @@ export const authOptions: NextAuthOptions = {
 
             try {
               const { data: userFromServer } = await axios.post<IUserAuth>(
-                `${ process.env.EXTERNAL_API_BASE_URL }/users/oauth2-login`,
+                `${ process.env.NEXT_PUBLIC_EXTERNAL_API_URL }/users/oauth2-login`,
                 { firstName, lastName, username: email, avatar },
                 {
                   headers: {
@@ -144,8 +156,14 @@ export const authOptions: NextAuthOptions = {
                 ...userFromServer,
               };
             } catch ( error ) {
-              const err = error as AxiosError;
-              throw new Error( err.response?.status && err.response.status === 401 ? 'Email or password is incorrect' : 'Something went wrong' );
+              const err = error as AxiosError<INestError>;
+              const internalCode = err.response?.data.internalCode;
+
+              if ( internalCode && internalCode === UserErrorsInternalCodeEnum.SUSPENDED_ACCOUNT ) {
+                throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
+              }
+
+              throw new Error( JSON.stringify( { internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
             }
           }
         }

@@ -69,7 +69,7 @@ const ForgetPassword = () => {
               variant="link"
               type="button"
               extraCSSClasses="flex text-primary"
-              onClick={(e) => router.push('/login')}
+              onClick={(e) => router.push('/auth/login')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
