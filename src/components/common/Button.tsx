@@ -30,6 +30,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-primary-accent 
         bg-primary
         hoverable:hover:bg-primary-dark
+        outline-none
         disabled:hoverable:hover:bg-primary
         focus:ring-2
         focus:ring-offset-2
@@ -41,6 +42,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-success-accent 
         bg-success
         hoverable:hover:bg-success-dark
+        outline-none
         disabled:hoverable:hover:bg-success
         focus:ring-2
         focus:ring-offset-2
@@ -52,6 +54,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-warning-accent 
         bg-warning
         hoverable:hover:bg-warning-dark
+        outline-none
         disabled:hoverable:hover:bg-warning
         focus:ring-2
         focus:ring-offset-2
@@ -63,6 +66,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         text-danger-accent 
         bg-danger
         hoverable:hover:bg-danger-dark
+        outline-none
         disabled:hoverable:hover:bg-danger
         focus:ring-2
         focus:ring-offset-2
@@ -75,6 +79,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2 
         border-primary 
+        outline-none
         focus:border-primary/20
         hoverable:hover:bg-primary 
         hoverable:hover:text-light 
@@ -91,6 +96,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2 
         border-success 
+        outline-none
         hoverable:hover:bg-success 
         hoverable:hover:text-light 
         disabled:hoverable:hover:bg-light
@@ -106,6 +112,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2 
         border-warning 
+        outline-none
         hoverable:hover:bg-warning 
         hoverable:hover:text-light 
         disabled:hoverable:hover:bg-light
@@ -121,6 +128,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2 
         border-danger 
+        outline-none
         hoverable:hover:bg-danger 
         hoverable:hover:text-light 
         disabled:hoverable:hover:bg-light
@@ -136,6 +144,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
         border-solid 
         border-2
         border-light 
+        outline-none
         hoverable:hover:bg-light 
         hoverable:hover:text-dark 
         focus:ring-2
@@ -149,6 +158,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
     case 'link':
       btnVariantCssClass = `
         text-primary
+        outline-none
         hoverable:hover:text-primary-dark 
         `;
       break;

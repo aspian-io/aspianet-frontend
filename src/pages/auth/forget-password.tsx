@@ -1,17 +1,21 @@
 import { NextPage } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Button from '../../components/common/Button';
-import Link from 'next/link';
-import Input, { InputTypeEnum } from '../../components/common/Input';
 import Image from 'next/image';
 import * as Yup from 'yup';
+import { INestError } from '../../models/common/error';
+import { AuthAgent } from '../../lib/agent';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const ForgetPasswordPage: NextPage = () => {
   const { status } = useSession();
   const router = useRouter();
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
@@ -28,11 +32,35 @@ const ForgetPasswordPage: NextPage = () => {
           .email('Invalid email address')
           .required('Please enter your email address'),
       })}
-      onSubmit={async (values) => {}}
+      onSubmit={async ({ email }) => {
+        try {
+          await AuthAgent.resetPasswordRequest(email);
+          setDone(true);
+          router.push(`/auth/reset-password?email=${email}`);
+        } catch (error) {
+          const err = error as AxiosError<INestError>;
+          if (err.response?.data.statusCode === 404) {
+            toast.error('Email address not found', {
+              className: 'bg-danger text-light',
+            });
+            return;
+          }
+          if (err.response?.data.statusCode === 400) {
+            toast.error('Please enter a valid email address', {
+              className: 'bg-danger text-light',
+            });
+            return;
+          }
+
+          toast.error('Something went wrong', {
+            className: 'bg-danger text-light',
+          });
+        }
+      }}
     >
       {({ errors, touched, setSubmitting, isSubmitting, values }) => (
         <Form>
-          <fieldset>
+          <fieldset disabled={isSubmitting || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
               <div className="flex flex-col w-11/12 sm:w-3/4 md:w-1/2 xl:w-1/3 bg-light rounded-2xl">
                 <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8">
@@ -54,31 +82,44 @@ const ForgetPasswordPage: NextPage = () => {
                       </h1>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center w-full mt-6">
-                    <Input
-                      placeholderText="Email Address"
-                      rounded="rounded-xl"
-                      size="h-11"
-                      block
-                      type={InputTypeEnum.email}
-                      extraCSSClasses="text-xs sm:text-sm"
+                  <div className="flex flex-col justify-center items-center w-full mt-6">
+                    <Field
+                      name="email"
+                      placeholder="Email Address"
+                      aria-required="true"
+                      type="text"
+                      className={`block w-full bg-zinc-100 
+                      placeholder-zinc-400 text-zinc-800 
+                        border-0 
+                        ${
+                          errors.email && touched.email
+                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+                            : 'focus:border-2 focus:border-primary focus:bg-light'
+                        } 
+                        h-11 rounded-xl text-xs sm:text-sm`}
+                    />
+                    <ErrorMessage
+                      name="email"
+                      className="mt-2 text-danger text-xs"
+                      component="div"
                     />
                   </div>
-                  <div className="flex flex-col justify-center items-center w-full mt-8">
-                    <Link href="/reset-password">
-                      <a className="flex w-full pb-6">
-                        <Button
-                          rounded="rounded-xl"
-                          size="h-11"
-                          variant="primary"
-                          type="submit"
-                          block
-                          extraCSSClasses="text-sm sm:text-base"
-                        >
-                          Send Email
-                        </Button>
-                      </a>
-                    </Link>
+                  <div className="flex flex-col justify-center items-center w-full mt-8 mb-6">
+                    <Button
+                      rounded="rounded-xl"
+                      size="h-11"
+                      variant="primary"
+                      type="submit"
+                      block
+                      extraCSSClasses="text-sm sm:text-base flex justify-center items-center"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <LoadingSpinner className="w-6 h-6" />
+                      ) : (
+                        'Next'
+                      )}
+                    </Button>
                   </div>
                   <div className="flex justify-center items-center">
                     <Button

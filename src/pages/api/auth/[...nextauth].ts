@@ -59,18 +59,20 @@ export const authOptions: NextAuthOptions = {
           return user;
         } catch ( error ) {
           const err = error as AxiosError<INestError>;
-
-          if ( err.response?.status === 401 ) throw new Error( 'Email or password is incorrect' );
-
+          const statusCode = err.response?.data.statusCode;
           const internalCode = err.response?.data.internalCode;
+
+          if ( err.response?.data.statusCode === 401 ) {
+            throw new Error( JSON.stringify( { statusCode: 401, internalCode: 0, message: 'Email or password is incorrect' } ) );
+          }
           if ( internalCode && internalCode === UserErrorsInternalCodeEnum.INACTIVE_ACCOUNT ) {
-            throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.INACTIVE_ACCOUNT } ) );
+            throw new Error( JSON.stringify( { statusCode, internalCode, message: UserErrorsEnum.INACTIVE_ACCOUNT } ) );
           }
           if ( internalCode && internalCode === UserErrorsInternalCodeEnum.SUSPENDED_ACCOUNT ) {
-            throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
+            throw new Error( JSON.stringify( { statusCode, internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
           }
 
-          throw new Error( JSON.stringify( { internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
+          throw new Error( JSON.stringify( { statusCode, internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
         }
       }
     } ),
@@ -158,12 +160,13 @@ export const authOptions: NextAuthOptions = {
             } catch ( error ) {
               const err = error as AxiosError<INestError>;
               const internalCode = err.response?.data.internalCode;
+              const statusCode = err.response?.data.statusCode;
 
               if ( internalCode && internalCode === UserErrorsInternalCodeEnum.SUSPENDED_ACCOUNT ) {
-                throw new Error( JSON.stringify( { internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
+                throw new Error( JSON.stringify( { statusCode, internalCode, message: UserErrorsEnum.SUSPENDED_ACCOUNT } ) );
               }
 
-              throw new Error( JSON.stringify( { internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
+              throw new Error( JSON.stringify( { statusCode, internalCode: UserErrorsInternalCodeEnum.BAD_REQUEST, message: UserErrorsEnum.BAD_REQUEST } ) );
             }
           }
         }

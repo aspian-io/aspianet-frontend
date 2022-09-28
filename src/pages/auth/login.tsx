@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useId } from 'react';
 import { signIn, getCsrfToken, useSession } from 'next-auth/react';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
@@ -14,6 +14,8 @@ import {
   IUserError,
   UserErrorsInternalCodeEnum,
 } from '../../models/users/auth-error';
+import { AxiosError } from 'axios';
+import { INestError } from '../../models/common/error';
 
 interface IProps {
   csrfToken: string;
@@ -23,16 +25,20 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
   const { status } = useSession();
   const router = useRouter();
   const [done, setDone] = useState(false);
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
   const initialValues: IUserLogin = new UserLogin();
+  const toastId = useId();
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
     if (router.query['error']) {
       toast.error('Something went wrong', {
+        toastId: toastId,
         className: 'bg-danger text-light',
       });
+      router.push('/auth/login', undefined, { shallow: true });
     }
-  }, [router, status]);
+  }, [router, status, toastId]);
 
   if (status === 'authenticated') return <></>;
 
@@ -57,6 +63,12 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
         });
         if (res?.error) {
           const err = JSON.parse(res.error) as IUserError;
+          if (err.statusCode === 401) {
+            toast.error('Your username or password is incorrect', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
           if (
             err.internalCode === UserErrorsInternalCodeEnum.INACTIVE_ACCOUNT
           ) {
@@ -83,11 +95,12 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
             className: 'bg-danger text-light text-sm',
           });
         }
+        setDone(true);
       }}
     >
       {({ errors, touched, setSubmitting, isSubmitting }) => (
         <Form>
-          <fieldset disabled={isSubmitting || done}>
+          <fieldset disabled={isSubmitting || googleLoginLoading || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
               <div className="flex flex-col sm:flex-row w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-light rounded-2xl">
                 <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8 sm:w-3/4">
@@ -189,22 +202,24 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       type="button"
                       variant="danger"
                       block
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || googleLoginLoading}
                       extraCSSClasses="flex justify-center items-center fill-light"
                       onClick={async (e) => {
-                        setSubmitting(true);
+                        setGoogleLoginLoading(true);
                         try {
                           await signIn('google', {
                             redirect: false,
                           });
+                          setDone(true);
                         } catch (error) {
+                          setGoogleLoginLoading(false);
                           toast.error('Something went wrong', {
                             className: 'bg-danger text-light',
                           });
                         }
                       }}
                     >
-                      {isSubmitting ? (
+                      {googleLoginLoading ? (
                         <LoadingSpinner className="h-5 w-5" />
                       ) : (
                         <>

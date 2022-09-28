@@ -157,7 +157,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                     </div>
                     <a
                       href="#"
-                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
+                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500"
                     >
                       {t('settings')}
                     </a>

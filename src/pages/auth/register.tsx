@@ -12,6 +12,7 @@ import { AuthAgent } from '../../lib/agent';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { INestError } from '../../models/common/error';
 
 interface IProps {
   csrfToken: string;
@@ -58,9 +59,9 @@ const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
           setDone(true);
           router.push(`/auth/verify-email?email=${user.email}`);
         } catch (error) {
-          const err = error as AxiosError<{ message: string }>;
-          console.log(error);
-          toast.error(err.response?.data.message ?? 'Something went wrong', {
+          const err = error as AxiosError<INestError>;
+
+          toast.error('Something went wrong', {
             className: 'bg-danger text-light',
           });
         }

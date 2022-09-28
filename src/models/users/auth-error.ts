@@ -1,4 +1,5 @@
 export interface IUserError {
+  statusCode?: number;
   internalCode: number;
   message: string;
 }

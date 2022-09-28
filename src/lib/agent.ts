@@ -54,5 +54,8 @@ export const AuthAgent = {
   verifyEmail: ( email: string, token: number ): Promise<IUserAuth> => apiRequests.post( 'users/activate-email-registration', { email, token } ),
   remainingTime: ( email: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( '/users/email-token-remaining-time', { email } ),
   resendVerificationToken: ( email: string ): Promise<IUserAuth> => apiRequests.post( '/users/resend-verification-email', { email } ),
-  resetPasswordRequest: ( email: string ): Promise<IUserAuth> => apiRequests.post( '/users/reset-password/by-email/request', { email } )
+  resetPasswordRequest: ( email: string ): Promise<{}> => apiRequests.post( '/users/reset-password/by-email/request', { email } ),
+  resetPassword: ( email: string, password: string, token: number ): Promise<IUserAuth> =>
+    apiRequests.post( '/users/reset-password/by-email', { email, password, token } ),
+
 };
