@@ -14,11 +14,7 @@ import { AxiosError } from 'axios';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { INestError } from '../../models/common/error';
 
-interface IProps {
-  csrfToken: string;
-}
-
-const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
+const RegisterPage: NextPage = () => {
   const { status } = useSession();
   const router = useRouter();
   const initialValues: IUserRegister = new UserRegister();
@@ -35,10 +31,10 @@ const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
       initialValues={initialValues}
       validationSchema={Yup.object({
         firstName: Yup.string()
-          .max(30, 'Firstname should be less than 30 characters')
+          .max(30, 'First name should be less than 30 characters')
           .required('Please enter your first name'),
         lastName: Yup.string()
-          .max(30, 'Firstname should be less than 30 characters')
+          .max(30, 'Last name should be less than 30 characters')
           .required('Please enter your last name'),
         email: Yup.string()
           .max(50, 'Email address should be less than 50 characters')
@@ -60,14 +56,14 @@ const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
           router.push(`/auth/verify-email?email=${user.email}`);
         } catch (error) {
           const err = error as AxiosError<INestError>;
-
-          toast.error('Something went wrong', {
+          console.log(error)
+          toast.error(err.response?.data.message, {
             className: 'bg-danger text-light',
           });
         }
       }}
     >
-      {({ errors, touched, setSubmitting, isSubmitting, status }) => (
+      {({ errors, touched, isSubmitting }) => (
         <Form>
           <fieldset disabled={isSubmitting || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-bl from-primary to-light">
@@ -125,11 +121,6 @@ const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
                     </div>
                   </div>
                   <div className="flex w-full mt-6">
-                    <Field
-                      type="hidden"
-                      name="csrfToken"
-                      defaultValue={csrfToken}
-                    />
                     <div className="flex flex-col justify-center items-center w-1/2 pr-4">
                       <Field
                         name="firstName"
@@ -291,11 +282,3 @@ const RegisterPage: NextPage<IProps> = ({ csrfToken }) => {
 };
 
 export default RegisterPage;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  };
-};

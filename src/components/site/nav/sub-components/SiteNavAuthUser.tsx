@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { IUserAuth } from '../../../../models/users/auth';
-import { AvatarSourceEnum } from '../../../../models/users/common';
+import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/users/common';
+import { AuthGuard } from '../../../common/AuthGuard';
 
 interface IProps {
   responsive: boolean;
@@ -56,23 +57,25 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
             : 'invisible -translate-y-2 opacity-0'
         } flex flex-col absolute drop-shadow-xl top-11 lg:top-14 right-0 p-2 text-zinc-500 bg-light text-sm rounded-lg transition-all duration-300`}
       >
-        <Link href="/admin">
-          <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="inline-block pl-1">Admin</span>
-          </a>
-        </Link>
+        <AuthGuard claims={Object.values(ClaimsEnum)} redirect={false}>
+          <Link href="/admin">
+            <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="inline-block pl-1">Admin</span>
+            </a>
+          </Link>
+        </AuthGuard>
         <Link href="/auth/profile">
           <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
             <svg

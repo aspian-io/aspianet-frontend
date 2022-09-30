@@ -14,10 +14,12 @@ import { signIn, useSession } from 'next-auth/react';
 
 interface IProps {
   claims: ClaimsEnum[];
+  redirect?: boolean;
 }
 
 export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
   claims,
+  redirect = true,
   children,
 }) => {
   const router = useRouter();
@@ -32,13 +34,16 @@ export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
   }, [session?.user.accessToken, status]);
 
   useEffect(() => {
-    if (status === 'unauthenticated') signIn();
-    if (
-      status === 'authenticated' &&
-      !claims?.some((c) => userClaims?.includes(c))
-    )
-      router.push('/403');
-  }, [claims, router, status, userClaims]);
+    if (redirect) {
+      if (status === 'unauthenticated') signIn();
+      if (
+        status === 'authenticated' &&
+        !claims?.some((c) => userClaims?.includes(c))
+      ) {
+        router.push('/403');
+      }
+    }
+  }, [claims, redirect, router, status, userClaims]);
 
   if (status === 'loading')
     return (
@@ -49,7 +54,11 @@ export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
 
   if (!claims?.length && status === 'authenticated') return <>{children}</>;
 
-  if (userClaims?.length && claims?.some((c) => userClaims.includes(c))) {
+  if (
+    claims?.length &&
+    userClaims?.length &&
+    claims?.some((c) => userClaims.includes(c))
+  ) {
     return <>{children}</>;
   }
 

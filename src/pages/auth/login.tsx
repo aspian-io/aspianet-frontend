@@ -14,8 +14,6 @@ import {
   IUserError,
   UserErrorsInternalCodeEnum,
 } from '../../models/users/auth-error';
-import { AxiosError } from 'axios';
-import { INestError } from '../../models/common/error';
 
 interface IProps {
   csrfToken: string;
