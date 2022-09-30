@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { AxiosError } from 'axios';
 import { INestError } from '../../models/common/error';
+import FormikInput from '../../components/common/FormikInput';
 
 interface IProps {
   email: string;
@@ -97,7 +98,7 @@ const VerifyEmailPage: NextPage<IProps> = ({
         }
       }}
     >
-      {({ errors, touched, setSubmitting, isSubmitting, values }) => (
+      {({ errors, touched, isSubmitting, values }) => (
         <Form>
           <fieldset disabled={isSubmitting || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">
@@ -138,18 +139,7 @@ const VerifyEmailPage: NextPage<IProps> = ({
                       aria-required="true"
                       type="text"
                       disabled={timer <= 0 || done}
-                      className={`block w-full bg-zinc-100 placeholder-zinc-400 text-zinc-800 border-0 focus:border-2 focus:border-primary focus:bg-light  
-                        ${
-                          errors.token && touched.token
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="token"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                     <div className="flex justify-center items-center py-1 w-16 text-center rounded-lg text-primary text-sm mt-4 absolute right-2 -top-3.5">
                       {resendLoading ? (

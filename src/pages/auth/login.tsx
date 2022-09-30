@@ -14,6 +14,7 @@ import {
   IUserError,
   UserErrorsInternalCodeEnum,
 } from '../../models/users/auth-error';
+import FormikInput from '../../components/common/FormikInput';
 
 interface IProps {
   csrfToken: string;
@@ -131,20 +132,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       placeholder="Email Address"
                       aria-required="true"
                       type="text"
-                      className={`block w-full bg-zinc-100 
-                      placeholder-zinc-400 text-zinc-800 
-                        border-0 
-                        ${
-                          errors.username && touched.username
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="username"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center w-full mt-4 sm:mt-6">
@@ -153,20 +141,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
                       placeholder="Password"
                       aria-required="true"
                       type="password"
-                      className={`block w-full bg-zinc-100 
-                                placeholder-zinc-400 text-zinc-800 
-                                  border-0 
-                                  ${
-                                    errors.password && touched.password
-                                      ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                                      : 'focus:border-2 focus:border-primary focus:bg-light'
-                                  } 
-                                  h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="password"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                   </div>
                   <div className="flex justify-start self-start items-center mt-4">

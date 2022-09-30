@@ -11,6 +11,7 @@ import { AuthAgent } from '../../lib/agent';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import FormikInput from '../../components/common/FormikInput';
 
 const ForgetPasswordPage: NextPage = () => {
   const { status } = useSession();
@@ -88,20 +89,7 @@ const ForgetPasswordPage: NextPage = () => {
                       placeholder="Email Address"
                       aria-required="true"
                       type="text"
-                      className={`block w-full bg-zinc-100 
-                      placeholder-zinc-400 text-zinc-800 
-                        border-0 
-                        ${
-                          errors.email && touched.email
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="email"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center w-full mt-8 mb-6">

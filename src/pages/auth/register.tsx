@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { INestError } from '../../models/common/error';
+import FormikInput from '../../components/common/FormikInput';
 
 const RegisterPage: NextPage = () => {
   const { status } = useSession();
@@ -63,7 +64,7 @@ const RegisterPage: NextPage = () => {
         }
       }}
     >
-      {({ errors, touched, isSubmitting }) => (
+      {({ isSubmitting }) => (
         <Form>
           <fieldset disabled={isSubmitting || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-bl from-primary to-light">
@@ -127,20 +128,7 @@ const RegisterPage: NextPage = () => {
                         placeholder="First Name"
                         aria-required="true"
                         type="text"
-                        className={`block w-full bg-zinc-100 
-                      placeholder-zinc-400 text-zinc-800 
-                        border-0 
-                        ${
-                          errors.firstName && touched.firstName
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                      />
-                      <ErrorMessage
-                        name="firstName"
-                        className="mt-2 text-danger text-xs"
-                        component="div"
+                        component={FormikInput}
                       />
                     </div>
                     <div className="flex flex-col justify-center items-center w-1/2">
@@ -149,20 +137,7 @@ const RegisterPage: NextPage = () => {
                         placeholder="Last Name"
                         aria-required="true"
                         type="text"
-                        className={`block w-full bg-zinc-100 
-                      placeholder-zinc-400 text-zinc-800 
-                        border-0 
-                        ${
-                          errors.lastName && touched.lastName
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                      />
-                      <ErrorMessage
-                        name="lastName"
-                        className="mt-2 text-danger text-xs"
-                        component="div"
+                        component={FormikInput}
                       />
                     </div>
                   </div>
@@ -172,20 +147,7 @@ const RegisterPage: NextPage = () => {
                       placeholder="Email Address"
                       aria-required="true"
                       type="text"
-                      className={`block w-full bg-zinc-100 
-                      placeholder-zinc-400 text-zinc-800 
-                        border-0 
-                        ${
-                          errors.email && touched.email
-                            ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : 'focus:border-2 focus:border-primary focus:bg-light'
-                        } 
-                        h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="email"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center w-full mt-4 sm:mt-6">
@@ -194,20 +156,7 @@ const RegisterPage: NextPage = () => {
                       placeholder="Password"
                       aria-required="true"
                       type="password"
-                      className={`block w-full bg-zinc-100 
-                                placeholder-zinc-400 text-zinc-800 
-                                  border-0 
-                                  ${
-                                    errors.password && touched.password
-                                      ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                                      : 'focus:border-2 focus:border-primary focus:bg-light'
-                                  } 
-                                  h-11 rounded-xl text-xs sm:text-sm`}
-                    />
-                    <ErrorMessage
-                      name="password"
-                      className="mt-2 text-danger text-xs"
-                      component="div"
+                      component={FormikInput}
                     />
                   </div>
                   <div className="flex justify-center items-center w-full mt-10 sm:mt-10">
@@ -249,7 +198,7 @@ const RegisterPage: NextPage = () => {
                       variant="link"
                       type="button"
                       extraCSSClasses="flex text-primary"
-                      onClick={(e) => router.push('/login')}
+                      onClick={(e) => router.push('/auth/login')}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
