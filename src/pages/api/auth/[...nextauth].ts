@@ -42,7 +42,8 @@ export const authOptions: NextAuthOptions = {
       name: 'Credentials',
       credentials: {
         username: { label: 'Email', type: 'text', placeholder: 'Email' },
-        password: { label: 'Password', type: 'password', placeholder: 'Password' }
+        password: { label: 'Password', type: 'password', placeholder: 'Password' },
+        recaptcha: { type: 'hidden' }
       },
       async authorize ( credentials ) {
         const payload = {
@@ -51,9 +52,13 @@ export const authOptions: NextAuthOptions = {
         };
 
         try {
+          if ( !credentials?.recaptcha ) {
+            throw new Error();
+          }
           const { data: user } = await axios.post<IUserAuth>(
             `${ process.env.NEXT_PUBLIC_EXTERNAL_API_URL }/users/login-by-email`,
             payload,
+            { headers: { recaptcha: credentials.recaptcha } }
           );
 
           return user;
@@ -97,7 +102,7 @@ export const authOptions: NextAuthOptions = {
       else if ( new URL( url ).origin === baseUrl ) return url;
       return baseUrl;
     },
-    
+
     async jwt ( { token, user, account } ) {
       if ( account && user ) {
         if ( account.provider === 'credentials' ) {

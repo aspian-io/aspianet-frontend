@@ -15,6 +15,7 @@ import {
   UserErrorsInternalCodeEnum,
 } from '../../models/users/auth-error';
 import FormikInput from '../../components/common/FormikInput';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface IProps {
   csrfToken: string;
@@ -22,6 +23,7 @@ interface IProps {
 
 const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
   const { status } = useSession();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const router = useRouter();
   const [done, setDone] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
@@ -55,10 +57,18 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
           .max(50, 'Password address should be less than 50 characters'),
       })}
       onSubmit={async (values) => {
+        if (!executeRecaptcha) {
+          toast.error('Something went wrong', {
+            className: 'bg-danger text-light text-sm',
+          });
+          return;
+        }
+        const reCaptchaToken = await executeRecaptcha('login');
         const res = await signIn('credentials', {
           redirect: false,
           username: values.username,
           password: values.password,
+          recaptcha: reCaptchaToken,
         });
         if (res?.error) {
           const err = JSON.parse(res.error) as IUserError;
@@ -93,6 +103,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
           toast.error('Something went wrong', {
             className: 'bg-danger text-light text-sm',
           });
+          return;
         }
         setDone(true);
       }}

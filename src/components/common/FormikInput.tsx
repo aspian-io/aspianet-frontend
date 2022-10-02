@@ -43,7 +43,7 @@ const FormikInput: FC<IFormikInput> = ({
   const cssClasses = `bg-zinc-100 placeholder-zinc-400 text-zinc-800 border-0 
     ${
       errors[field.name] && touched[field.name]
-        ? 'border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+        ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
         : 'focus:border-2 focus:border-primary focus:bg-light'
     } ${
     className ? className : 'block w-full h-11 rounded-xl text-xs sm:text-sm'

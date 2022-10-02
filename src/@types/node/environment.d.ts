@@ -9,5 +9,7 @@ namespace NodeJS {
     OAUTH_GOOGLE_CLIENT_ID?: string;
     OAUTH_GOOGLE_SECRET?: string;
     OAUTH_GOOGLE_CALLBACK_URI?: string;
+    NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY?: string;
+    GOOGLE_RECAPTCHA_SECRET_KEY?: string;
   }
 }
