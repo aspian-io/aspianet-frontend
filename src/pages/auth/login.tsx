@@ -108,7 +108,7 @@ const LoginPage: NextPage<IProps> = ({ csrfToken }) => {
         setDone(true);
       }}
     >
-      {({ errors, touched, setSubmitting, isSubmitting }) => (
+      {({ isSubmitting }) => (
         <Form>
           <fieldset disabled={isSubmitting || googleLoginLoading || done}>
             <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-br from-primary to-light">

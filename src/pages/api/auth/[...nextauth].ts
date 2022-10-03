@@ -136,7 +136,7 @@ export const authOptions: NextAuthOptions = {
 
           if ( ( Math.floor( Date.now() / 1000 ) < Number( googleAccessTokenExpires ) ) ) {
             const authServerAccessToken = jwt.sign(
-              { sub: account.providerAccountId, email, clms: [] },
+              { sub: account.providerAccountId, email, clms: [ 'external_a' ] },
               process.env.AUTH_ACCESS_TOKEN_SECRET!,
               { expiresIn: process.env.OAUTH_SERVER_ACCESS_TOKEN_EXPIRATION }
             );
