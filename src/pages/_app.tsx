@@ -2,7 +2,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'nprogress/nprogress.css';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { store } from '../store/store';
+import { store, useAppDispatch } from '../store/store';
 import '../locales/i18n';
 import { Provider } from 'react-redux';
 import { SessionProvider } from 'next-auth/react';

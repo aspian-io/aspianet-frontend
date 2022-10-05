@@ -5,7 +5,6 @@ export interface IUserProfile {
   lastName: string;
   bio?: string;
   email: string;
-  emailVerified: boolean;
   birthDate?: Date;
   gender?: GenderEnum;
   country?: string;
@@ -14,9 +13,14 @@ export interface IUserProfile {
   address?: string;
   phone?: string;
   mobilePhone?: string;
-  mobilePhoneVerified: boolean;
   postalCode?: string;
   avatarSource: AvatarSourceEnum;
   avatar?: string;
-  
+  bookmarkIds: string[];
+  website?: string;
+  facebook?: string;
+  twitter?: string;
+  instagram?: string;
+  linkedIn?: string;
+  pinterest?: string;
 }

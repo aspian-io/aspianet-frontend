@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import Button from '../../common/Button';
-import Input, { InputTypeEnum } from '../../common/Input';
-import BlogCard from '../post/sub-components/BlogCard';
-import Pagination from '../post/sub-components/Pagination';
+import Button from '../../../common/Button';
+import Input, { InputTypeEnum } from '../../../common/Input';
+import BlogCard from '../../post/sub-components/BlogCard';
+import Pagination from '../../post/sub-components/Pagination';
+import ChangeAvatar from './sub-components/ChangeAvatar';
+import ProfileAvatar from './sub-components/ProfileAvatar';
 
 const Profile = () => {
   const [birthday, setBirthday] = useState<string | null>(null);
@@ -16,6 +17,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     'profile' | 'privacy' | 'bookmark'
   >('profile');
+  
 
   return (
     <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start px-2 sm:px-8 lg:px-0 py-6 sm:py-8 bg-zinc-100 rounded-3xl my-4 lg:my-8">
@@ -23,35 +25,8 @@ const Profile = () => {
       <div className="flex flex-col sm:flex-row lg:hidden justify-between items-center w-full mb-1 sm:mb-4 px-6 sm:divide-x-2">
         <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:max-w-[25%] space-x-3 group">
           <div className="relative flex flex-col justify-center items-center mb-2 sm:mb-0">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary ring-offset-2 ring-offset-zinc-100 hoverable:group-hover:ring-offset-0 transition-all duration-700">
-              <Image
-                className="hoverable:group-hover:scale-110 hoverable:group-hover:rotate-3 transition-transform duration-700"
-                src="/staff3.jpg"
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
-                alt="Avatar"
-              />
-            </div>
-            <div className="absolute -bottom-2 -left-1 flex lg:hidden justify-center items-center p-1 bg-primary rounded-full cursor-pointer">
-              <label
-                htmlFor="dropzone-file"
-                className="flex justify-center items-center"
-              >
-                <div className="flex flex-col justify-center items-center text-light cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
-                    <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
-                  </svg>
-                </div>
-                <input id="dropzone-file" type="file" className="hidden" />
-              </label>
-            </div>
+            <ProfileAvatar responsive />
+            <ChangeAvatar responsive />
           </div>
         </div>
         {/* Tabs Wrapper starts */}
@@ -180,28 +155,9 @@ const Profile = () => {
 
       {/* lg menu starts */}
       <div className="hidden lg:flex flex-col min-w-[270px] lg:w-1/4 rounded-2xl py-10 px-8 bg-zinc-100">
-        <div className="flex flex-col justify-center items-center group">
-          <div className="relative w-36 h-36 rounded-full overflow-hidden ring-4 ring-primary ring-offset-4 ring-offset-zinc-100 hoverable:group-hover:ring-offset-0 transition-all duration-300">
-            <Image
-              className="hoverable:group-hover:scale-110 hoverable:group-hover:rotate-3 transition-transform duration-300"
-              src="/staff3.jpg"
-              layout="fill"
-              objectFit="cover"
-              objectPosition="center"
-              alt="Avatar"
-            />
-            <div className="absolute flex justify-center items-center w-full h-1/2 -bottom-8 hoverable:hover:bottom-0 hoverable:hover:h-full transition-all duration-300">
-              <label
-                htmlFor="dropzone-file"
-                className="flex flex-col justify-center items-center w-full h-full bg-primary/60 rounded-b-full hoverable:hover:rounded-full cursor-pointer transition-all duration-300"
-              >
-                <div className="flex flex-col justify-center items-center pt-5 pb-6">
-                  <p className="mb-2 text-sm text-light">Edit</p>
-                  <p className="text-xs text-light">PNG, JPG (MAX. 1MB)</p>
-                </div>
-                <input id="dropzone-file" type="file" className="hidden" />
-              </label>
-            </div>
+        <div className="flex flex-col justify-center items-center">
+          <div className="group">
+            <ProfileAvatar />
           </div>
           <div className="mt-6 text-lg text-dark font-semibold">Hi Jane</div>
           <div className="text-center">

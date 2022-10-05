@@ -158,7 +158,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
     case 'link':
       btnVariantCssClass = `
         text-primary
-        outline-none
+        outline-hidden
         hoverable:hover:text-primary-dark 
         `;
       break;

@@ -1,15 +1,8 @@
-import axios, { AxiosRequestHeaders, AxiosResponse } from "axios";
-import { getSession } from "next-auth/react";
+import axios, { AxiosRequestHeaders, AxiosResponse, AxiosRequestConfig } from "axios";
+import { Session } from "next-auth";
 import { IUserAuth } from "../models/users/auth";
+import { IUserProfile } from "../models/users/profile";
 import { IUserRegister } from "../models/users/register";
-
-const getAuthTokenHeader = async (): Promise<AxiosRequestHeaders | undefined> => {
-  const session = await getSession();
-  if ( session?.user.accessToken ) {
-    return { Authorization: `Bearer ${ session.user.accessToken }` };
-  }
-  return undefined;
-};
 
 const AxiosApp = async () => axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -18,7 +11,6 @@ const AxiosApp = async () => axios.create( {
 
 const AxiosAPI = async () => axios.create( {
   baseURL: process.env.NEXT_PUBLIC_EXTERNAL_API_URL,
-  headers: await getAuthTokenHeader()
 } );
 
 const responseBody = ( response: AxiosResponse ) => response.data;
@@ -29,30 +21,38 @@ const sleep = ( ms: number ) => ( response: AxiosResponse ) =>
     setTimeout( () => resolve( response ), ms )
   );
 
+// Generate Authorization header
+const authHeader = ( session: Session | null ): AxiosRequestHeaders | undefined => {
+  if ( session?.user.accessToken ) {
+    return { Authorization: `Bearer ${ session.user.accessToken }` };
+  }
+  return undefined;
+};
+
 // Axios App requests
 const appRequests = {
-  get: async ( url: string ) => ( await AxiosApp() ).get( url ).then( sleep( 1000 ) ).then( responseBody ),
-  post: async ( url: string, body: {} ) =>
-    ( await AxiosApp() ).post( url, body ).then( sleep( 1000 ) ).then( responseBody ),
-  put: async ( url: string, body: {} ) =>
-    ( await AxiosApp() ).put( url, body ).then( sleep( 1000 ) ).then( responseBody ),
-  del: async ( url: string ) =>
+  get: async ( url: string, config?: AxiosRequestConfig<{}> ) => ( await AxiosApp() ).get( url, config ).then( sleep( 1000 ) ).then( responseBody ),
+  post: async ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
+    ( await AxiosApp() ).post( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+  patch: async ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
+    ( await AxiosApp() ).put( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+  del: async ( url: string, config?: AxiosRequestConfig<{}> ) =>
     ( await AxiosApp() )
-      .delete( url )
+      .delete( url, config )
       .then( sleep( 1000 ) )
       .then( responseBody ),
 };
 
 // Axios API requests
 const apiRequests = {
-  get: async ( url: string ) => ( await AxiosAPI() ).get( url ).then( sleep( 1000 ) ).then( responseBody ),
-  post: async ( url: string, body: {} ) =>
-    ( await AxiosAPI() ).post( url, body ).then( sleep( 1000 ) ).then( responseBody ),
-  put: async ( url: string, body: {} ) =>
-    ( await AxiosAPI() ).put( url, body ).then( sleep( 1000 ) ).then( responseBody ),
-  del: async ( url: string ) =>
+  get: async ( url: string, config?: AxiosRequestConfig<{}> ) => ( await AxiosAPI() ).get( url, config ).then( sleep( 1000 ) ).then( responseBody ),
+  post: async ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
+    ( await AxiosAPI() ).post( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+  patch: async ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
+    ( await AxiosAPI() ).patch( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+  del: async ( url: string, config?: AxiosRequestConfig<{}> ) =>
     ( await AxiosAPI() )
-      .delete( url )
+      .delete( url, config )
       .then( sleep( 1000 ) )
       .then( responseBody ),
 };
@@ -66,5 +66,13 @@ export const AuthAgent = {
   resetPasswordRequest: async ( email: string ): Promise<{}> => await apiRequests.post( '/users/reset-password/by-email/request', { email } ),
   resetPassword: async ( email: string, password: string, token: number ): Promise<IUserAuth> =>
     await apiRequests.post( '/users/reset-password/by-email', { email, password, token } ),
+  resetPasswordRemainingTime: async ( email: string ): Promise<{ remainingTimeInSec: number; }> => await apiRequests.post( '/users/reset-password-token-time', { email } ),
+};
 
+// User agent
+export const UserAgent = {
+  getCurrentUserProfile: async ( session: Session | null ): Promise<IUserProfile> => await apiRequests.get( '/users/profile', { headers: authHeader( session ) } ),
+  uploadAvatar: async ( session: Session | null, formData: FormData ): Promise<IUserProfile> => await apiRequests.patch( 'users/profile/edit-avatar', formData, {
+    headers: { "Content-Type": "multipart/form-data", ...authHeader( session ) }
+  } )
 };

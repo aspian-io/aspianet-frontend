@@ -14,6 +14,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { AxiosError } from 'axios';
 import { INestError } from '../../models/common/error';
 import FormikInput from '../../components/common/FormikInput';
+import { useTimer } from '../../hooks/common/useTimer';
 
 interface IProps {
   email: string;
@@ -26,45 +27,16 @@ const VerifyEmailPage: NextPage<IProps> = ({
   remainingTime,
   csrfToken,
 }) => {
-  const [timer, setTimer] = useState(remainingTime);
   const [resendLoading, setResendLoading] = useState(false);
   const [done, setDone] = useState(false);
   const { status } = useSession();
   const router = useRouter();
+  const { timer, timerMinutes, timerSeconds } = useTimer(remainingTime);
   const initialValues: IUserOtp = new UserOtp({ email, token: '' });
-  const getRemainingMinutes = useCallback(
-    (seconds: number) => {
-      const mins = Math.floor(timer / 60);
-      return String(mins).padStart(2, '0');
-    },
-    [timer]
-  );
-
-  const getRemainingSeconds = useCallback(
-    (seconds: number) => {
-      const sec = timer - Math.floor(timer / 60) * 60;
-      return String(sec).padStart(2, '0');
-    },
-    [timer]
-  );
-
-  const [timerMinutes, setTimerMinutes] = useState(getRemainingMinutes(timer));
-  const [timerSeconds, setTimerSeconds] = useState(getRemainingSeconds(timer));
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
-    const interval = setInterval(() => {
-      setTimer(timer - 1);
-      setTimerMinutes(getRemainingMinutes(timer));
-      setTimerSeconds(getRemainingSeconds(timer));
-    }, 1000);
-
-    if (timer < 0) clearInterval(interval);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [router, status, getRemainingMinutes, getRemainingSeconds, timer]);
+  }, [router, status]);
 
   if (status === 'authenticated') return <></>;
 

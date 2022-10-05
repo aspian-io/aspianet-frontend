@@ -13,7 +13,7 @@ import { UserErrorsEnum, UserErrorsInternalCodeEnum } from "../../../models/user
 async function refreshAccessToken ( token: JWT ): Promise<JWT> {
   try {
 
-    const { data } = await axios.post<IUserAuth>(
+    const { data: user } = await axios.post<IUserAuth>(
       `${ process.env.NEXT_PUBLIC_EXTERNAL_API_URL }/users/refresh-tokens`,
       undefined,
       {
@@ -23,12 +23,11 @@ async function refreshAccessToken ( token: JWT ): Promise<JWT> {
       }
     );
 
-    const decodedJwt = jwt.decode( data.accessToken ) as IJwt;
+    const decodedJwt = jwt.decode( user.accessToken ) as IJwt;
 
     return {
       ...token,
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
+      ...user,
       accessTokenExpires: decodedJwt.exp,
     };
   } catch ( error ) {
@@ -178,11 +177,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      if ( ( Math.floor( Date.now() / 1000 ) > Number( token.accessTokenExpires ) ) ) {
-        return await refreshAccessToken( token );
-      }
-
-      return token;
+      return await refreshAccessToken( token );
     },
 
     async session ( { session, token } ) {

@@ -4,14 +4,14 @@ import { SlicesEnum } from "./slices.type";
 
 export interface IUserState {
   loading: boolean;
-  user: IUserAuth | null;
-  error: SerializedError | null;
+  user?: IUserAuth;
+  error: SerializedError | undefined;
 }
 
 const internalInitialState: IUserState = {
   loading: false,
-  user: null,
-  error: null
+  user: undefined,
+  error: undefined
 } as const;
 
 export const userSlice = createSlice( {
@@ -29,7 +29,7 @@ export const userSlice = createSlice( {
       action: PayloadAction<typeof internalInitialState.user>
     ) => {
       state.user = action.payload;
-      state.error = null;
+      state.error = undefined;
     },
     updateUserError: (
       state: Draft<IUserState>,

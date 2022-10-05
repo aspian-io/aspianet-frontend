@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import SiteLayout from '../../components/site/layout/SiteLayout';
-import Profile from '../../components/site/profile/Profile';
+import Profile from '../../components/site/users/profile/Profile';
 
 const ProfilePage: NextPage = () => {
   return (
