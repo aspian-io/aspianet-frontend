@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import Link from 'next/link';
 import Button from '../../../common/Button';
 import Input, { InputTypeEnum } from '../../../common/Input';
@@ -7,7 +7,11 @@ import Pagination from '../../post/sub-components/Pagination';
 import ChangeAvatar from './sub-components/ChangeAvatar';
 import ProfileAvatar from './sub-components/ProfileAvatar';
 
-const Profile = () => {
+interface IProps {
+  isUpdateAvatarAllowed: boolean;
+}
+
+const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
   const [birthday, setBirthday] = useState<string | null>(null);
   const [birthdayInputType, setBirthdayInputType] = useState<InputTypeEnum>(
     InputTypeEnum.text
@@ -17,7 +21,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState<
     'profile' | 'privacy' | 'bookmark'
   >('profile');
-  
 
   return (
     <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start px-2 sm:px-8 lg:px-0 py-6 sm:py-8 bg-zinc-100 rounded-3xl my-4 lg:my-8">
@@ -26,7 +29,7 @@ const Profile = () => {
         <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:max-w-[25%] space-x-3 group">
           <div className="relative flex flex-col justify-center items-center mb-2 sm:mb-0">
             <ProfileAvatar responsive />
-            <ChangeAvatar responsive />
+            {isUpdateAvatarAllowed && <ChangeAvatar responsive />}
           </div>
         </div>
         {/* Tabs Wrapper starts */}
@@ -157,7 +160,7 @@ const Profile = () => {
       <div className="hidden lg:flex flex-col min-w-[270px] lg:w-1/4 rounded-2xl py-10 px-8 bg-zinc-100">
         <div className="flex flex-col justify-center items-center">
           <div className="group">
-            <ProfileAvatar />
+            <ProfileAvatar isUpdateAvatarAllowed={isUpdateAvatarAllowed} />
           </div>
           <div className="mt-6 text-lg text-dark font-semibold">Hi Jane</div>
           <div className="text-center">

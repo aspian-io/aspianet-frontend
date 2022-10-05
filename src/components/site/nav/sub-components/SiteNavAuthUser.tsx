@@ -76,7 +76,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
             </a>
           </Link>
         </AuthGuard>
-        <Link href="/auth/profile">
+        <Link href="/users/profile">
           <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"

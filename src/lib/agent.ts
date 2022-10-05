@@ -74,5 +74,6 @@ export const UserAgent = {
   getCurrentUserProfile: async ( session: Session | null ): Promise<IUserProfile> => await apiRequests.get( '/users/profile', { headers: authHeader( session ) } ),
   uploadAvatar: async ( session: Session | null, formData: FormData ): Promise<IUserProfile> => await apiRequests.patch( 'users/profile/edit-avatar', formData, {
     headers: { "Content-Type": "multipart/form-data", ...authHeader( session ) }
-  } )
+  } ),
+  isUpdateAvatarAllowed: async ( session: Session | null ): Promise<boolean> => await apiRequests.get( 'users/profile/update-avatar-setting', { headers: authHeader( session ) } )
 };

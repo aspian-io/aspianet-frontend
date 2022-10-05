@@ -6,9 +6,13 @@ import ChangeAvatar from './ChangeAvatar';
 
 interface IProps {
   responsive?: boolean;
+  isUpdateAvatarAllowed?: boolean;
 }
 
-const ProfileAvatar: FC<IProps> = ({ responsive = false }) => {
+const ProfileAvatar: FC<IProps> = ({
+  isUpdateAvatarAllowed = false,
+  responsive = false,
+}) => {
   const { data: session } = useSession();
   const profilePhotoId = useId();
 
@@ -51,11 +55,11 @@ const ProfileAvatar: FC<IProps> = ({ responsive = false }) => {
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
-                placeholder='blur'
+                placeholder="blur"
                 blurDataURL={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${session.user.avatar}`}
                 alt="Avatar"
               />
-              <ChangeAvatar />
+              {isUpdateAvatarAllowed && <ChangeAvatar />}
             </div>
           ) : (
             <div className="flex justify-center items-center h-12 w-12 rounded-full overflow-hidden bg-primary text-light">

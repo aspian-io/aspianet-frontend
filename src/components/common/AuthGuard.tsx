@@ -37,8 +37,8 @@ export const AuthGuard: FC<PropsWithChildren<IProps>> = ({
     if (redirect) {
       if (status === 'unauthenticated') signIn();
       if (
-        status === 'authenticated' &&
-        !claims?.some((c) => userClaims?.includes(c))
+        status === 'authenticated' && claims.length &&
+        !claims.some((c) => userClaims?.includes(c))
       ) {
         router.push('/403');
       }
