@@ -6,12 +6,14 @@ import BlogCard from '../../post/sub-components/BlogCard';
 import Pagination from '../../post/sub-components/Pagination';
 import ChangeAvatar from './sub-components/ChangeAvatar';
 import ProfileAvatar from './sub-components/ProfileAvatar';
+import { useSession } from 'next-auth/react';
 
 interface IProps {
   isUpdateAvatarAllowed: boolean;
 }
 
 const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
+  const { data: session } = useSession();
   const [birthday, setBirthday] = useState<string | null>(null);
   const [birthdayInputType, setBirthdayInputType] = useState<InputTypeEnum>(
     InputTypeEnum.text
@@ -29,7 +31,8 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:max-w-[25%] space-x-3 group">
           <div className="relative flex flex-col justify-center items-center mb-2 sm:mb-0">
             <ProfileAvatar responsive />
-            {isUpdateAvatarAllowed && <ChangeAvatar responsive />}
+            {isUpdateAvatarAllowed && !session?.user.avatar && <ChangeAvatar responsive noAvatarMode />}
+            {isUpdateAvatarAllowed && session?.user.avatar && <ChangeAvatar responsive noAvatarMode />}
           </div>
         </div>
         {/* Tabs Wrapper starts */}
@@ -315,7 +318,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
             size="h-8"
             type="button"
             variant="success"
-            extraCSSClasses=" text-xs sm:text-sm sm:px-4"
+            extraCSSClasses=" text-xs sm:text-sm px-2 sm:px-4"
           >
             Save Changes
           </Button>

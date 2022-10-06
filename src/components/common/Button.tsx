@@ -173,7 +173,6 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
     <button
       type={props.type}
       className={`
-        px-2
         ${btnVariantCssClass} 
         ${btnIsBlockCssClass} 
         ${props.size}

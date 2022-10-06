@@ -53,17 +53,7 @@ function MyApp({
           draggable
           pauseOnHover
         />
-        <GoogleReCaptchaProvider
-          reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY!}
-          scriptProps={{
-            async: false,
-            defer: false,
-            appendTo: 'head',
-            nonce: undefined,
-          }}
-        >
-          <Component {...pageProps} />
-        </GoogleReCaptchaProvider>
+        <Component {...pageProps} />
       </Provider>
     </SessionProvider>
   );
