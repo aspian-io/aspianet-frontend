@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction, SerializedError } from "@reduxjs/toolkit";
-import { IUserAuth } from "../../models/users/auth";
+import { IUserAuth } from "../../models/auth/auth";
 import { SlicesEnum } from "./slices.type";
 
 export interface IUserState {

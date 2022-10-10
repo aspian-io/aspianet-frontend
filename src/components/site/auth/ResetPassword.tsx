@@ -8,10 +8,10 @@ import { useTimer } from '../../../hooks/common/useTimer';
 import {
   IUserResetPasswordOtp,
   UserResetPasswordOtp,
-} from '../../../models/users/otp';
+} from '../../../models/auth/otp';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
-import { AuthAgent } from '../../../lib/agent';
+import { AuthAgent } from '../../../lib/axios/agent';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';

@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { FC, useId } from 'react';
-import { AvatarSourceEnum } from '../../../../../models/users/common';
+import React, { FC } from 'react';
+import { AvatarSourceEnum } from '../../../../../models/auth/common';
 import ChangeAvatar from './ChangeAvatar';
 
 interface IProps {
@@ -14,7 +14,6 @@ const ProfileAvatar: FC<IProps> = ({
   responsive = false,
 }) => {
   const { data: session } = useSession();
-  const profilePhotoId = useId();
 
   return (
     <>
@@ -26,7 +25,7 @@ const ProfileAvatar: FC<IProps> = ({
                 className="hoverable:group-hover:scale-110 hoverable:group-hover:rotate-3 transition-transform duration-700"
                 src={
                   session.user.avatarSource === AvatarSourceEnum.STORAGE
-                    ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${session.user.avatar}`
+                    ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${session.user.avatar}`
                     : session.user.avatar
                 }
                 layout="fill"
@@ -49,14 +48,14 @@ const ProfileAvatar: FC<IProps> = ({
                 className="hoverable:group-hover:scale-110 hoverable:group-hover:rotate-3 transition-transform duration-300"
                 src={
                   session.user.avatarSource === AvatarSourceEnum.STORAGE
-                    ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${session.user.avatar}`
+                    ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${session.user.avatar}`
                     : session.user.avatar
                 }
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
                 placeholder="blur"
-                blurDataURL={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${session.user.avatar}`}
+                blurDataURL={`${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${session.user.avatar}`}
                 alt="Avatar"
               />
               {isUpdateAvatarAllowed && <ChangeAvatar />}

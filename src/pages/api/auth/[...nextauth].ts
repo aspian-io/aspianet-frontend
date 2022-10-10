@@ -1,14 +1,14 @@
 import axios, { AxiosError } from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialProvider from 'next-auth/providers/credentials';
-import { IUserAuth } from "../../../models/users/auth";
+import { IUserAuth } from "../../../models/auth/auth";
 import * as jwt from 'jsonwebtoken';
 import { IJwt } from "../../../components/common/types/jwt";
 import { JWT } from "next-auth/jwt";
-import { AvatarSourceEnum } from "../../../models/users/common";
+import { AvatarSourceEnum } from "../../../models/auth/common";
 import GoogleProvider from "next-auth/providers/google";
 import { INestError } from "../../../models/common/error";
-import { UserErrorsEnum, UserErrorsInternalCodeEnum } from "../../../models/users/auth-error";
+import { UserErrorsEnum, UserErrorsInternalCodeEnum } from "../../../models/auth/auth-error";
 
 async function refreshAccessToken ( token: JWT ): Promise<JWT> {
   try {

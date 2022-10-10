@@ -1,9 +1,8 @@
 import { Dispatch, SerializedError } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import { AuthAgent } from "../../lib/agent";
-import { IUserAuth } from "../../models/users/auth";
-import { resetUserState, updateUser, updateUserError, updateUserLoadingState } from "../slices/user-slice";
+import { IUserAuth } from "../../models/auth/auth";
+import { resetUserState, updateUserError, updateUserLoadingState } from "../slices/user-slice";
 
 export const updateCurrentUser = ( user?: IUserAuth ) => {
   return async ( dispatch: Dispatch ) => {

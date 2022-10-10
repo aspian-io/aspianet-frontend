@@ -96,3 +96,47 @@ input[type='date'].date-input--has-value::-webkit-datetime-edit-day-field,
 input[type='date'].date-input--has-value::-webkit-datetime-edit-year-field {
   @apply text-dark;
 }
+
+
+.react-datepicker {
+  @apply rounded-xl shadow-2xl border-0
+}
+
+.react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
+  @apply border-b-primary
+}
+
+.react-datepicker__day--selected {
+  @apply bg-primary
+}
+
+.react-datepicker__month-container {
+  @apply text-dark
+}
+
+.react-datepicker__header,
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  @apply bg-primary rounded-t-xl
+}
+
+.react-datepicker__day:hover {
+  @apply bg-primary-light
+}
+
+.react-datepicker__current-month {
+  @apply text-light
+}
+
+.react-datepicker__day-name {
+  @apply text-light
+}
+
+.react-datepicker__month-select,
+.react-datepicker__year-select {
+  @apply rounded-lg pl-2 py-1 text-sm border-0 focus:ring-0 cursor-pointer
+}
+
+.react-datepicker__day--keyboard-selected {
+  @apply bg-primary
+}

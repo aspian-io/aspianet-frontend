@@ -1,14 +1,14 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
 import { getCsrfToken, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useId, useState } from 'react';
-import { IUserOtp, UserOtp } from '../../models/users/otp';
+import { useEffect, useState } from 'react';
+import { IUserOtp, UserOtp } from '../../models/auth/otp';
 import * as Yup from 'yup';
 import Link from 'next/link';
 import Button from '../../components/common/Button';
 import Image from 'next/image';
-import { AuthAgent } from '../../lib/agent';
+import { AuthAgent } from '../../lib/axios/agent';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { AxiosError } from 'axios';

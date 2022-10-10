@@ -26,7 +26,7 @@ const ConfirmModal: FC<IProps> = ({
   children,
 }) => {
   return (
-    <Modal show={show}>
+    <Modal show={show} onClose={onCancel}>
       <div className="flex flex-row justify-center items-center w-full text-left">
         {children ? (
           <>{children}</>
@@ -55,7 +55,7 @@ const ConfirmModal: FC<IProps> = ({
           rounded="rounded-xl"
           size="h-9"
           type="button"
-          variant="primary-outline"
+          variant="primary"
           extraCSSClasses="flex justify-center items-center w-24 sm:w-28"
           onClick={() => onCancel()}
           disabled={onCancelLoading || onConfirmLoading}
@@ -70,7 +70,7 @@ const ConfirmModal: FC<IProps> = ({
           rounded="rounded-xl"
           size="h-9"
           type="button"
-          variant="danger"
+          variant="danger-outline"
           extraCSSClasses="ml-4 flex justify-center items-center w-24 sm:w-28"
           onClick={() => onConfirm()}
           disabled={onCancelLoading || onConfirmLoading}

@@ -1,24 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useEffect, useState, useCallback } from 'react';
-import { getCsrfToken, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import * as Yup from 'yup';
 import { AxiosError } from 'axios';
 import { INestError } from '../../models/common/error';
-import { toast } from 'react-toastify';
-import { AuthAgent } from '../../lib/agent';
-import Link from 'next/link';
-import Button from '../../components/common/Button';
-import Input, { InputTypeEnum } from '../../components/common/Input';
-import Image from 'next/image';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import {
-  IUserResetPasswordOtp,
-  UserResetPasswordOtp,
-} from '../../models/users/otp';
-import FormikInput from '../../components/common/FormikInput';
-import { useTimer } from '../../hooks/common/useTimer';
+import { AuthAgent } from '../../lib/axios/agent';
 import ResetPassword from '../../components/site/auth/ResetPassword';
 
 interface IProps {

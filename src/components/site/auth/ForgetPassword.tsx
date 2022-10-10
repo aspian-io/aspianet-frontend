@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
-import { AuthAgent } from '../../../lib/agent';
+import { AuthAgent } from '../../../lib/axios/agent';
 import {AxiosError} from 'axios';
 import { INestError } from '../../../models/common/error';
 import { toast } from 'react-toastify';

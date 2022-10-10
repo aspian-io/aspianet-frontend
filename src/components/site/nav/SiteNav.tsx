@@ -9,7 +9,6 @@ import SiteNavHamburgerBtn from './sub-components/SiteNavHamburgerBtn';
 import SiteNavLogo from './sub-components/SiteNavLogo';
 import SiteNavItemsWrapper from './sub-components/SiteNavItemsWrapper';
 import SiteNavOpenSearchBtn from './sub-components/SiteNavOpenSearchBtn';
-import { getUserState } from '../../../store/slices/user-slice';
 import SiteNavAuthUser from './sub-components/SiteNavAuthUser';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import { useSession } from 'next-auth/react';

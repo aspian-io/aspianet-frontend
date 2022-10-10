@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState, useId, FC } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { toast } from 'react-toastify';
-import { IUserLogin, UserLogin } from '../../../models/users/login';
+import { IUserLogin, UserLogin } from '../../../models/auth/login';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import {
   IUserError,
   UserErrorsInternalCodeEnum,
-} from '../../../models/users/auth-error';
+} from '../../../models/auth/auth-error';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
 

@@ -23,6 +23,7 @@ const SiteNavAuthBtn: FC<ISiteNavAuthBtnProps> = ({
               size="h-11"
               variant="primary-outline"
               type="button"
+              extraCSSClasses='px-2'
             >
               <div className="flex flex-row space-x-1 text-xs">
                 <svg

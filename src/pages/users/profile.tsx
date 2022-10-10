@@ -1,13 +1,10 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { AuthGuard } from '../../components/common/AuthGuard';
-import Button from '../../components/common/Button';
-import ConfirmModal from '../../components/common/ConfirmModal';
 import SiteLayout from '../../components/site/layout/SiteLayout';
 import Profile from '../../components/site/users/profile/Profile';
-import { UserAgent } from '../../lib/agent';
+import { UserAgent } from '../../lib/axios/agent';
 import { authOptions } from '../api/auth/[...nextauth]';
-import { useState } from 'react';
 
 interface IProps {
   isUpdateAvatarAllowed: boolean;

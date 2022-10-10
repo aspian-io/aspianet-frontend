@@ -2,8 +2,8 @@ import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { IUserAuth } from '../../../../models/users/auth';
-import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/users/common';
+import { IUserAuth } from '../../../../models/auth/auth';
+import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/auth/common';
 import { AuthGuard } from '../../../common/AuthGuard';
 
 interface IProps {
@@ -35,7 +35,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
             <Image
               src={
                 user.avatarSource === AvatarSourceEnum.STORAGE
-                  ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${user.avatar}`
+                  ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${user.avatar}`
                   : user.avatar
               }
               layout="fill"

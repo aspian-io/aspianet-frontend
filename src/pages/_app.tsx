@@ -1,8 +1,9 @@
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'nprogress/nprogress.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { store, useAppDispatch } from '../store/store';
+import { store } from '../store/store';
 import '../locales/i18n';
 import { Provider } from 'react-redux';
 import { SessionProvider } from 'next-auth/react';
@@ -11,7 +12,6 @@ import NProgress from 'nprogress';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Session } from 'next-auth';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 function MyApp({
   Component,

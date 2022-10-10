@@ -1,4 +1,4 @@
-import { AvatarSourceEnum, GenderEnum } from "./common";
+import { AvatarSourceEnum } from "./common";
 
 export interface IUserAuth {
   id: string;

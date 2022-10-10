@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { ClaimsEnum } from '../../models/users/common';
+import { ClaimsEnum } from '../../models/auth/common';
 import Loading from './Loading';
 import jwt from 'jsonwebtoken';
 import { IJwt } from './types/jwt';

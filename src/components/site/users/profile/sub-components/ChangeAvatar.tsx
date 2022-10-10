@@ -1,8 +1,8 @@
 import { Field, Form, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { useState, useId, FC } from 'react';
-import { UserAgent } from '../../../../../lib/agent';
-import { reloadSession } from '../../../../../lib/session';
+import { UserAgent } from '../../../../../lib/axios/agent';
+import { reloadSession } from '../../../../../lib/next-auth/session';
 import { AxiosError } from 'axios';
 import { INestError } from '../../../../../models/common/error';
 import { toast } from 'react-toastify';
@@ -240,24 +240,28 @@ const ChangeAvatar: FC<IProps> = ({
             <Form>
               <>
                 {!noAvatarMode ? (
-                  <div className="absolute flex justify-center items-center w-full h-1/2 -bottom-8 hoverable:hover:bottom-0 hoverable:hover:h-full transition-all duration-300">
+                  <div
+                    className={`absolute flex justify-center items-center w-full hoverable:hover:bottom-0 hoverable:hover:h-full transition-all duration-300 ${
+                      isSubmitting
+                        ? 'h-full bottom-0 bg-primary/60 text-light'
+                        : ' h-1/2 -bottom-8'
+                    }`}
+                  >
                     {isSubmitting ? (
                       <LoadingSpinner className="h-10 w-10" />
                     ) : (
                       <label
                         htmlFor={profilePhotoId}
-                        className="flex flex-col justify-center items-center w-full h-full pt-12 pb-2 bg-primary/60 rounded-b-full hoverable:hover:rounded-full hoverable:hover:pt-2 cursor-pointer transition-all duration-300"
+                        className="flex flex-col justify-center items-center w-full h-full pt-12 pb-2 bg-light/90 rounded-b-full hoverable:hover:rounded-full hoverable:hover:pt-2 cursor-pointer transition-all duration-300"
                       >
                         <div className="flex flex-col justify-center items-center">
-                          <p className="mb-4 text-sm text-light">Edit</p>
-                          <p className="text-xs text-light">
-                            PNG, JPG (MAX. 100KB)
-                          </p>
+                          <p className="mb-4 text-sm text-primary font-bold hoverable:hover:text-primary-dark">Change</p>
+                          <p className="text-xs text-primary">JPG (MAX. 100KB)</p>
                           <Button
                             rounded="rounded-full"
                             size="h-8"
                             type="button"
-                            variant="danger"
+                            variant="danger-outline"
                             disabled={isSubmitting || removeLoading}
                             onClick={async () => setRemoveConfirm(true)}
                             extraCSSClasses="text-light text-xs mt-2 px-2"
@@ -266,12 +270,11 @@ const ChangeAvatar: FC<IProps> = ({
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
                               fill="currentColor"
-                              className="w-4 h-4"
+                              className="w-3 h-3"
                             >
-                              <path d="M2 3a1 1 0 00-1 1v1a1 1 0 001 1h16a1 1 0 001-1V4a1 1 0 00-1-1H2z" />
                               <path
                                 fillRule="evenodd"
-                                d="M2 7.5h16l-.811 7.71a2 2 0 01-1.99 1.79H4.802a2 2 0 01-1.99-1.79L2 7.5zm5.22 1.72a.75.75 0 011.06 0L10 10.94l1.72-1.72a.75.75 0 111.06 1.06L11.06 12l1.72 1.72a.75.75 0 11-1.06 1.06L10 13.06l-1.72 1.72a.75.75 0 01-1.06-1.06L8.94 12l-1.72-1.72a.75.75 0 010-1.06z"
+                                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
                                 clipRule="evenodd"
                               />
                             </svg>
