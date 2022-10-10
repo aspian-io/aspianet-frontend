@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useSWR from 'swr';
 import { UserAgent } from '../../../../../lib/axios/agent';
 import { UserKeys } from '../../../../../lib/swr/keys';
