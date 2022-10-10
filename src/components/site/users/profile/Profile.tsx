@@ -34,11 +34,11 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
   >('profile');
 
   useEffect(() => {
-    const routeHash = router.asPath.split('#')[1];
-    if (routeHash) {
-      if (routeHash === 'profile') setActiveTab('profile');
-      if (routeHash === 'security') setActiveTab('privacy');
-      if (routeHash === 'bookmarks') setActiveTab('bookmark');
+    const routeTab = router.query['tab'];
+    if (routeTab) {
+      if (routeTab === 'profile') setActiveTab('profile');
+      if (routeTab === 'security') setActiveTab('privacy');
+      if (routeTab === 'bookmarks') setActiveTab('bookmark');
     }
   }, [router.asPath]);
 
@@ -64,7 +64,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         <div className="flex justify-center items-center w-full sm:w-3/4 space-x-2 sm:space-x-3 mt-2 sm:mt-0">
           {/* Profile starts */}
           <div className="flex items-center group h-14">
-            <Link href="#">
+            <Link href="?tab=profile">
               <a
                 onClick={() => setActiveTab('profile')}
                 className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
@@ -103,7 +103,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
           </div>
           {/* Privacy starts */}
           <div className="flex items-center group h-14">
-            <Link href="#">
+            <Link href="?tab=security">
               <a
                 onClick={() => setActiveTab('privacy')}
                 className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
@@ -142,7 +142,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
           </div>
           {/* Bookmarks starts */}
           <div className="flex items-center group h-14">
-            <Link href="#">
+            <Link href="?tab=bookmarks">
               <a
                 onClick={() => setActiveTab('bookmark')}
                 className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
@@ -226,7 +226,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         </div>
         <div className="flex flex-col justify-center">
           <div className="flex items-center group h-14">
-            <Link href="#profile">
+            <Link href="?tab=profile">
               <a
                 onClick={() => setActiveTab('profile')}
                 className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
@@ -260,7 +260,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
             </Link>
           </div>
           <div className="flex items-center group h-14">
-            <Link href="#security">
+            <Link href="?tab=security">
               <a
                 onClick={() => setActiveTab('privacy')}
                 className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
@@ -294,7 +294,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
             </Link>
           </div>
           <div className="flex items-center group h-14">
-            <Link href="#bookmarks">
+            <Link href="?tab=bookmarks">
               <a
                 onClick={() => setActiveTab('bookmark')}
                 className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${

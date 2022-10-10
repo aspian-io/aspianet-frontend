@@ -27,7 +27,13 @@ const Pagination: FC<IPaginationProps> = ({
   return (
     <div className="flex justify-center items-center w-full gap-1 md:gap-2">
       {appliedCurrentPage > 1 && (
-        <Link href={`${baseUrl}?page=${appliedCurrentPage - 1}&${queryString}`}>
+        <Link
+          href={
+            queryString
+              ? `${baseUrl}?page=${appliedCurrentPage - 1}&${queryString}`
+              : `${baseUrl}?page=${appliedCurrentPage - 1}`
+          }
+        >
           <a>
             <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
               &lt;
@@ -37,7 +43,14 @@ const Pagination: FC<IPaginationProps> = ({
       )}
 
       {!mainIncludesFirstPage && (
-        <Link href={`${baseUrl}?page=1&${queryString}`} key={1}>
+        <Link
+          href={
+            queryString
+              ? `${baseUrl}?page=1&${queryString}`
+              : `${baseUrl}?page=1`
+          }
+          key={1}
+        >
           <a>
             <div
               className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
@@ -60,7 +73,14 @@ const Pagination: FC<IPaginationProps> = ({
 
       {mainSegmentNumbers.map((p) => {
         return (
-          <Link href={`${baseUrl}?page=${p}&${queryString}`} key={p}>
+          <Link
+            href={
+              queryString
+                ? `${baseUrl}?page=${p}&${queryString}`
+                : `${baseUrl}?page=${p}`
+            }
+            key={p}
+          >
             <a>
               <div
                 className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
@@ -84,7 +104,11 @@ const Pagination: FC<IPaginationProps> = ({
 
       {!mainIncludesLastPage && (
         <Link
-          href={`${baseUrl}?page=${totalPages}&${queryString}`}
+          href={
+            queryString
+              ? `${baseUrl}?page=${totalPages}&${queryString}`
+              : `${baseUrl}?page=${totalPages}`
+          }
           key={totalPages}
         >
           <a>
@@ -102,7 +126,13 @@ const Pagination: FC<IPaginationProps> = ({
       )}
 
       {appliedCurrentPage < totalPages && (
-        <Link href={`${baseUrl}?page=${appliedCurrentPage + 1}&${queryString}`}>
+        <Link
+          href={
+            queryString
+              ? `${baseUrl}?page=${appliedCurrentPage + 1}&${queryString}`
+              : `${baseUrl}?page=${appliedCurrentPage + 1}`
+          }
+        >
           <a>
             <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
               &gt;

@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { UserAgent } from '../../../../../lib/axios/agent';
 import { UserKeys } from '../../../../../lib/swr/keys';
@@ -14,13 +14,18 @@ import Pagination from '../../../post/sub-components/Pagination';
 
 const UserBookmarks = () => {
   const { data: session } = useSession();
-  const fetcher = () => UserAgent.getBookmarks(1, session);
-  const { data: profileData, error } = useSWR<
-    IPaginated<IBookmarkPost>,
-    AxiosError<INestError>
-  >(UserKeys.GET_BOOKMARKS, fetcher);
   const router = useRouter();
-
+  const page = router.query['page'] ? +router.query['page'] : 1;
+  const fetcher = () => UserAgent.getBookmarks(page, session);
+  const {
+    data: profileData,
+    error,
+    mutate,
+  } = useSWR<IPaginated<IBookmarkPost>, AxiosError<INestError>>(
+    `${UserKeys.GET_BOOKMARKS}?page=${page}`,
+    fetcher
+  );
+  
   if (error) router.push('/500');
   if (!profileData) return <Loading />;
 
@@ -46,7 +51,7 @@ const UserBookmarks = () => {
                   ? `${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${p.featuredImage.key}`
                   : undefined
               }
-              authorName={`${p.createdBy.firstName} ${p.createdBy.lastName}`}
+              authorName={`${p.createdBy.firstName}`}
               commentsNum={p.comments}
               likesNum={p.likes}
               bookmarksNum={p.bookmarks}
@@ -59,9 +64,10 @@ const UserBookmarks = () => {
       </div>
       <div className="flex justify-center items center w-full mt-12">
         <Pagination
-          currentPage={3}
-          totalPages={97}
-          baseUrl="localhost:3000/profile/bookmarks"
+          currentPage={profileData.meta.currentPage}
+          totalPages={profileData.meta.totalPages}
+          baseUrl={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/users/profile`}
+          queryString="tab=bookmarks"
         />
       </div>
     </>
