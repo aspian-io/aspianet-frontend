@@ -33,11 +33,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
         {user.avatar ? (
           <div className="relative h-7 w-7 lg:h-10 lg:w-10 rounded-full overflow-hidden ring-2 ring-primary ring-offset-2 hoverable:hover:ring-offset-0 hoverable:hover:scale-110 transition-all duration-300">
             <Image
-              src={
-                user.avatarSource === AvatarSourceEnum.STORAGE
-                  ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${user.avatar}`
-                  : user.avatar
-              }
+              src={user.avatar}
               layout="fill"
               objectFit="cover"
               objectPosition="center"

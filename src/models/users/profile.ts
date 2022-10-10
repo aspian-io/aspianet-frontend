@@ -45,7 +45,12 @@ export class UserProfileFormValues implements Partial<IUserProfile> {
 
   constructor ( init?: UserProfileFormValues ) {
     if ( init ) {
-      Object.keys( this ).forEach( key => { this[ key as keyof UserProfileFormValues ] = init[ key as keyof typeof init ] as any; } );
+      Object.keys( this ).forEach( key => {
+        // For formik we cannot use null values
+        if ( init[ key as keyof typeof init ] ) {
+          this[ key as keyof UserProfileFormValues ] = init[ key as keyof typeof init ] as any;
+        }
+      } );
     }
   }
 }

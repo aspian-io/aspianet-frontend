@@ -23,7 +23,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
   const bioCharCount = initialFormValues.bio?.length ?? 0;
   const initialCharLeft = 400 - bioCharCount;
   const [charLeft, setCharLeft] = useState(initialCharLeft);
-  
+
   // Formik Params Initialization
   const initialValues = new UserProfileFormValues(initialFormValues);
   const phoneRegex =
@@ -38,54 +38,64 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
       .max(30, 'Last name should be less than 30 characters')
       .required('Please enter your last name'),
     bio: Yup.string()
+      .nullable()
       .min(5, 'Biography should be more than 5 characters')
       .max(400, 'Biography should be less than 400 characters'),
     birthDate: Yup.date().nullable(),
-    gender: Yup.mixed().oneOf(Object.values(GenderEnum)),
+    gender: Yup.mixed().nullable().oneOf(Object.values(GenderEnum)),
     country: Yup.string()
+      .nullable()
       .min(2, 'Country name should be more than 2 characters')
       .max(30, 'Country name should be less than 30 characters'),
     state: Yup.string()
+      .nullable()
       .min(2, 'State name should be more than 2 characters')
       .max(30, 'State name should be less than 30 characters'),
     city: Yup.string()
+      .nullable()
       .min(2, 'City name should be more than 2 characters')
       .max(30, 'City name should be less than 30 characters'),
     address: Yup.string()
+      .nullable()
       .min(10, 'Address should be more than 10 characters')
       .max(100, 'Address should be less than 100 characters'),
-    phone: Yup.string().matches(
-      phoneRegex,
-      'Phone value must be a standard phone number'
-    ),
-    mobilePhone: Yup.string().matches(
-      phoneRegex,
-      'Phone value must be a standard phone number'
-    ),
+    phone: Yup.string()
+      .nullable()
+      .matches(phoneRegex, 'Phone value must be a standard phone number'),
+    mobilePhone: Yup.string()
+      .nullable()
+      .matches(phoneRegex, 'Phone value must be a standard phone number'),
     postalCode: Yup.string()
+      .nullable()
       .min(5, 'Postal code should be more than 5 characters')
       .max(10, 'Postal code should be less than 10 characters'),
     website: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Website address should be more than 5 characters')
       .max(50, 'Website address should be less than 50 characters'),
     facebook: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Facebook address should be more than 5 characters')
       .max(50, 'Facebook address should be less than 50 characters'),
     twitter: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Twitter address should be more than 5 characters')
       .max(50, 'Twitter address should be less than 50 characters'),
     instagram: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Instagram address should be more than 5 characters')
       .max(50, 'Instagram address should be less than 50 characters'),
     linkedIn: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'LinkedIn address should be more than 5 characters')
       .max(50, 'LinkedIn address should be less than 50 characters'),
     pinterest: Yup.string()
+      .nullable()
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Pinterest address should be more than 5 characters')
       .max(50, 'Pinterest address should be less than 50 characters'),
@@ -97,7 +107,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { resetForm }) => {
         try {
-          const result = await UserAgent.updateProfile(values, session);
+          const data = await UserAgent.updateProfile(values, session);
           await mutate(UserKeys.GET_CURRENT_USER_PROFILE);
           toast.success(
             'Your profile information has been updated successfully.',
@@ -105,11 +115,11 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
               className: 'bg-success text-light',
             }
           );
+          const result = new UserProfileFormValues(data);
           resetForm({ values: result });
         } catch (error) {
           const err = error as AxiosError<INestError>;
           if (err.response?.data.statusCode === 400) {
-            console.log(err.response.data);
             toast.error(
               'Something went wrong, check entered information and try again.',
               {
@@ -184,7 +194,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                   className={`text-xs sm:text-sm h-10 bg-zinc-100 border-0 rounded-xl w-full sm:w-1/2 ${
                     !!values.gender ? 'text-dark' : 'text-zinc-400'
                   } focus:text-dark focus:border-2 focus:border-primary focus:bg-light`}
-                  value={values.gender}
+                  value={values.gender ?? undefined}
                   onChange={handleChange}
                 >
                   <option value="default" disabled>
@@ -198,7 +208,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                     type={InputTypeEnum.date}
                     name="birthDate"
                     placeholder="Birthday"
-                    className="text-xs sm:text-sm h-10 rounded-xl w-full"
+                    className="text-xs sm:text-sm h-10 rounded-xl w-full flex"
                     component={FormikInput}
                   />
                 </div>

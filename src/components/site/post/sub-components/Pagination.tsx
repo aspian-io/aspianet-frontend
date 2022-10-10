@@ -102,7 +102,7 @@ const Pagination: FC<IPaginationProps> = ({
         </div>
       )}
 
-      {!mainIncludesLastPage && (
+      {!!totalPages && !mainIncludesLastPage && (
         <Link
           href={
             queryString

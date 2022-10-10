@@ -17,15 +17,11 @@ const UserBookmarks = () => {
   const router = useRouter();
   const page = router.query['page'] ? +router.query['page'] : 1;
   const fetcher = () => UserAgent.getBookmarks(page, session);
-  const {
-    data: profileData,
-    error,
-    mutate,
-  } = useSWR<IPaginated<IBookmarkPost>, AxiosError<INestError>>(
-    `${UserKeys.GET_BOOKMARKS}?page=${page}`,
-    fetcher
-  );
-  
+  const { data: profileData, error } = useSWR<
+    IPaginated<IBookmarkPost>,
+    AxiosError<INestError>
+  >(`${UserKeys.GET_BOOKMARKS}?page=${page}`, fetcher);
+
   if (error) router.push('/500');
   if (!profileData) return <Loading />;
 
@@ -63,12 +59,14 @@ const UserBookmarks = () => {
         ))}
       </div>
       <div className="flex justify-center items center w-full mt-12">
-        <Pagination
-          currentPage={profileData.meta.currentPage}
-          totalPages={profileData.meta.totalPages}
-          baseUrl={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/users/profile`}
-          queryString="tab=bookmarks"
-        />
+        {!!profileData.meta.totalPages && (
+          <Pagination
+            currentPage={profileData.meta.currentPage}
+            totalPages={profileData.meta.totalPages}
+            baseUrl={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/users/profile`}
+            queryString="tab=bookmarks"
+          />
+        )}
       </div>
     </>
   );
