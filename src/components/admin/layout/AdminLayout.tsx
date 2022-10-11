@@ -17,7 +17,7 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
       <div className="p-2 md:p-4">
         <AdminHeader />
         <div
-          className={`bg-primary ${sidebarSideLayoutCss} h-screen rounded-3xl overflow-hidden transition-all duration-300`}
+          className={`${sidebarSideLayoutCss} h-screen rounded-3xl overflow-hidden transition-all duration-300`}
         >
           {children}
         </div>

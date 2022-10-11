@@ -153,6 +153,17 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                       type="password"
                       component={FormikInput}
                     />
+                    <div className="text-zinc-400 text-xs self-start mt-2">
+                      This site is protected by reCAPTCHA and the Google&nbsp;
+                      <Link href="https://policies.google.com/privacy">
+                        <a className='text-blue-400'>Privacy Policy</a>
+                      </Link>
+                      &nbsp;and&nbsp;
+                      <Link href="https://policies.google.com/terms">
+                        <a className='text-blue-400'>Terms of Service</a>
+                      </Link>
+                      &nbsp;apply.
+                    </div>
                   </div>
                   <div className="flex justify-start self-start items-center mt-4">
                     <Link href="/auth/forget-password">

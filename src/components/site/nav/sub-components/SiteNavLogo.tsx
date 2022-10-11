@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { FC } from 'react';
 
 export interface ISiteNavLogoProps {
@@ -19,15 +20,19 @@ const SiteNavLogo: FC<ISiteNavLogoProps> = ({
           isOpen ? 'hidden' : ''
         } w-1/2 h-10 lg:flex lg:w-52 lg:h-24 relative`}
       >
-        <Image
-          className="mx-auto z-20"
-          src={logoSrc}
-          layout="fill"
-          objectFit="contain"
-          objectPosition="left center"
-          priority
-          alt="Site Logo"
-        />
+        <Link href={process.env.NEXT_PUBLIC_APP_BASE_URL!}>
+          <a>
+            <Image
+              className="mx-auto z-20"
+              src={logoSrc}
+              layout="fill"
+              objectFit="contain"
+              objectPosition="left center"
+              priority
+              alt="Site Logo"
+            />
+          </a>
+        </Link>
       </div>
       <div
         className={`${isOpen ? '' : 'hidden'} w-1/2 h-10 lg:hidden relative`}

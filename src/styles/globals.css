@@ -66,6 +66,10 @@
   --toastify-color-progress-error: #ff7595;
 }
 
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 .Toastify__toast {
   @apply rounded-xl;
 }

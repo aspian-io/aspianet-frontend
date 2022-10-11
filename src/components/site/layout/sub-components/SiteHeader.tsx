@@ -11,25 +11,25 @@ const SiteHeader = () => {
         loginRegisterHref="/auth/login"
         loginRegisterLabel={'Login/Register'}
       >
-        <Item href="#" isActive={true}>
+        <Item href="/#home" isActive={true}>
           Home
         </Item>
-        <Item href="#" isActive={false}>
-          Service
+        <Item href="/#services" isActive={false}>
+          Services
         </Item>
-        <Item href="#" isActive={false}>
+        <Item href="/#blog" isActive={false}>
           Blog
         </Item>
-        <Item href="#" isActive={false}>
+        <Item href="/#portfolio" isActive={false}>
           Portfolio
         </Item>
-        <Item href="#" isActive={false}>
+        <Item href="/#team" isActive={false}>
           Team
         </Item>
-        <Item href="#" isActive={false}>
+        <Item href="/#testimonials" isActive={false}>
           Testimonials
         </Item>
-        <Item href="#" isActive={false}>
+        <Item href="/#contact" isActive={false}>
           Contact
         </Item>
       </SiteNav>

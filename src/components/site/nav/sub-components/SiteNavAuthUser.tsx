@@ -52,6 +52,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
               placeholder="blur"
               blurDataURL={imgPlaceholderDataURL}
               alt="Profile Photo"
+              priority
             />
           </div>
         ) : (

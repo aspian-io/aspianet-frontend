@@ -330,14 +330,18 @@ const Logo: FC<IAdminSideBarLogoProps> = ({ src, href }) => {
     <Link href={href}>
       <a className="p-1.5 rounded-xl flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900">
         <div className="relative w-24 h-7">
-          <Image
-            src={src}
-            layout="fill"
-            objectFit="contain"
-            objectPosition="center"
-            alt="Logo"
-            priority
-          />
+          <Link href={process.env.NEXT_PUBLIC_APP_BASE_URL!}>
+            <a>
+              <Image
+                src={src}
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                alt="Logo"
+                priority
+              />
+            </a>
+          </Link>
         </div>
       </a>
     </Link>
