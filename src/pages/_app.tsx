@@ -12,6 +12,7 @@ import NProgress from 'nprogress';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Session } from 'next-auth';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 function MyApp({
   Component,
@@ -53,7 +54,17 @@ function MyApp({
           draggable
           pauseOnHover
         />
-        <Component {...pageProps} />
+        <GoogleReCaptchaProvider
+          reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY!}
+          scriptProps={{
+            async: false,
+            defer: false,
+            appendTo: 'head',
+            nonce: undefined,
+          }}
+        >
+          <Component {...pageProps} />
+        </GoogleReCaptchaProvider>
       </Provider>
     </SessionProvider>
   );

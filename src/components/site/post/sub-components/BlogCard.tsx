@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
+import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 import Button from '../../../common/Button';
 
 export interface IBlogCardProps {
@@ -36,6 +37,8 @@ const BlogCard: FC<IBlogCardProps> = ({
             layout="fill"
             objectFit="cover"
             objectPosition="center"
+            placeholder="blur"
+            blurDataURL={imgPlaceholderDataURL}
             alt="Featured Image"
           />
         ) : (
@@ -134,8 +137,12 @@ const BlogCard: FC<IBlogCardProps> = ({
           </div>
         </div>
 
-        <h5 className="mt-4 text-dark font-bold line-clamp-2 text-sm sm:text-lg">{title}</h5>
-        <p className="mt-2 mb-4 line-clamp-3 text-zinc-600 text-xs sm:text-sm">{excerpt}</p>
+        <h5 className="mt-4 text-dark font-bold line-clamp-2 text-sm sm:text-lg">
+          {title}
+        </h5>
+        <p className="mt-2 mb-4 line-clamp-3 text-zinc-600 text-xs sm:text-sm">
+          {excerpt}
+        </p>
 
         <div className="flex justify-center items-center w-full mt-auto">
           <Link href={postUrl} passHref>

@@ -2,6 +2,7 @@ import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState, useEffect, useRef } from 'react';
+import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 import { IUserAuth } from '../../../../models/auth/auth';
 import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/auth/common';
 import { AuthGuard } from '../../../common/AuthGuard';
@@ -15,6 +16,8 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const navProfileBtnRef = useRef<HTMLDivElement>(null);
 
+  
+
   useEffect(() => {
     document.addEventListener('click', (e) => {
       if (!navProfileBtnRef.current?.contains(e.target as any)) {
@@ -22,6 +25,15 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
       }
     });
   }, []);
+
+  const getUserAvatarSrc = () => {
+    if (user.avatar) {
+      return user.avatarSource === AvatarSourceEnum.STORAGE
+        ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${user.avatar}`
+        : user.avatar;
+    }
+    return '';
+  };
 
   return (
     <div className="relative">
@@ -33,10 +45,12 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
         {user.avatar ? (
           <div className="relative h-7 w-7 lg:h-10 lg:w-10 rounded-full overflow-hidden ring-2 ring-primary ring-offset-2 hoverable:hover:ring-offset-0 hoverable:hover:scale-110 transition-all duration-300">
             <Image
-              src={user.avatar}
+              src={getUserAvatarSrc()}
               layout="fill"
               objectFit="cover"
               objectPosition="center"
+              placeholder="blur"
+              blurDataURL={imgPlaceholderDataURL}
               alt="Profile Photo"
             />
           </div>
