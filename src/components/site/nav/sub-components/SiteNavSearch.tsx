@@ -4,7 +4,6 @@ import {
   getLayoutState,
   setIsSearchOpen,
 } from '../../../../store/slices/layout-slice';
-import Input, { InputTypeEnum } from '../../../common/Input';
 
 export interface ISiteNavSearchProps {
   responsive: boolean;
@@ -32,7 +31,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
 
   return (
     <div className={searchWrapperCss}>
-      <Input
+      {/* <Input
         placeholderText={searchPlaceholderLabel}
         rounded="rounded-lg"
         size={responsive ? 'h-8' : 'h-11'}
@@ -41,7 +40,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
         extraCSSClasses={
           responsive ? 'pr-11 placeholder:text-sm text-sm' : 'pr-12'
         }
-      />
+      /> */}
       {!responsive && (
         <button
           type="button"

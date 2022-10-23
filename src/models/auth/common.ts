@@ -8,6 +8,11 @@ export enum AvatarSourceEnum {
   OAUTH2 = "OAUTH2"
 }
 
+export interface IClaimEntity {
+  id: string;
+  name: ClaimsEnum
+}
+
 export enum ClaimsEnum {
   ADMIN = 'rw_a',
   USER_READ = 'usr_r',

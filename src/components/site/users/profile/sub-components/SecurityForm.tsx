@@ -11,8 +11,6 @@ import LoadingSpinner from '../../../../common/LoadingSpinner';
 import { UserAgent } from '../../../../../lib/axios/agent';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
-import { INestError } from '../../../../../models/common/error';
 
 const SecurityForm = () => {
   const { data: session } = useSession();
@@ -92,7 +90,7 @@ const SecurityForm = () => {
                     name="currentPassword"
                     placeholder="Current Password"
                     className="text-xs sm:text-sm h-10 rounded-xl"
-                    passwordEyeFromTopCssClass="top-2"
+                    passwordEyeFromTopCssClass="top-6"
                     component={FormikInput}
                   />
                 </div>
@@ -102,7 +100,7 @@ const SecurityForm = () => {
                     name="password"
                     placeholder="New Password"
                     className="text-xs sm:text-sm h-10 rounded-xl"
-                    passwordEyeFromTopCssClass="top-2"
+                    passwordEyeFromTopCssClass="top-6"
                     component={FormikInput}
                   />
                   <div className="mt-2 text-zinc-400 text-xs">Password must contains uppercase letters, lowercase letters, numbers or symbols.</div>

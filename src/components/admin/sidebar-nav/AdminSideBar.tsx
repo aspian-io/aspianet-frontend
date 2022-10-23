@@ -1,15 +1,5 @@
-import React, { FC, PropsWithChildren, useState } from 'react';
-import Image from 'next/image';
-import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
-import {
-  IAdminSideBar,
-  IAdminSideBarItem,
-  IAdminSideBarItemProps,
-  IAdminSideBarLogoProps,
-  IAdminSideBarProps,
-  IAdminSideBarSubItemProps,
-} from './admin-sidebar.types';
+import React, { useState } from 'react';
+import { IAdminSideBar, IAdminSideBarProps } from './admin-sidebar.types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAdminLayoutState,
@@ -17,8 +7,11 @@ import {
   setMinimizeSidebarCss,
   setSidebarSideLayoutCss,
 } from '../../../store/slices/admin/admin-layout-slice';
+import SidebarUserArea from './sub-components/SidebarUserArea';
+import SidebarLogo from './sub-components/SidebarLogo';
+import Item from './sub-components/SidebarItem';
+import Link from 'next/link';
 
-// Admin Sidebar Component
 const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   logo,
   userPhotoSrc,
@@ -27,11 +20,9 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   userLastName,
   children,
 }) => {
-  const { t } = useTranslation('sidebar');
   const [backdropCss, setBackDropCss] = useState(
     'fixed inset-0 h-0 w-0 md:hidden md:h-0 md:w-0'
   );
-  const [userTabOpen, setUSerTabOpen] = useState(false);
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
 
@@ -55,12 +46,12 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
         }}
       ></div>
       <div
-        className={`fixed bottom-2 top-2 md:top-4 md:bottom-4 bg-gray-900 rounded-3xl overflow-hidden ${sidebar.minimizeSidebarCss} transition-all duration-300 ease-in-out`}
+        className={`fixed bottom-2 top-2 md:top-4 md:bottom-4 bg-gray-900 rounded-3xl overflow-hidden ${sidebar.minimizeSidebarCss} transition-all duration-300 ease-in-out z-50`}
       >
         <div className="flex flex-col w-64 h-full bg-gray-900 rounded-3xl scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
           <div className="px-6 pt-8">
             <div className="flex items-center justify-between">
-              <Logo src={logo.src} href={logo.href} />
+              <SidebarLogo src={logo.src} href={logo.href} />
               <button
                 className="flex items-center justify-center p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light rtl:rotate-180"
                 onClick={(e) => {
@@ -111,7 +102,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
               <input
                 type="text"
                 className="w-full rounded-xl pl-8 px-4 py-2.5 text-xs font-light bg-gray-800 text-gray-400 placeholder-gray-500 border-0 focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800"
-                placeholder={t('search')}
+                placeholder="Search"
               />
             </div>
           </div>
@@ -155,12 +146,11 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                         />
                       </svg>
                     </div>
-                    <a
-                      href="#"
-                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500"
-                    >
-                      {t('settings')}
-                    </a>
+                    <Link href="/admin/settings">
+                      <a className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
+                        Settings
+                      </a>
+                    </Link>
                   </div>
                 </li>
                 <li>
@@ -181,110 +171,33 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                         />
                       </svg>
                     </div>
-                    <a
-                      href="#"
-                      className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500"
-                    >
-                      {t('notifications')}
-                    </a>
+                    <Link href="/admin/notifications">
+                      <a className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500">
+                        Notifications
+                      </a>
+                    </Link>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <div className="py-4 bg-gray-800 flex flex-col items-start justify-center bottom-0 rounded-b-3xl">
-              <div className="flex justify-between items-center w-full pl-6 pr-8">
-                <div className="flex items-center">
-                  <div className="relative w-8 h-8 rounded-full before:absolute before:w-2 before:h-2 before:bg-success before:rounded-full ltr:before:right-0 rtl:before:left-0 before:bottom-0 before:ring-1 before:ring-light before:z-10">
-                    {userPhotoSrc ? (
-                      <Image
-                        className="rounded-full"
-                        src={userPhotoSrc}
-                        layout="fill"
-                        objectFit="cover"
-                        objectPosition="center"
-                        alt="User Photo"
-                      />
-                    ) : (
-                      <div className="flex justify-center items-center absolute w-full h-full bg-primary text-light rounded-full">
-                        {userFirstName[0]}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col ltr:pl-3 rtl:pr-3">
-                    <div className="text-sm text-gray-50">
-                      {userFirstName} {userLastName}
-                    </div>
-                    <span className="text-xs text-gray-400 font-light tracking-tight">
-                      {username}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  className={`text-gray-400 bg-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light ${
-                    userTabOpen ? '-rotate-90' : 'ltr:rotate-0 rtl:rotate-180'
-                  } transition-transform duration-300`}
-                  onClick={(e) => setUSerTabOpen(!userTabOpen)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex justify-start items-center w-full">
-                <div
-                  className={`flex flex-col justify-center pt-8 pb-8 overflow-hidden ${
-                    userTabOpen ? 'max-h-40' : 'max-h-0 pt-0 pb-0'
-                  } w-full transition-all duration-300`}
-                >
-                  <div
-                    className={`flex flex-col text-gray-500 ltr:pl-14 rtl:pr-14 space-y-1 px-10`}
-                  >
-                    <div>
-                      <a
-                        href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
-                      >
-                        {t('profile')}
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
-                      >
-                        {t('security')}
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
-                      >
-                        {t('bookmarks')}
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href="#"
-                        className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500"
-                      >
-                        {t('logout')}
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SidebarUserArea
+              userPhotoSrc={userPhotoSrc}
+              userFirstName={userFirstName}
+              userLastName={userLastName}
+              signOutLabel="Logout"
+              username={username}
+              items={[
+                {
+                  label: 'Profile',
+                  pathname: '/admin/profile',
+                },
+                {
+                  label: 'Security',
+                  pathname: '/admin/security',
+                },
+              ]}
+            />
           </div>
         </div>
       </div>
@@ -292,7 +205,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
         className={`${sidebar.displaySidebarBtnCss} flex items-center justify-center fixed top-12 ltr:left-10 rtl:right-10 p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light`}
         onClick={(e) => {
           setBackDropCss(
-            'fixed inset-0 h-screen w-screen md:hidden md:h-0 md:w-0'
+            'fixed inset-0 h-screen w-screen md:hidden md:h-0 md:w-0 z-50'
           );
           dispatch(
             setDisplaySidebarBtnCss(
@@ -324,120 +237,6 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   );
 };
 
-// Logo Component
-const Logo: FC<IAdminSideBarLogoProps> = ({ src, href }) => {
-  return (
-    <Link href={href}>
-      <a className="p-1.5 rounded-xl flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900">
-        <div className="relative w-24 h-7">
-          <Link href={process.env.NEXT_PUBLIC_APP_BASE_URL!}>
-            <a>
-              <Image
-                src={src}
-                layout="fill"
-                objectFit="contain"
-                objectPosition="center"
-                alt="Logo"
-                priority
-              />
-            </a>
-          </Link>
-        </div>
-      </a>
-    </Link>
-  );
-};
-
-// Item Component
-const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
-  hasSubItems = false,
-  itemIcon,
-  itemTitle,
-  itemHref,
-  children,
-}) => {
-  const [tabOpen, setTabOpen] = useState(false);
-
-  return (
-    <li>
-      <div className="relative text-gray-500 flex justify-between items-center group">
-        <div
-          className="flex items-center w-full"
-          onClick={(e) => setTabOpen(!tabOpen)}
-        >
-          <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center px-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-300">
-            {itemIcon}
-          </div>
-          {!itemHref ? (
-            <div className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
-              {itemTitle}
-            </div>
-          ) : (
-            <Link href={itemHref!}>
-              <a className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
-                {itemTitle}
-              </a>
-            </Link>
-          )}
-        </div>
-        {hasSubItems && (
-          <button
-            className={`absolute ltr:right-0 rtl:left-0 p-1 flex items-center ${
-              tabOpen ? '-rotate-90' : 'rotate-0'
-            } transition-transform duration-300`}
-            onClick={(e) => setTabOpen(!tabOpen)}
-            tabIndex={-1}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        )}
-      </div>
-      {hasSubItems && (
-        <div
-          className={`pt-2 ltr:pl-4 rtl:pr-4 overflow-hidden ${
-            tabOpen ? 'max-h-40' : 'max-h-0'
-          } transition-all duration-300`}
-        >
-          <div
-            className={`flex flex-col p-2 text-gray-500 space-y-1 ltr:border-l rtl:border-r border-gray-700`}
-          >
-            {children}
-          </div>
-        </div>
-      )}
-    </li>
-  );
-};
-
 AdminSideBar.Item = Item;
-
-// SubItem Component
-const SubItem: FC<PropsWithChildren<IAdminSideBarSubItemProps>> = ({
-  href,
-  children,
-}) => {
-  return (
-    <div>
-      <Link href={href}>
-        <a className="inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 focus:text-light transition-all duration-500">
-          {children}
-        </a>
-      </Link>
-    </div>
-  );
-};
-
-Item.SubItem = SubItem;
 
 export default AdminSideBar;

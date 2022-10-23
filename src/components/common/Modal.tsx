@@ -18,7 +18,7 @@ const ModalComponent: FC<IProps> = ({ show, onClose, children }) => {
         onClick={() => onClose()}
       ></div>
       <div
-        className={`relative flex flex-col items-center justify-center max-w-xl mx-6 bg-light px-4 sm:px-12 pt-14 pb-10 rounded-xl text-dark text-center text-xs sm:text-sm drop-shadow-2xl ${
+        className={`relative flex flex-col items-center justify-center max-w-xl mx-6 my-6 bg-light px-10 sm:px-12 pt-14 pb-10 rounded-xl text-dark text-center text-xs sm:text-sm drop-shadow-2xl ${
           show
             ? 'visible opacity-100 translate-y-0 transition-all duration-300 delay-300'
             : 'invisible opacity-0 -translate-y-4 transition-all duration-300'

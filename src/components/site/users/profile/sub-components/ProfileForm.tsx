@@ -189,9 +189,17 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-3 sm:mt-4">
+              <div className="flex flex-col w-full sm:w-1/2">
+                <label
+                  className={`self-start ${
+                    touched['gender'] && errors['gender'] ? 'text-danger' : ''
+                  } text-dark text-xs`}
+                >
+                  Gender:
+                </label>
                 <select
                   name="gender"
-                  className={`text-xs sm:text-sm h-10 bg-zinc-100 border-0 rounded-xl w-full sm:w-1/2 ${
+                  className={`text-xs sm:text-sm h-10 bg-zinc-100 border-0 rounded-xl ${
                     !!values.gender ? 'text-dark' : 'text-zinc-400'
                   } focus:text-dark focus:border-2 focus:border-primary focus:bg-light`}
                   value={values.gender ?? undefined}
@@ -203,6 +211,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                   <option value="female">Female</option>
                   <option value="male">Male</option>
                 </select>
+                </div>
                 <div className="flex flex-col w-full sm:w-1/2">
                   <Field
                     type={InputTypeEnum.date}
@@ -213,40 +222,49 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                   />
                 </div>
               </div>
-              <textarea
-                name="bio"
-                className={`mt-4 border-0 rounded-xl bg-zinc-100 w-full h-32 placeholder-zinc-400 text-xs sm:text-sm ${
-                  errors.bio && touched.bio
-                    ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                    : ' focus:border-2 focus:border-primary focus:bg-light'
-                }`}
-                maxLength={400}
-                value={values.bio?.length ? values.bio : ''}
-                placeholder="Biography..."
-                onBlur={handleBlur}
-                onChange={(e) => {
-                  handleChange(e);
-                  setCharLeft(400 - e.target.value.length);
-                }}
-              ></textarea>
-              {charLeft > 1 && (
-                <div className="mt-2 text-zinc-400 text-xs self-start">
-                  {charLeft} characters left.
-                </div>
-              )}
-              {charLeft === 1 && (
-                <div className="mt-2 text-zinc-400 text-xs self-start">
-                  {charLeft} character left.
-                </div>
-              )}
-              {charLeft === 0 && (
-                <div className="mt-2 text-zinc-400 text-xs self-start">
-                  No characters left.
-                </div>
-              )}
-              {touched.bio && errors.bio && (
-                <div className="mt-2 text-danger text-xs">{errors.bio}</div>
-              )}
+              <div className="flex flex-col mt-4 w-full">
+                <label
+                  className={`${
+                    touched['bio'] && errors['bio'] ? 'text-danger' : ''
+                  } self-start text-dark text-xs`}
+                >
+                  Biography:
+                </label>
+                <textarea
+                  name="bio"
+                  className={`border-0 rounded-xl bg-zinc-100 w-full h-32 placeholder-zinc-400 text-xs sm:text-sm ${
+                    errors.bio && touched.bio
+                      ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+                      : ' focus:border-2 focus:border-primary focus:bg-light'
+                  }`}
+                  maxLength={400}
+                  value={values.bio?.length ? values.bio : ''}
+                  placeholder="Biography..."
+                  onBlur={handleBlur}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setCharLeft(400 - e.target.value.length);
+                  }}
+                ></textarea>
+                {charLeft > 1 && (
+                  <div className="mt-2 text-zinc-400 text-xs self-start">
+                    {charLeft} characters left.
+                  </div>
+                )}
+                {charLeft === 1 && (
+                  <div className="mt-2 text-zinc-400 text-xs self-start">
+                    {charLeft} character left.
+                  </div>
+                )}
+                {charLeft === 0 && (
+                  <div className="mt-2 text-zinc-400 text-xs self-start">
+                    No characters left.
+                  </div>
+                )}
+                {touched.bio && errors.bio && (
+                  <div className="mt-2 text-danger text-xs">{errors.bio}</div>
+                )}
+              </div>
               <div className="flex justify-between items-center w-full mt-10">
                 <h3 className="flex relative text-sm font-bold sm:text-lg text-dark ml-3 before:absolute before:w-6 before:h-6 sm:before:w-7 sm:before:h-7 before:bg-primary-light/30 before:rounded-lg before:-z-10 before:-top-1.5 sm:before:-top-1 before:-left-3">
                   Contact Info
@@ -284,13 +302,15 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                   />
                 </div>
               </div>
-              <Field
-                type={InputTypeEnum.text}
-                name="address"
-                placeholder="Address"
-                className="w-full text-xs sm:text-sm h-10 rounded-xl mt-4"
-                component={FormikInput}
-              />
+              <div className="mt-4 w-full">
+                <Field
+                  type={InputTypeEnum.text}
+                  name="address"
+                  placeholder="Address"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+              </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full  space-y-3 sm:space-x-6 sm:space-y-0 mt-4">
                 <div className="flex flex-col w-full sm:w-1/3">
                   <Field

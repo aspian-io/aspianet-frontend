@@ -14,14 +14,18 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="p-2 md:p-4">
+      <div className="relative py-2 md:py-4 pr-4 pl-4 md:pl-8 min-h-screen bg-zinc-100 z-0">
         <AdminHeader />
         <div
-          className={`${sidebarSideLayoutCss} h-screen rounded-3xl overflow-hidden transition-all duration-300`}
+          className={`${sidebarSideLayoutCss} rounded-3xl overflow-hidden transition-all duration-300 mb-10`}
         >
           {children}
         </div>
-        <AdminFooter />
+        <div
+          className={`${sidebarSideLayoutCss} absolute bottom-4 left-0 right-0 text-xs text-zinc-500`}
+        >
+          <AdminFooter />
+        </div>
       </div>
     </>
   );

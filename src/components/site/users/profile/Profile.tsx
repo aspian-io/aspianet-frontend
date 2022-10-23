@@ -40,7 +40,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
       if (routeTab === 'security') setActiveTab('privacy');
       if (routeTab === 'bookmarks') setActiveTab('bookmark');
     }
-  }, [router.asPath]);
+  }, [router.asPath, router.query]);
 
   if (error) router.push('/500');
   if (!profileData) return <Loading />;
@@ -51,7 +51,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
       <div className="flex flex-col sm:flex-row lg:hidden justify-between items-center w-full mb-1 sm:mb-4 px-6 sm:divide-x-2">
         <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:max-w-[25%] space-x-3 group">
           <div className="relative flex flex-col justify-center items-center mb-2 sm:mb-0">
-            <ProfileAvatar user={session?.user} responsive />
+            <ProfileAvatar user={session!.user} responsive />
             {isUpdateAvatarAllowed && !session?.user.avatar && (
               <ChangeAvatar responsive noAvatarMode />
             )}
@@ -188,7 +188,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
       <div className="hidden lg:flex flex-col min-w-[270px] lg:w-1/4 rounded-2xl py-10 px-8 bg-zinc-100">
         <div className="flex flex-col justify-center items-center">
           <div className="group">
-            <ProfileAvatar user={session?.user} isUpdateAvatarAllowed={isUpdateAvatarAllowed} />
+            <ProfileAvatar user={session!.user} isUpdateAvatarAllowed={isUpdateAvatarAllowed} />
           </div>
           <div className="mt-6 text-lg text-dark font-semibold">
             Hi {session?.user.firstName}

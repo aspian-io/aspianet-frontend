@@ -30,6 +30,8 @@ export interface IFormikInput {
   type: InputTypeEnum;
   placeholder: string;
   className?: string;
+  labelClassName?: string;
+  required?: boolean;
   name: string;
   passwordEyeFromTopCssClass?: string;
   passwordEyeFromRightCssClass?: string;
@@ -40,11 +42,13 @@ const FormikInput: FC<IFormikInput> = ({
   form: { touched, errors },
   id,
   className,
+  labelClassName,
+  required = false,
   type,
   placeholder,
   name,
   passwordEyeFromRightCssClass = 'right-3',
-  passwordEyeFromTopCssClass = 'top-2.5',
+  passwordEyeFromTopCssClass = 'top-6',
   ...props
 }) => {
   const { setFieldValue } = useFormikContext();
@@ -63,7 +67,15 @@ const FormikInput: FC<IFormikInput> = ({
   // Date Input
   if (type === InputTypeEnum.date) {
     return (
-      <>
+      <div className="flex flex-col w-full">
+        <label
+          htmlFor={id}
+          className={`${
+            touched[field.name] && errors[field.name] ? 'text-danger' : ''
+          } self-start text-dark text-xs ${labelClassName}`}
+        >
+          {required ? `* ${placeholder}` : placeholder}:
+        </label>
         <ReactDatePicker
           name={name}
           id={id}
@@ -83,14 +95,22 @@ const FormikInput: FC<IFormikInput> = ({
         {touched[field.name] && errors[field.name] && (
           <div className="mt-2 text-danger text-xs">{errors[field.name]}</div>
         )}
-      </>
+      </div>
     );
   }
 
   // Password Input
   if (type === InputTypeEnum.password) {
     return (
-      <div className="relative w-full">
+      <div className="relative w-full flex flex-col">
+        <label
+          htmlFor={id}
+          className={`${
+            touched[field.name] && errors[field.name] ? 'text-danger' : ''
+          } self-start text-dark text-xs ${labelClassName}`}
+        >
+          {required ? `* ${placeholder}` : placeholder}:
+        </label>
         <input
           type={showPassword ? InputTypeEnum.text : InputTypeEnum.password}
           name={name}
@@ -131,7 +151,15 @@ const FormikInput: FC<IFormikInput> = ({
 
   // Other Inputs
   return (
-    <>
+    <div className='flex flex-col w-full'>
+      <label
+        htmlFor={id}
+        className={`${
+          touched[field.name] && errors[field.name] ? 'text-danger' : ''
+        } self-start text-dark text-xs ${labelClassName}`}
+      >
+        {required ? `* ${placeholder}` : placeholder}:
+      </label>
       <input
         type={type}
         name={name}
@@ -144,7 +172,7 @@ const FormikInput: FC<IFormikInput> = ({
       {touched[field.name] && errors[field.name] && (
         <div className="mt-2 text-danger text-xs">{errors[field.name]}</div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ import { IUserProfile, UserProfileFormValues } from "../../models/users/profile"
 import { IUserRegister } from "../../models/auth/register";
 import { IPaginated } from "../../models/common/paginated-result";
 import { IBookmarkPost } from "../../models/users/bookmark";
+import { IUserEntity } from "../../models/users/admin/user";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -72,7 +73,26 @@ const apiRequests = {
       .then( responseBody ),
 };
 
-// Auth agent
+/*********** ADMIN REGION START **************/
+
+// User Agent
+export const AdminUserAgent = {
+  details: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.get( `/admin/users/${ userId }`, { headers: authHeader( session ) } ),
+  uploadAvatar: ( session: Session | null, userId: string, formData: FormData ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/edit-avatar/${ userId }`, formData, {
+    headers: { "Content-Type": "multipart/form-data", ...authHeader( session ) }
+  } ),
+  deleteAvatar: ( userId: string, session: Session | null ): Promise<IUserEntity> => apiRequests.del( `/admin/users/delete-avatar/${ userId }`, { headers: authHeader( session ) } ),
+  updateUser: ( userId: string, userFormValues: Partial<IUserEntity>, session: Session | null ): Promise<IUserEntity> =>
+    apiRequests.patch( `/admin/users/${ userId }`, userFormValues, { headers: authHeader( session ) } ),
+};
+
+/*********** ADMIN REGION END **************/
+
+
+
+/*********** CLIENT REGION START **************/
+
+// Auth Agent
 export const AuthAgent = {
   register: ( userInfo: IUserRegister ): Promise<IUserAuth> => apiRequests.post( '/users/register-by-email', userInfo ),
   verifyEmail: ( email: string, token: number ): Promise<IUserAuth> => apiRequests.post( 'users/activate-email-registration', { email, token } ),
@@ -84,7 +104,7 @@ export const AuthAgent = {
   resetPasswordRemainingTime: ( email: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( '/users/reset-password-token-time', { email } ),
 };
 
-// User agent
+// User Agent
 export const UserAgent = {
   getCurrentUserProfile: ( session: Session | null ): Promise<IUserProfile> => apiRequests.get( '/users/profile', { headers: authHeader( session ) } ),
   updateProfile: ( profileFormValues: UserProfileFormValues, session: Session | null ): Promise<IUserProfile> =>
@@ -97,3 +117,6 @@ export const UserAgent = {
   changePassword: ( body: IChangePassword, session: Session | null ): Promise<IUserProfile> => apiRequests.patch( '/users/change-password', body, { headers: authHeader( session ) } ),
   getBookmarks: ( page: number, session: Session | null ): Promise<IPaginated<IBookmarkPost>> => apiRequests.get( `/users/profile/bookmarks?page=${ page }&limit=6`, { headers: authHeader( session ) } ),
 };
+
+
+/*********** CLIENT REGION START **************/

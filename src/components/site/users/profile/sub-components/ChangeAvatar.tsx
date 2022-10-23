@@ -22,34 +22,9 @@ const ChangeAvatar: FC<IProps> = ({
   const { data: session } = useSession();
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
-  const responsiveAvatarInitialValue: { avatar?: File } = { avatar: undefined };
+  const avatarInitialValue: { avatar?: File } = { avatar: undefined };
   const responsiveProfilePhotoId = useId();
   const profilePhotoId = useId();
-
-  const removeAvatar = async () => {
-    try {
-      setRemoveLoading(true);
-      await UserAgent.deleteAvatar(session);
-      toast.success('Your avatar has been removed successfully.', {
-        className: 'bg-success text-light text-sm',
-      });
-      reloadSession();
-      setRemoveLoading(false);
-    } catch (error) {
-      setRemoveLoading(false);
-      const err = error as AxiosError<INestError>;
-      if (err.response?.data.statusCode === 403) {
-        toast.error('Forbidden resource', {
-          className: 'bg-danger text-light text-sm',
-        });
-        return;
-      }
-
-      toast.error('Something went wrong. Please try again later.', {
-        className: 'bg-danger text-light text-sm',
-      });
-    }
-  };
 
   return (
     <>
@@ -74,7 +49,7 @@ const ChangeAvatar: FC<IProps> = ({
       />
       {responsive ? (
         <Formik
-          initialValues={responsiveAvatarInitialValue}
+          initialValues={avatarInitialValue}
           onSubmit={async (value, { resetForm }) => {
             if (value.avatar) {
               const formData = new FormData();
@@ -195,7 +170,7 @@ const ChangeAvatar: FC<IProps> = ({
         </Formik>
       ) : (
         <Formik
-          initialValues={responsiveAvatarInitialValue}
+          initialValues={avatarInitialValue}
           onSubmit={async (value, { resetForm }) => {
             if (value.avatar) {
               const formData = new FormData();

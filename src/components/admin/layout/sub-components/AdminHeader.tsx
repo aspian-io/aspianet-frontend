@@ -1,18 +1,31 @@
+import { useSession } from 'next-auth/react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { AvatarSourceEnum } from '../../../../models/auth/common';
 import AdminSideBar from '../../sidebar-nav/AdminSideBar';
 
 const AdminHeader = () => {
-  const { t } = useTranslation('sidebar');
+  const { data: session } = useSession();
+
+  const getUserAvatarSrc = () => {
+    if (session?.user.avatar) {
+      return session?.user.avatarSource === AvatarSourceEnum.STORAGE
+        ? `${process.env.NEXT_PUBLIC_STORAGE_PROFILE_BASE_URL}/${session?.user.avatar}`
+        : session?.user.avatar;
+    }
+    return '';
+  };
 
   return (
     <>
       <AdminSideBar
-        logo={{ src: '/nav-logo.svg', href: '#' }}
-        username="jane@example.com"
-        userPhotoSrc="/staff3.jpg"
-        userFirstName="Jane"
-        userLastName="Doe"
+        logo={{
+          src: '/nav-logo.svg',
+          href: process.env.NEXT_PUBLIC_APP_BASE_URL!,
+        }}
+        username={session?.user.email ?? ''}
+        userPhotoSrc={getUserAvatarSrc()}
+        userFirstName={session?.user.firstName ?? ''}
+        userLastName={session?.user.lastName ?? ''}
       >
         <AdminSideBar.Item
           itemIcon={
@@ -31,8 +44,8 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('dashboard')}
-          itemHref="#"
+          itemTitle="Dashboard"
+          itemHref="/admin"
         />
         <AdminSideBar.Item
           itemIcon={
@@ -51,20 +64,20 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('posts')}
+          itemTitle="Posts"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('all-posts')}
+          <AdminSideBar.Item.SubItem href="/admin/posts">
+            All Posts
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('add-new')}
+          <AdminSideBar.Item.SubItem href="/admin/posts/add-new">
+            Add New
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('categories')}
+          <AdminSideBar.Item.SubItem href="/admin/categories">
+            Categories
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('tags')}
+          <AdminSideBar.Item.SubItem href="/admin/tags">
+            Tags
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
         <AdminSideBar.Item
@@ -84,14 +97,14 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('media')}
+          itemTitle="Media"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('library')}
+          <AdminSideBar.Item.SubItem href="/admin/media/library">
+            Library
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('add-new')}
+          <AdminSideBar.Item.SubItem href="/admin/media/add-new">
+            Add New
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
         <AdminSideBar.Item
@@ -111,14 +124,14 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('pages')}
+          itemTitle="Pages"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('all-pages')}
+          <AdminSideBar.Item.SubItem href="/admin/pages">
+            All Pages
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('add-new')}
+          <AdminSideBar.Item.SubItem href="/admin/pages/add-new">
+            Add New
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
         <AdminSideBar.Item
@@ -138,8 +151,8 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('comments')}
-          itemHref="#"
+          itemTitle="Comments"
+          itemHref="/admin/comments"
         />
         <AdminSideBar.Item
           itemIcon={
@@ -158,17 +171,17 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('newsletter')}
+          itemTitle="Newsletter"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('all-campaigns')}
+          <AdminSideBar.Item.SubItem href="/admin/newsletter/all-campaigns">
+            All Campaigns
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('add-new-campaign')}
+          <AdminSideBar.Item.SubItem href="/admin/newsletter/add-new-campaign">
+            Add New Campaign
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('subscribers')}
+          <AdminSideBar.Item.SubItem href="/admin/newsletter/subscribers">
+            Subscribers
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
         <AdminSideBar.Item
@@ -188,17 +201,17 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('appearance')}
+          itemTitle="Appearance"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('personalization')}
+          <AdminSideBar.Item.SubItem href="/admin/appearance/personalization">
+            Personalization
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('widgets')}
+          <AdminSideBar.Item.SubItem href="/admin/appearance/widgets">
+            Widgets
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('menus')}
+          <AdminSideBar.Item.SubItem href="/admin/appearance/menus">
+            Menus
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
         <AdminSideBar.Item
@@ -218,17 +231,17 @@ const AdminHeader = () => {
               />
             </svg>
           }
-          itemTitle={t('users')}
+          itemTitle="Users"
           hasSubItems={true}
         >
-          <AdminSideBar.Item.SubItem href="#">
-            {t('all-users')}
+          <AdminSideBar.Item.SubItem href="/admin/users">
+            All Users
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('add-new')}
+          <AdminSideBar.Item.SubItem href="/admin/users/add-new">
+            Add New
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="#">
-            {t('settings')}
+          <AdminSideBar.Item.SubItem href="/admin/users/settings">
+            Settings
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
       </AdminSideBar>
