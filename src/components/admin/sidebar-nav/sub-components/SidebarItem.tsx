@@ -1,6 +1,10 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { IAdminSideBarItem, IAdminSideBarItemProps } from '../admin-sidebar.types';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import {
+  IAdminSideBarItem,
+  IAdminSideBarItemProps,
+} from '../admin-sidebar.types';
 import SubItem from './SidebarSubItem';
 
 const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
@@ -8,9 +12,27 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
   itemIcon,
   itemTitle,
   itemHref,
+  activeItem = false,
   children,
 }) => {
   const [tabOpen, setTabOpen] = useState(false);
+  const router = useRouter();
+
+  const activeItemIconCssGen = () => {
+    return (itemHref && router.pathname === itemHref) || activeItem
+      ? 'text-primary-dark'
+      : '';
+  };
+
+  const activeLinkCssGen = (pathname: string): string => {
+    return router.pathname === pathname || activeItem
+      ? 'outline-none bg-gray-800 text-light'
+      : '';
+  };
+
+  useEffect(() => {
+    if (activeItem) setTabOpen(true);
+  }, [activeItem]);
 
   return (
     <li>
@@ -19,16 +41,26 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
           className="flex items-center w-full"
           onClick={(e) => setTabOpen(!tabOpen)}
         >
-          <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center px-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-300">
+          <div
+            className={`absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center px-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-300 ${activeItemIconCssGen()}`}
+          >
             {itemIcon}
           </div>
           {!itemHref ? (
-            <div className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
+            <div
+              className={`inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500 ${
+                activeItem ? 'outline-none bg-gray-800 text-light' : ''
+              }`}
+            >
               {itemTitle}
             </div>
           ) : (
             <Link href={itemHref!}>
-              <a className="inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
+              <a
+                className={`inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500 ${activeLinkCssGen(
+                  itemHref
+                )}`}
+              >
                 {itemTitle}
               </a>
             </Link>

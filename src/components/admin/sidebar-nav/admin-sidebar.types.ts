@@ -26,8 +26,10 @@ export interface IAdminSideBarItemProps {
   itemTitle: string;
   itemHref?: string;
   hasSubItems?: boolean;
+  activeItem?: boolean;
 }
 
 export interface IAdminSideBarSubItemProps {
   href: string;
+  onActive: Function;
 }

@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { AvatarSourceEnum } from '../../../../models/auth/common';
 import AdminSideBar from '../../sidebar-nav/AdminSideBar';
 
@@ -14,6 +14,13 @@ const AdminHeader = () => {
     }
     return '';
   };
+
+  const [activePosts, setActivePosts] = useState(false);
+  const [activeMedia, setActiveMedia] = useState(false);
+  const [activePages, setActivePages] = useState(false);
+  const [activeNewsletter, setActiveNewsletter] = useState(false);
+  const [activeAppearance, setActiveAppearance] = useState(false);
+  const [activeUsers, setActiveUsers] = useState(false);
 
   return (
     <>
@@ -66,17 +73,30 @@ const AdminHeader = () => {
           }
           itemTitle="Posts"
           hasSubItems={true}
+          activeItem={activePosts}
         >
-          <AdminSideBar.Item.SubItem href="/admin/posts">
+          <AdminSideBar.Item.SubItem
+            href="/admin/posts"
+            onActive={() => setActivePosts(true)}
+          >
             All Posts
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/posts/add-new">
+          <AdminSideBar.Item.SubItem
+            href="/admin/posts/add-new"
+            onActive={() => setActivePosts(true)}
+          >
             Add New
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/categories">
+          <AdminSideBar.Item.SubItem
+            href="/admin/categories"
+            onActive={() => setActivePosts(true)}
+          >
             Categories
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/tags">
+          <AdminSideBar.Item.SubItem
+            href="/admin/tags"
+            onActive={() => setActivePosts(true)}
+          >
             Tags
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
@@ -99,11 +119,18 @@ const AdminHeader = () => {
           }
           itemTitle="Media"
           hasSubItems={true}
+          activeItem={activeMedia}
         >
-          <AdminSideBar.Item.SubItem href="/admin/media/library">
+          <AdminSideBar.Item.SubItem
+            href="/admin/media/library"
+            onActive={() => setActiveMedia(true)}
+          >
             Library
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/media/add-new">
+          <AdminSideBar.Item.SubItem
+            href="/admin/media/add-new"
+            onActive={() => setActiveMedia(true)}
+          >
             Add New
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
@@ -126,11 +153,18 @@ const AdminHeader = () => {
           }
           itemTitle="Pages"
           hasSubItems={true}
+          activeItem={activePages}
         >
-          <AdminSideBar.Item.SubItem href="/admin/pages">
+          <AdminSideBar.Item.SubItem
+            href="/admin/pages"
+            onActive={() => setActivePages(true)}
+          >
             All Pages
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/pages/add-new">
+          <AdminSideBar.Item.SubItem
+            href="/admin/pages/add-new"
+            onActive={() => setActivePages(true)}
+          >
             Add New
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
@@ -173,14 +207,24 @@ const AdminHeader = () => {
           }
           itemTitle="Newsletter"
           hasSubItems={true}
+          activeItem={activeNewsletter}
         >
-          <AdminSideBar.Item.SubItem href="/admin/newsletter/all-campaigns">
+          <AdminSideBar.Item.SubItem
+            href="/admin/newsletter/all-campaigns"
+            onActive={() => setActiveNewsletter(true)}
+          >
             All Campaigns
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/newsletter/add-new-campaign">
+          <AdminSideBar.Item.SubItem
+            href="/admin/newsletter/add-new-campaign"
+            onActive={() => setActiveNewsletter(true)}
+          >
             Add New Campaign
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/newsletter/subscribers">
+          <AdminSideBar.Item.SubItem
+            href="/admin/newsletter/subscribers"
+            onActive={() => setActiveNewsletter(true)}
+          >
             Subscribers
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
@@ -203,14 +247,24 @@ const AdminHeader = () => {
           }
           itemTitle="Appearance"
           hasSubItems={true}
+          activeItem={activeAppearance}
         >
-          <AdminSideBar.Item.SubItem href="/admin/appearance/personalization">
+          <AdminSideBar.Item.SubItem
+            href="/admin/appearance/personalization"
+            onActive={() => setActiveAppearance(true)}
+          >
             Personalization
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/appearance/widgets">
+          <AdminSideBar.Item.SubItem
+            href="/admin/appearance/widgets"
+            onActive={() => setActiveAppearance(true)}
+          >
             Widgets
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/appearance/menus">
+          <AdminSideBar.Item.SubItem
+            href="/admin/appearance/menus"
+            onActive={() => setActiveAppearance(true)}
+          >
             Menus
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
@@ -233,14 +287,24 @@ const AdminHeader = () => {
           }
           itemTitle="Users"
           hasSubItems={true}
+          activeItem={activeUsers}
         >
-          <AdminSideBar.Item.SubItem href="/admin/users">
+          <AdminSideBar.Item.SubItem
+            href="/admin/users"
+            onActive={() => setActiveUsers(true)}
+          >
             All Users
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/users/add-new">
+          <AdminSideBar.Item.SubItem
+            href="/admin/users/add-new"
+            onActive={() => setActiveUsers(true)}
+          >
             Add New
           </AdminSideBar.Item.SubItem>
-          <AdminSideBar.Item.SubItem href="/admin/users/settings">
+          <AdminSideBar.Item.SubItem
+            href="/admin/users/settings"
+            onActive={() => setActiveUsers(true)}
+          >
             Settings
           </AdminSideBar.Item.SubItem>
         </AdminSideBar.Item>
