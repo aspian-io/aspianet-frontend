@@ -56,7 +56,7 @@ const FormikInput: FC<IFormikInput> = ({
     ${
       errors[field.name] && touched[field.name]
         ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-        : 'focus:border-2 focus:border-primary focus:bg-light'
+        : 'focus:border-2 focus:border-primary focus:bg-light focus:ring-0'
     } ${
     className ? className : 'block w-full h-11 rounded-xl text-xs sm:text-sm'
   }`;

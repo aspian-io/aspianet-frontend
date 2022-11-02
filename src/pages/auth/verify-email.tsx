@@ -106,6 +106,7 @@ const VerifyEmailPage: NextPage<IProps> = ({
                     <Field
                       name="token"
                       placeholder="Enter Your Token Here..."
+                      labelClassName='hidden'
                       minLength={6}
                       maxLength={6}
                       aria-required="true"

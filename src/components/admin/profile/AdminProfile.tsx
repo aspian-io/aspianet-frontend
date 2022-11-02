@@ -8,7 +8,6 @@ import { AdminUserKeys } from '../../../lib/swr/keys';
 import { INestError } from '../../../models/common/error';
 import { IUserEntity } from '../../../models/users/admin/user';
 import Loading from '../../common/Loading';
-import TopBar from '../topbar/TopBar';
 import AvatarCard from './sub-components/AvatarCard';
 import ContactInfoCard from './sub-components/ContactInfoCard';
 import PersonalInfoCard from './sub-components/PersonalInfoCard';
@@ -31,7 +30,6 @@ const AdminProfile = () => {
 
   return (
     <div className="flex flex-col justify-center items-center pb-4 space-y-4">
-      <TopBar title='Profile' />
       <div className="flex flex-col lg:flex-row justify-center items-center w-full lg:space-x-4 space-y-4 lg:space-y-0">
         <AvatarCard session={session} userData={userData} />
         <PersonalInfoCard userData={userData} />

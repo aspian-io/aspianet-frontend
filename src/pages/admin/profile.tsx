@@ -5,11 +5,13 @@ import { AuthGuard } from '../../components/common/AuthGuard';
 import { ClaimsEnum } from '../../models/auth/common';
 
 const ProfilePage: NextPage = (props) => {
-
   return (
     <>
       <AuthGuard claims={Object.values(ClaimsEnum)}>
-        <AdminLayout>
+        <AdminLayout
+          pageTitle="Profile"
+          breadCrumbs={[{ label: 'Admin' }, { label: 'Profile' }]}
+        >
           <AdminProfile />
         </AdminLayout>
       </AuthGuard>

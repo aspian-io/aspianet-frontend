@@ -7,7 +7,10 @@ const AdminPage: NextPage = (props) => {
   return (
     <>
       <AuthGuard claims={Object.values(ClaimsEnum)}>
-        <AdminLayout></AdminLayout>
+        <AdminLayout
+          pageTitle="Dashboard"
+          breadCrumbs={[{ label: 'Dashboard' }]}
+        ></AdminLayout>
       </AuthGuard>
     </>
   );

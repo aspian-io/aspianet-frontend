@@ -5,7 +5,6 @@ import {
   IChangePassword,
 } from '../../../models/users/security';
 import AdminCard from '../common/AdminCard';
-import TopBar from '../topbar/TopBar';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { toast } from 'react-toastify';
@@ -34,7 +33,6 @@ const AdminSecurity = () => {
 
   return (
     <div className="flex flex-col justify-center items-center pb-4 space-y-4">
-      <TopBar title='Security' />
       <AdminCard>
         <Formik
           initialValues={initialValues}

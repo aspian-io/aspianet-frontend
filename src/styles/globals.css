@@ -104,9 +104,6 @@ input[type='date'].date-input--has-value::-webkit-datetime-edit-year-field {
 .react-datepicker {
   @apply rounded-xl shadow-2xl border-0;
 }
-.react-datepicker__triangle {
-  @apply hidden;
-}
 
 .react-datepicker__day--selected {
   @apply bg-primary;

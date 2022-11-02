@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { IAdminSideBar, IAdminSideBarProps } from './admin-sidebar.types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAdminLayoutState,
-  setDisplaySidebarBtnCss,
+  setBackDropCss,
   setMinimizeSidebarCss,
   setSidebarSideLayoutCss,
 } from '../../../store/slices/admin/admin-layout-slice';
@@ -11,6 +11,14 @@ import SidebarUserArea from './sub-components/SidebarUserArea';
 import SidebarLogo from './sub-components/SidebarLogo';
 import Item from './sub-components/SidebarItem';
 import Link from 'next/link';
+import {
+  SIDEBAR_HIDE_BACKDROP_CSS,
+  SIDEBAR_HIDE_CSS,
+  SIDEBAR_HIDE_SIDE_LAYOUT_CSS,
+  SIDEBAR_SHOW_BACKDROP_CSS,
+  SIDEBAR_SHOW_CSS,
+  SIDEBAR_SHOW_SIDE_LAYOUT_CSS,
+} from './constants';
 
 const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   logo,
@@ -20,29 +28,29 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   userLastName,
   children,
 }) => {
-  const [backdropCss, setBackDropCss] = useState(
-    'fixed inset-0 h-0 w-0 md:hidden md:h-0 md:w-0'
-  );
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
 
-  const sidebarDisplayModeCss1 =
-    'ltr:left-2 ltr:md:left-4 rtl:right-2 rtl:md:right-4';
-  const sidebarDisplayModeCss2 = 'ltr:-left-[300px] rtl:-right-[300px]';
+  useEffect(() => {
+    if (window.innerWidth >= 768) {
+      dispatch(setBackDropCss(SIDEBAR_SHOW_BACKDROP_CSS));
+      dispatch(setMinimizeSidebarCss(SIDEBAR_SHOW_CSS));
+      dispatch(setSidebarSideLayoutCss(SIDEBAR_SHOW_SIDE_LAYOUT_CSS));
+    } else {
+      dispatch(setBackDropCss(SIDEBAR_HIDE_BACKDROP_CSS));
+      dispatch(setMinimizeSidebarCss(SIDEBAR_HIDE_CSS));
+      dispatch(setSidebarSideLayoutCss(SIDEBAR_HIDE_SIDE_LAYOUT_CSS));
+    }
+  }, [dispatch]);
 
   return (
     <>
       <div
-        className={backdropCss}
+        className={sidebar.backdropCss}
         onClick={(e) => {
-          setBackDropCss('hidden inset-0 h-0 w-0 md:hidden md:h-0 md:w-0');
-          dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss2));
-          dispatch(
-            setDisplaySidebarBtnCss(
-              'transition-all duration-300 opacity-1 z-10 delay-300'
-            )
-          );
-          dispatch(setSidebarSideLayoutCss('w-full'));
+          dispatch(setBackDropCss(SIDEBAR_HIDE_BACKDROP_CSS));
+          dispatch(setMinimizeSidebarCss(SIDEBAR_HIDE_CSS));
+          dispatch(setSidebarSideLayoutCss(SIDEBAR_HIDE_SIDE_LAYOUT_CSS));
         }}
       ></div>
       <div
@@ -55,16 +63,11 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
               <button
                 className="flex items-center justify-center p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light rtl:rotate-180"
                 onClick={(e) => {
-                  setBackDropCss(
-                    'hidden inset-0 h-0 w-0 bg-dark/50 md:hidden md:h-0 md:w-0'
-                  );
-                  dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss2));
+                  dispatch(setBackDropCss(SIDEBAR_HIDE_BACKDROP_CSS));
+                  dispatch(setMinimizeSidebarCss(SIDEBAR_HIDE_CSS));
                   dispatch(
-                    setDisplaySidebarBtnCss(
-                      'transition-all duration-300 opacity-1 z-10 delay-300'
-                    )
+                    setSidebarSideLayoutCss(SIDEBAR_HIDE_SIDE_LAYOUT_CSS)
                   );
-                  dispatch(setSidebarSideLayoutCss('w-full'));
                 }}
               >
                 <svg
@@ -201,38 +204,6 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
           </div>
         </div>
       </div>
-      <button
-        className={`${sidebar.displaySidebarBtnCss} flex items-center justify-center fixed top-12 ltr:left-10 rtl:right-10 p-0.5 rounded bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500 text-light`}
-        onClick={(e) => {
-          setBackDropCss(
-            'fixed inset-0 h-screen w-screen md:hidden md:h-0 md:w-0 z-50'
-          );
-          dispatch(
-            setDisplaySidebarBtnCss(
-              'opacity-0 -z-10 transition-all duration-300'
-            )
-          );
-          dispatch(setMinimizeSidebarCss(sidebarDisplayModeCss1));
-          dispatch(
-            setSidebarSideLayoutCss(
-              'w-full md:w-[calc(100%-272px)] ltr:md:ml-[272px] rtl:md:mr-[272px]'
-            )
-          );
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            fillRule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
     </>
   );
 };

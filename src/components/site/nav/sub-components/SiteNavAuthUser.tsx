@@ -16,8 +16,6 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const navProfileBtnRef = useRef<HTMLDivElement>(null);
 
-  
-
   useEffect(() => {
     document.addEventListener('click', (e) => {
       if (!navProfileBtnRef.current?.contains(e.target as any)) {

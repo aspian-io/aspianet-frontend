@@ -1,19 +1,20 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { SIDEBAR_SHOW_CSS } from "../../../components/admin/sidebar-nav/constants";
 import { AdminSlicesEnum } from "./admin-slices.type";
 
 export interface IAdminLayoutState {
   sidebar: {
     minimizeSidebarCss: string;
-    displaySidebarBtnCss: string;
     sidebarSideLayoutCss: string;
+    backdropCss: string;
   };
 }
 
 const initialState: IAdminLayoutState = {
   sidebar: {
-    minimizeSidebarCss: 'ltr:-left-[300px] ltr:md:left-4 rtl:-right-[300px] rtl:md:right-4',
-    displaySidebarBtnCss: 'opacity-1 z-10 transition-all delay-300 duration-300 md:opacity-0 md:-z-10 md:delay-0',
-    sidebarSideLayoutCss: 'w-full md:w-[calc(100%-272px)] ltr:md:ml-[272px] rtl:md:mr-[272px]'
+    minimizeSidebarCss: SIDEBAR_SHOW_CSS,
+    sidebarSideLayoutCss: 'w-full md:w-[calc(100%-272px)] ltr:md:ml-[272px] rtl:md:mr-[272px]',
+    backdropCss: 'fixed inset-0 h-0 w-0 md:hidden md:h-0 md:w-0'
   }
 } as const;
 
@@ -27,23 +28,26 @@ const adminLayoutSlice = createSlice( {
     ) => {
       state.sidebar.minimizeSidebarCss = action.payload;
     },
-    setDisplaySidebarBtnCss: (
-      state: Draft<IAdminLayoutState>,
-      action: PayloadAction<typeof initialState.sidebar.displaySidebarBtnCss>
-    ) => {
-      state.sidebar.displaySidebarBtnCss = action.payload;
-    },
     setSidebarSideLayoutCss: (
       state: Draft<IAdminLayoutState>,
       action: PayloadAction<typeof initialState.sidebar.sidebarSideLayoutCss>
     ) => {
       state.sidebar.sidebarSideLayoutCss = action.payload;
+    },
+    setBackDropCss: (
+      state: Draft<IAdminLayoutState>,
+      action: PayloadAction<typeof initialState.sidebar.backdropCss>
+    ) => {
+      state.sidebar.backdropCss = action.payload;
     }
   }
 } );
 
 export const getAdminLayoutState = ( state: { adminLayout: IAdminLayoutState; } ) => state.adminLayout;
 
-export const { setMinimizeSidebarCss, setSidebarSideLayoutCss, setDisplaySidebarBtnCss } = adminLayoutSlice.actions;
+export const {
+  setMinimizeSidebarCss,
+  setSidebarSideLayoutCss,
+  setBackDropCss } = adminLayoutSlice.actions;
 
 export const adminLayoutReducer = adminLayoutSlice.reducer;
