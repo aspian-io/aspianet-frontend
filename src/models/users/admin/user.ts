@@ -5,7 +5,7 @@ import { IPostEntity } from "../../posts/admin/post";
 
 export interface IUserEntity extends IBaseMinimalEntity {
   isActivated: boolean;
-  email: string | null;
+  email: string;
   emailVerified: boolean;
   emailVerificationToken: number | null;
   emailVerificationTokenExpiresAt?: Date;

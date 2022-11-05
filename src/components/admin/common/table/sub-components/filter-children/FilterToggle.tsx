@@ -6,6 +6,7 @@ export interface IFilterToggleProps {
   onReset?: Function;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
+  disabled?: boolean;
 }
 
 const FilterToggle: FC<IFilterToggleProps> = ({
@@ -13,6 +14,7 @@ const FilterToggle: FC<IFilterToggleProps> = ({
   onReset,
   className = '',
   dropDownAlignment = 'right',
+  disabled = false,
 }) => {
   const [filterShow, setFilterShow] = useState(false);
   const [filterActive, setFilterActive] = useState(false);
@@ -43,12 +45,13 @@ const FilterToggle: FC<IFilterToggleProps> = ({
     <div className="relative" ref={filterBtnRef}>
       <button
         type="button"
-        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark rounded-md p-1 ${
+        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark disabled:hoverable:hover:bg-primary rounded-md p-1 ${
           filterActive ? 'bg-primary-dark' : ''
         } ${className}`}
         onClick={() => {
           setFilterShow((prev) => !prev);
         }}
+        disabled={disabled}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -104,6 +107,10 @@ const FilterToggle: FC<IFilterToggleProps> = ({
           variant="primary-outline"
           onClick={() => {
             if (onReset) onReset();
+            const checkboxInput = document.getElementById(
+              toggleId
+            ) as HTMLInputElement;
+            checkboxInput.checked = false;
             setFilterActive(false);
             setFilterShow(false);
           }}

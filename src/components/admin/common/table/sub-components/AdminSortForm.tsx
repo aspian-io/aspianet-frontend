@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik';
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect, useRef, useId } from 'react';
 import Button from '../../../../common/Button';
 
 export interface IAdminSortProps {
@@ -7,6 +7,7 @@ export interface IAdminSortProps {
   onReset?: Function;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
+  disabled?: boolean;
 }
 
 const AdminSortForm: FC<IAdminSortProps> = ({
@@ -14,10 +15,14 @@ const AdminSortForm: FC<IAdminSortProps> = ({
   onReset,
   className,
   dropDownAlignment = 'right',
+  disabled = false,
 }) => {
   const [sortShow, setSortShow] = useState(false);
   const [sortActive, setSortActive] = useState(false);
   const sortBtnRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+  const inputAscLabelId = useId();
+  const inputDescLabelId = useId();
 
   function dropDownAlignmentClassNames() {
     if (dropDownAlignment === 'right') {
@@ -33,7 +38,10 @@ const AdminSortForm: FC<IAdminSortProps> = ({
 
   useEffect(() => {
     document.addEventListener('click', (e) => {
-      if (!sortBtnRef.current?.contains(e.target as any)) {
+      if (
+        !sortBtnRef.current?.contains(e.target as any) &&
+        !labelRef.current?.contains(e.target as any)
+      ) {
         setSortShow(false);
       }
     });
@@ -43,10 +51,11 @@ const AdminSortForm: FC<IAdminSortProps> = ({
     <div className="relative" ref={sortBtnRef}>
       <button
         type="button"
-        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark rounded-md p-1 ${
+        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark disabled:hoverable:hover:bg-primary rounded-md p-1 ${
           sortActive ? 'bg-primary-dark' : ''
         } ${className}`}
         onClick={() => setSortShow((prev) => !prev)}
+        disabled={disabled}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -81,13 +90,13 @@ const AdminSortForm: FC<IAdminSortProps> = ({
               <div className="flex items-center mb-4">
                 <Field
                   name="sort"
-                  id="sortAsc"
+                  id={inputAscLabelId}
                   type="radio"
                   value="ASC"
                   className="w-4 h-4 text-primary bg-gray-100 border-gray-300 focus:ring-0 focus:ring-offset-0"
                 />
                 <label
-                  htmlFor="sortAsc"
+                  htmlFor={inputAscLabelId}
                   className="ml-2 text-sm font-medium text-zinc-700"
                 >
                   Ascending
@@ -96,13 +105,13 @@ const AdminSortForm: FC<IAdminSortProps> = ({
               <div className="flex items-center mb-4">
                 <Field
                   name="sort"
-                  id="sortDesc"
+                  id={inputDescLabelId}
                   type="radio"
                   value="DESC"
                   className="w-4 h-4 text-primary bg-gray-100 border-gray-300 focus:ring-0 focus:ring-offset-0"
                 />
                 <label
-                  htmlFor="sortDesc"
+                  htmlFor={inputDescLabelId}
                   className="ml-2 text-sm font-medium text-zinc-700"
                 >
                   Descending

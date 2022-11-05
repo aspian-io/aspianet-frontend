@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useId, useState, Fragment } from 'react';
 import Button from '../../../common/Button';
+import LoadingSpinner from '../../../common/LoadingSpinner';
 import AdminPagination, {
   IAdminPaginationProps,
 } from './sub-components/AdminPagination';
@@ -28,6 +29,9 @@ interface IProps {
   data: ITableDataType[];
   pagination: IAdminPaginationProps;
   onSelectColumns?: (selectedIds: string[]) => any;
+  loading?: boolean;
+  selectable?: boolean;
+  trashBtnOnClick?: Function;
 }
 
 interface IColumn {
@@ -52,6 +56,9 @@ const AdminTable: FC<IProps> = ({
   data,
   pagination,
   onSelectColumns,
+  loading = false,
+  selectable = true,
+  trashBtnOnClick,
 }) => {
   const [checked, setChecked] = useState<string[]>([]);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
@@ -104,46 +111,57 @@ const AdminTable: FC<IProps> = ({
 
   return (
     <div className="rounded-3xl bg-light py-6 px-2 w-full">
-      <div className="px-4 my-4">
-        <AdminPagination
-          totalPages={pagination.totalPages}
-          baseUrl={pagination.baseUrl}
-          currentPage={pagination.currentPage}
-          onSubmit={pagination.onSubmit}
-          onItemsPerPageChange={pagination.onItemsPerPageChange}
-          queryString={pagination.queryString}
-        />
-      </div>
-      <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max  scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
-        <div
-          className={`h-14 transition-all duration-300 overflow-hidden ${
-            showDeleteBtn ? '' : 'h-0'
-          }`}
-        >
-          <Button
-            type="button"
-            size="h-10"
-            rounded="rounded-xl"
-            variant="danger"
-            extraCSSClasses={`px-4 mt-3 ml-4 text-sm transition-all duration-300 ${
-              showDeleteBtn ? '' : 'invisible h-0'
-            }`}
-            onClick={() => {}}
-          >
-            Delete Items
-          </Button>
+      <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
+        <div className="flex justify-start items-center w-full">
+          {trashBtnOnClick && (
+            <Button
+              type="button"
+              size="h-9"
+              rounded="rounded-xl"
+              variant="primary"
+              extraCSSClasses="px-4 ml-4 text-sm transition-all duration-300"
+              onClick={() => {
+                trashBtnOnClick();
+              }}
+            >
+              Go to Trash
+            </Button>
+          )}
+          {selectable && (
+            <div
+              className={`h-12 transition-all duration-300 overflow-hidden ${
+                showDeleteBtn ? '' : 'invisible opacity-0'
+              }`}
+            >
+              <Button
+                type="button"
+                size="h-9"
+                rounded="rounded-xl"
+                variant="danger"
+                extraCSSClasses={`px-4 mt-1 ml-4 text-sm transition-all duration-300 ${
+                  showDeleteBtn ? '' : 'invisible opacity-0'
+                }`}
+                onClick={() => {}}
+              >
+                Delete Items
+              </Button>
+            </div>
+          )}
         </div>
         <table className="border-separate border-spacing-y-2 border-spacing-x-px px-4 w-full rounded-2xl bg-light">
           <thead className="text-white text-xs sm:text-sm">
             <tr className="bg-primary rounded-2xl shadow-sm">
-              <th className="px-3 py-2 text-center first:rounded-l-xl last:rounded-r-xl w-6">
-                <input
-                  id={selectAllInputId}
-                  type="checkbox"
-                  onChange={(e) => toggleCheckAll(e.target)}
-                  className="w-4 h-4 text-primary-dark bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
-                />
-              </th>
+              {selectable && (
+                <th className="px-3 py-2 text-center first:rounded-l-xl last:rounded-r-xl w-6">
+                  <input
+                    id={selectAllInputId}
+                    type="checkbox"
+                    onChange={(e) => toggleCheckAll(e.target)}
+                    className="w-4 h-4 text-primary-dark bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-100"
+                    disabled={!data.length}
+                  />
+                </th>
+              )}
               {columns.map((c, i) => (
                 <th
                   className="px-3 py-2 text-left first:rounded-l-xl last:rounded-r-xl"
@@ -210,57 +228,85 @@ const AdminTable: FC<IProps> = ({
             </tr>
           </thead>
           <tbody className="text-xs sm:text-sm">
-            {data.map((d, i) => (
-              <tr className="shadow-sm rounded-2xl" key={i}>
-                <td className="text-center p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
-                  <input
-                    name="table_record"
-                    value={d.rowId}
-                    type="checkbox"
-                    onChange={(e) => {
-                      e.target.checked
-                        ? setChecked([...checked, e.target.value])
-                        : setChecked([
-                            ...checked.filter((i) => i !== e.target.value),
-                          ]);
-                      if (!e.target.checked) {
-                        const selectAllInput = document.getElementById(
-                          selectAllInputId
-                        ) as HTMLInputElement;
-                        selectAllInput.checked = false;
-                      } else {
-                        setShowDeleteBtn(true);
-                      }
-
-                      checkIfSomeChecked();
-                      checkIfAllChecked();
-                    }}
-                    className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
-                  />
+            {loading && (
+              <tr className="shadow-sm rounded-xl bg-zinc-100 text-primary p-3 w-full">
+                <td
+                  className="text-center p-3 bg-zinc-100 w-full rounded-xl h-72 sm:h-80"
+                  colSpan={columns.length + 1}
+                >
+                  <div className="flex justify-center items-center w-full">
+                    <LoadingSpinner className="w-8 h-8 text-primary" />
+                  </div>
                 </td>
-                {Object.entries(d).map((v, i) => (
-                  <Fragment key={i}>
-                    {v[0] !== 'rowId' && (
-                      <td className="p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
-                        {v[1]}
-                      </td>
-                    )}
-                  </Fragment>
-                ))}
               </tr>
-            ))}
+            )}
+            {!data.length && !loading && (
+              <tr className="shadow-sm rounded-xl bg-zinc-100 text-primary p-3 w-full">
+                <td
+                  className="text-center p-3 bg-zinc-100 w-full rounded-xl"
+                  colSpan={columns.length + 1}
+                >
+                  No Records
+                </td>
+              </tr>
+            )}
+            {data.length > 0 &&
+              data.map((d, i) => (
+                <tr className="shadow-sm rounded-xl" key={i}>
+                  {selectable && (
+                    <td className="text-center p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
+                      <input
+                        name="table_record"
+                        value={d.rowId}
+                        type="checkbox"
+                        onChange={(e) => {
+                          e.target.checked
+                            ? setChecked([...checked, e.target.value])
+                            : setChecked([
+                                ...checked.filter((i) => i !== e.target.value),
+                              ]);
+                          if (!e.target.checked) {
+                            const selectAllInput = document.getElementById(
+                              selectAllInputId
+                            ) as HTMLInputElement;
+                            selectAllInput.checked = false;
+                          } else {
+                            setShowDeleteBtn(true);
+                          }
+
+                          checkIfSomeChecked();
+                          checkIfAllChecked();
+                        }}
+                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
+                      />
+                    </td>
+                  )}
+                  {Object.entries(d).map((v, i) => (
+                    <Fragment key={i}>
+                      {v[0] !== 'rowId' && (
+                        <td className="p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
+                          {v[1]}
+                        </td>
+                      )}
+                    </Fragment>
+                  ))}
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
       <div className="px-4 my-4">
-        <AdminPagination
-          totalPages={pagination.totalPages}
-          baseUrl={pagination.baseUrl}
-          currentPage={pagination.currentPage}
-          onSubmit={pagination.onSubmit}
-          onItemsPerPageChange={pagination.onItemsPerPageChange}
-          queryString={pagination.queryString}
-        />
+        {pagination && !loading && data && (
+          <AdminPagination
+            totalPages={pagination.totalPages}
+            baseUrl={pagination.baseUrl}
+            currentPage={pagination.currentPage}
+            onSubmit={pagination.onSubmit}
+            onItemsPerPageChange={pagination.onItemsPerPageChange}
+            queryString={pagination.queryString}
+            disabled={!data.length}
+          />
+        )}
       </div>
     </div>
   );

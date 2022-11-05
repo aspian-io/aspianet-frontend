@@ -10,6 +10,7 @@ export interface IFilterTextProps {
   onReset?: Function;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
+  disabled?: boolean
 }
 
 const FilterText: FC<IFilterTextProps> = ({
@@ -18,6 +19,7 @@ const FilterText: FC<IFilterTextProps> = ({
   placeholder,
   className = '',
   dropDownAlignment = 'right',
+  disabled = false
 }) => {
   const [filterShow, setFilterShow] = useState(false);
   const [filterActive, setFilterActive] = useState(false);
@@ -47,10 +49,11 @@ const FilterText: FC<IFilterTextProps> = ({
     <div className="relative" ref={filterBtnRef}>
       <button
         type="button"
-        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark rounded-md p-1 ${
+        className={`flex justify-center items-center text-light hoverable:hover:bg-primary-dark disabled:hoverable:hover:bg-primary rounded-md p-1 ${
           filterActive ? 'bg-primary-dark' : ''
         } ${className}`}
         onClick={() => setFilterShow((prev) => !prev)}
+        disabled={disabled}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

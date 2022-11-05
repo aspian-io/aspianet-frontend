@@ -8,12 +8,14 @@ export interface IAdminSearchProps {
   onSubmit: (searchString: string | undefined) => any;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
+  disabled?: boolean
 }
 
 const AdminSearchForm: FC<IAdminSearchProps> = ({
   className,
   onSubmit,
   dropDownAlignment = 'right',
+  disabled = false
 }) => {
   const [searchShow, setSearchShow] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
@@ -51,10 +53,11 @@ const AdminSearchForm: FC<IAdminSearchProps> = ({
     <div className="relative" ref={searchBtnRef}>
       <button
         type="button"
-        className={`flex justify-center items-center text-light ml-auto hoverable:hover:bg-primary-dark rounded-md p-1 ${
+        className={`flex justify-center items-center text-light ml-auto hoverable:hover:bg-primary-dark disabled:hoverable:hover:bg-primary rounded-md p-1 ${
           searchActive ? 'bg-primary-dark' : ''
         } ${className}`}
         onClick={() => setSearchShow((prev) => !prev)}
+        disabled={disabled}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
