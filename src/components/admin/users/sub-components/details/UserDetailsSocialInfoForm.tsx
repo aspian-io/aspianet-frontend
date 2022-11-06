@@ -3,20 +3,20 @@ import React, { FC } from 'react';
 import {
   AdminUserSocialInfo,
   IUserEntity,
-} from '../../../../models/users/admin/user';
+} from '../../../../../models/users/admin/user';
 import * as Yup from 'yup';
-import Modal from '../../../common/Modal';
+import Modal from '../../../../common/Modal';
 import { Field, Form, Formik } from 'formik';
-import { AdminUserAgent } from '../../../../lib/axios/agent';
-import { AdminUserKeys } from '../../../../lib/swr/keys';
-import { reloadSession } from '../../../../lib/next-auth/session';
+import { AdminUserAgent } from '../../../../../lib/axios/agent';
+import { AdminUserKeys } from '../../../../../lib/swr/keys';
+import { reloadSession } from '../../../../../lib/next-auth/session';
 import { mutate } from 'swr';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { INestError } from '../../../../models/common/error';
-import FormikInput, { InputTypeEnum } from '../../../common/FormikInput';
-import Button from '../../../common/Button';
-import LoadingSpinner from '../../../common/LoadingSpinner';
+import { INestError } from '../../../../../models/common/error';
+import FormikInput, { InputTypeEnum } from '../../../../common/FormikInput';
+import Button from '../../../../common/Button';
+import LoadingSpinner from '../../../../common/LoadingSpinner';
 
 interface IProps {
   show: boolean;
@@ -25,7 +25,7 @@ interface IProps {
   onSuccess: Function;
 }
 
-const SocialNetworkInfoFormModal: FC<IProps> = ({
+const UserDetailsSocialInfoForm: FC<IProps> = ({
   onCancel,
   onSuccess,
   show,
@@ -75,14 +75,14 @@ const SocialNetworkInfoFormModal: FC<IProps> = ({
         onSubmit={async (values, { resetForm }) => {
           try {
             const user = await AdminUserAgent.updateUser(
-              session!.user.id,
+              userData.id,
               values,
               session
             );
-            await mutate(AdminUserKeys.GET_USER_DETAILS);
-            reloadSession();
+            await mutate(`${AdminUserKeys.GET_USER_DETAILS}/${userData.id}`);
+            if (userData.id === session?.user.id) reloadSession();
             toast.success(
-              'Your social network information has been updated successfully.',
+              'The user social network information has been updated successfully.',
               {
                 className: 'bg-success text-light',
               }
@@ -93,7 +93,7 @@ const SocialNetworkInfoFormModal: FC<IProps> = ({
           } catch (error) {
             const err = error as AxiosError<INestError>;
             if (err.response?.data.statusCode === 400) {
-              return toast.error(
+              toast.error(
                 'Something went wrong, check entered information and try again.',
                 {
                   className: 'bg-danger text-light',
@@ -213,4 +213,4 @@ const SocialNetworkInfoFormModal: FC<IProps> = ({
   );
 };
 
-export default SocialNetworkInfoFormModal;
+export default UserDetailsSocialInfoForm;

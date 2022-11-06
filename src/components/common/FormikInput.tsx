@@ -91,6 +91,7 @@ const FormikInput: FC<IFormikInput> = ({
           showYearDropdown
           dropdownMode="select"
           clearButtonClassName="after:bg-primary/60 hoverable:hover:after:bg-primary after:content-['×']"
+          showPopperArrow={false}
         />
         {touched[field.name] && errors[field.name] && (
           <div className="mt-2 text-danger text-xs">{errors[field.name]}</div>

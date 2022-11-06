@@ -85,7 +85,10 @@ export const AdminUserAgent = {
   deleteAvatar: ( userId: string, session: Session | null ): Promise<IUserEntity> => apiRequests.del( `/admin/users/delete-avatar/${ userId }`, { headers: authHeader( session ) } ),
   updateUser: ( userId: string, userFormValues: Partial<IUserEntity>, session: Session | null ): Promise<IUserEntity> =>
     apiRequests.patch( `/admin/users/${ userId }`, userFormValues, { headers: authHeader( session ) } ),
-  softDelete: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/soft-delete/${ userId }`, { headers: authHeader( session ) } )
+  softDelete: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/soft-delete/${ userId }`, { headers: authHeader( session ) } ),
+  softDeletedUsersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IUserEntity>> => apiRequests.get( `/admin/users/soft-deleted/trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  recoverUser: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/recover/${ userId }`, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/permanent-delete/${ userId }`, { headers: authHeader( session ) } )
 };
 
 /*********** ADMIN REGION END **************/

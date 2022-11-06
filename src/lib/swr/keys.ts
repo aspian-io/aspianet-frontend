@@ -9,7 +9,8 @@ const BaseURLs = {
 
 // USER KEYS
 export const AdminUserKeys = {
-  GET_USER_DETAILS: `${ BaseURLs.API }/admin/users/`
+  GET_USER_DETAILS: `${ BaseURLs.API }/admin/users`,
+  GET_SOFT_DELETED_USERS: `${ BaseURLs.API }/admin/users/soft-deleted/trash`
 } as const;
 
 /*********** ADMIN REGION END **************/

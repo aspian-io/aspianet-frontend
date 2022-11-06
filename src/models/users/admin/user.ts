@@ -1,4 +1,4 @@
-import { plainToClassFromExist, Expose } from "class-transformer";
+import { plainToClassFromExist, Expose, Type, Transform } from "class-transformer";
 import { AvatarSourceEnum, GenderEnum, IClaimEntity } from "../../auth/common";
 import { IBaseMinimalEntity } from "../../common/base-entities";
 import { IPostEntity } from "../../posts/admin/post";
@@ -41,11 +41,11 @@ export interface IUserEntity extends IBaseMinimalEntity {
 }
 
 export class AdminUserPersonalInfo implements Partial<IUserEntity> {
-  @Expose() firstName: string = '';
-  @Expose() lastName: string = '';
-  @Expose() bio: string | null = '';
+  @Expose() @Transform( v => v.value ?? '' ) firstName: string = '';
+  @Expose() @Transform( v => v.value ?? '' ) lastName: string = '';
+  @Expose() @Transform( v => v.value ?? '' ) bio: string | null = '';
   @Expose() birthDate?: Date = undefined;
-  @Expose() gender?: GenderEnum = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) gender?: GenderEnum;
 
   constructor ( init?: IUserEntity ) {
     plainToClassFromExist(
@@ -58,13 +58,13 @@ export class AdminUserPersonalInfo implements Partial<IUserEntity> {
 
 
 export class AdminUserContactInfo implements Partial<IUserEntity> {
-  @Expose() country?: string = undefined;
-  @Expose() state?: string = undefined;
-  @Expose() city?: string = undefined;
-  @Expose() address?: string = undefined;
-  @Expose() phone?: string = undefined;
-  @Expose() mobilePhone?: string = undefined;
-  @Expose() postalCode?: string = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) country?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) state?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) city?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) address?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) phone?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) mobilePhone?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) postalCode?: string;
 
   constructor ( init?: IUserEntity ) {
     plainToClassFromExist(
@@ -76,12 +76,48 @@ export class AdminUserContactInfo implements Partial<IUserEntity> {
 }
 
 export class AdminUserSocialInfo implements Partial<IUserEntity> {
-  @Expose() website?: string = undefined;
-  @Expose() facebook?: string = undefined;
-  @Expose() twitter?: string = undefined;
-  @Expose() instagram?: string = undefined;
-  @Expose() linkedIn?: string = undefined;
-  @Expose() pinterest?: string = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) website?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) facebook?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) twitter?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) instagram?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) linkedIn?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) pinterest?: string;
+
+  constructor ( init?: IUserEntity ) {
+    plainToClassFromExist(
+      this,
+      init,
+      { excludeExtraneousValues: true }
+    );
+  }
+}
+
+
+export class AdminUserDetailsContactInfo implements Partial<IUserEntity> {
+  @Expose() @Transform( v => v.value ?? undefined ) country?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) state?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) city?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) address?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) email?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) phone?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) mobilePhone?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) postalCode?: string;
+
+  constructor ( init?: IUserEntity ) {
+    plainToClassFromExist(
+      this,
+      init,
+      { excludeExtraneousValues: true }
+    );
+  }
+}
+
+export class AdminUserDetailsSecurityInfo implements Partial<IUserEntity> {
+  @Expose() @Transform( v => v.value ?? '' ) role?: string;
+  @Expose() suspend?: Date = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) isActivated?: boolean;
+  @Expose() @Transform( v => v.value ?? undefined ) emailVerified?: boolean;
+  @Expose() @Transform( v => v.value ?? undefined ) mobilePhoneVerified?: boolean;
 
   constructor ( init?: IUserEntity ) {
     plainToClassFromExist(

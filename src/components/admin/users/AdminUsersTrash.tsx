@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import { AdminUserAgent } from '../../../lib/axios/agent';
+import { AdminUserKeys } from '../../../lib/swr/keys';
 import { INestError } from '../../../models/common/error';
 import { IPaginated } from '../../../models/common/paginated-result';
 import { IUserEntity } from '../../../models/users/admin/user';
@@ -20,19 +21,30 @@ interface IDataType extends ITableDataType {
   actions: JSX.Element;
 }
 
-const AdminUsers = () => {
+const AdminUsersTrash = () => {
   const router = useRouter();
+  const page =
+    router.query['page'] && +router.query['page'] >= 1
+      ? +router.query['page']
+      : 1;
+  const limit =
+    router.query['limit'] && +router.query['limit'] >= 10
+      ? +router.query['limit']
+      : 10;
   const { data: session } = useSession();
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
+  const [recoverLoading, setRecoverLoading] = useState(false);
+  const [btnId, setBtnId] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-  const fetcher = () => AdminUserAgent.list(session, router.asPath);
+  const fetcher = () =>
+    AdminUserAgent.softDeletedUsersList(session, page, limit);
   const {
     data: users,
     error,
     mutate,
   } = useSWR<IPaginated<IUserEntity>, AxiosError<INestError>>(
-    router.asPath,
+    `${AdminUserKeys.GET_SOFT_DELETED_USERS}?page=${page}&limit=${limit}`,
     fetcher
   );
 
@@ -44,22 +56,41 @@ const AdminUsers = () => {
         rounded="rounded-md"
         size="h-5"
         type="button"
-        variant="primary"
+        variant="success"
         extraCSSClasses="px-1.5 text-xs"
-        onClick={() => {
-          router.push(`users/details/${id}`);
+        disabled={recoverLoading}
+        onClick={async () => {
+          setBtnId(id);
+          setRecoverLoading(true);
+          try {
+            await AdminUserAgent.recoverUser(session, id);
+            await mutate();
+            setRecoverLoading(false);
+            toast.success('User recovered successfully.', {
+              className: 'bg-success text-light text-sm',
+            });
+            setBtnId(null);
+          } catch (error) {
+            setRecoverLoading(false);
+            toast.error('Something went wrong. Please try again later.', {
+              className: 'bg-danger text-light text-sm',
+            });
+            setBtnId(null);
+          }
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="w-3 h-3"
+          id={id}
+          className={`w-3 h-3 ${
+            recoverLoading && btnId === id ? 'animate-spin' : ''
+          }`}
         >
-          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
           <path
             fillRule="evenodd"
-            d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
             clipRule="evenodd"
           />
         </svg>
@@ -68,28 +99,9 @@ const AdminUsers = () => {
         rounded="rounded-md"
         size="h-5"
         type="button"
-        variant="warning"
-        extraCSSClasses="px-1.5 text-xs"
-        onClick={() => {
-          router.push(`users/edit/${id}`);
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-3 h-3"
-        >
-          <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
-          <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
-        </svg>
-      </Button>
-      <Button
-        rounded="rounded-md"
-        size="h-5"
-        type="button"
         variant="danger"
         extraCSSClasses="px-1.5 text-xs"
+        disabled={recoverLoading}
         onClick={() => {
           setItemToDelete(id);
           setRemoveConfirm(true);
@@ -140,7 +152,7 @@ const AdminUsers = () => {
             }
             setRemoveLoading(true);
             if (itemToDelete) {
-              await AdminUserAgent.softDelete(session, itemToDelete);
+              await AdminUserAgent.deletePermanently(session, itemToDelete);
               await mutate();
             } else {
               toast.error('Something went wrong. Please try again later.', {
@@ -159,7 +171,7 @@ const AdminUsers = () => {
         }}
         show={removeConfirm}
         onConfirmLoading={removeLoading}
-        text="Are you sure you want to delete the user?"
+        text="Are you sure you want to delete the user permanently?"
       />
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
@@ -167,83 +179,15 @@ const AdminUsers = () => {
           columns={[
             {
               title: 'Email',
-              search: {
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.email'];
-                  else router.query['searchBy.email'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                onSortChange: (sort) => {
-                  router.query['orderBy.email'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.email'];
-                  router.push(router);
-                },
-              },
             },
             {
               title: 'First Name',
-              search: {
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.firstName'];
-                  else router.query['searchBy.firstName'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                onSortChange: (sort) => {
-                  router.query['orderBy.firstName'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.firstName'];
-                  router.push(router);
-                },
-              },
             },
             {
               title: 'Last Name',
-              search: {
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.lastName'];
-                  else router.query['searchBy.lastName'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                onSortChange: (sort) => {
-                  router.query['orderBy.lastName'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.lastName'];
-                  router.push(router);
-                },
-              },
             },
             {
               title: 'Mobile Phone',
-              search: {
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.mobilePhone'];
-                  else router.query['searchBy.mobilePhone'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                onSortChange: (sort) => {
-                  router.query['orderBy.mobilePhone'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.mobilePhone'];
-                  router.push(router);
-                },
-              },
             },
             {
               title: 'Actions',
@@ -251,9 +195,6 @@ const AdminUsers = () => {
           ]}
           data={data}
           loading={!users}
-          trashBtnOnClick={() => {
-            router.push('users/trash');
-          }}
           pagination={{
             baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/users`,
             currentPage: users?.meta.currentPage,
@@ -267,4 +208,4 @@ const AdminUsers = () => {
   );
 };
 
-export default AdminUsers;
+export default AdminUsersTrash;

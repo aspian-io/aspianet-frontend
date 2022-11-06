@@ -119,7 +119,7 @@ const AdminTable: FC<IProps> = ({
               size="h-9"
               rounded="rounded-xl"
               variant="primary"
-              extraCSSClasses="px-4 ml-4 text-sm transition-all duration-300"
+              extraCSSClasses="px-4 ml-4 mt-2 text-sm transition-all duration-300"
               onClick={() => {
                 trashBtnOnClick();
               }}
@@ -138,7 +138,7 @@ const AdminTable: FC<IProps> = ({
                 size="h-9"
                 rounded="rounded-xl"
                 variant="danger"
-                extraCSSClasses={`px-4 mt-1 ml-4 text-sm transition-all duration-300 ${
+                extraCSSClasses={`px-4 mt-2.5 ml-4 text-sm transition-all duration-300 ${
                   showDeleteBtn ? '' : 'invisible opacity-0'
                 }`}
                 onClick={() => {}}
