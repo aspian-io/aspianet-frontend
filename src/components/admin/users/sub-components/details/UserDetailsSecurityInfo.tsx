@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { date } from 'yup/lib/locale';
+import { ClaimsEnum } from '../../../../../models/auth/common';
 import { IUserEntity } from '../../../../../models/users/admin/user';
+import { AuthGuard } from '../../../../common/AuthGuard';
 import DropdownMenu from '../../../../common/DropdownMenu';
 import AdminCard from '../../../common/AdminCard';
 import UserDetailsSecurityInfoForm from './UserDetailsSecurityInfoForm';
@@ -10,6 +13,8 @@ interface IProps {
 }
 
 const UserDetailsSecurityInfo: FC<IProps> = ({ userData }) => {
+  const router = useRouter();
+  const id = router.query.id as string;
   const [showEditModal, setShowEditModal] = useState(false);
 
   return (
@@ -27,8 +32,15 @@ const UserDetailsSecurityInfo: FC<IProps> = ({ userData }) => {
           </h4>
           <DropdownMenu className="self-end">
             <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
-              Edit
+              General Edit
             </DropdownMenu.Item>
+            <AuthGuard claims={[ClaimsEnum.ADMIN]}>
+              <DropdownMenu.Item
+                onClick={() => router.push(`/admin/users/claims/${id}`)}
+              >
+                Edit Claims
+              </DropdownMenu.Item>
+            </AuthGuard>
           </DropdownMenu>
         </div>
         <div className="space-y-2 w-full">
