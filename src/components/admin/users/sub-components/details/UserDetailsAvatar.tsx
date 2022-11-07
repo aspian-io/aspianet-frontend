@@ -9,9 +9,13 @@ import { AdminUserAgent } from '../../../../../lib/axios/agent';
 import { imgPlaceholderDataURL } from '../../../../../lib/helpers/img-placeholder';
 import { reloadSession } from '../../../../../lib/next-auth/session';
 import { AdminUserKeys } from '../../../../../lib/swr/keys';
-import { AvatarSourceEnum } from '../../../../../models/auth/common';
+import {
+  AvatarSourceEnum,
+  ClaimsEnum,
+} from '../../../../../models/auth/common';
 import { INestError } from '../../../../../models/common/error';
 import { IUserEntity } from '../../../../../models/users/admin/user';
+import { AuthGuard } from '../../../../common/AuthGuard';
 import ConfirmModal from '../../../../common/ConfirmModal';
 import DropdownMenu from '../../../../common/DropdownMenu';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
@@ -122,18 +126,20 @@ const UserDetailsAvatar: FC<IProps> = ({ userData, session }) => {
             />
 
             <AdminCard className="flex flex-col justify-start items-center min-w-max h-72">
-              <DropdownMenu className="self-end">
-                <DropdownMenu.Item
-                  onClick={() => {
-                    document.getElementById(avatarUploadFieldId)?.click();
-                  }}
-                >
-                  Change Avatar
-                </DropdownMenu.Item>
-                <DropdownMenu.Item onClick={() => setRemoveConfirm(true)}>
-                  Remove Avatar
-                </DropdownMenu.Item>
-              </DropdownMenu>
+              <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_EDIT]}>
+                <DropdownMenu className="self-end">
+                  <DropdownMenu.Item
+                    onClick={() => {
+                      document.getElementById(avatarUploadFieldId)?.click();
+                    }}
+                  >
+                    Change Avatar
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item onClick={() => setRemoveConfirm(true)}>
+                    Remove Avatar
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              </AuthGuard>
               <div>
                 {userData.avatar ? (
                   <div className="relative w-28 h-28 rounded-full overflow-hidden ring-2 ring-primary ring-offset-2 ring-offset-zinc-100 hoverable:group-hover:ring-offset-0 transition-all duration-700">

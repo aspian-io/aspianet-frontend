@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react';
+import { ClaimsEnum } from '../../../../../models/auth/common';
 import { IUserEntity } from '../../../../../models/users/admin/user';
+import { AuthGuard } from '../../../../common/AuthGuard';
 import DropdownMenu from '../../../../common/DropdownMenu';
 import AdminCard from '../../../common/AdminCard';
 import UserDetailsContactInfoForm from './UserDetailsContactInfoForm';
@@ -25,11 +27,13 @@ const UserDetailsContactInfo: FC<IProps> = ({ userData }) => {
           <h4 className="font-bold text-primary text-base underline">
             Contact Info:
           </h4>
-          <DropdownMenu className="self-end">
-            <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
-              Edit
-            </DropdownMenu.Item>
-          </DropdownMenu>
+          <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_EDIT]}>
+            <DropdownMenu className="self-end">
+              <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
+                Edit
+              </DropdownMenu.Item>
+            </DropdownMenu>
+          </AuthGuard>
         </div>
         <div className="space-y-2 w-full">
           <div className="text-dark font-bold">

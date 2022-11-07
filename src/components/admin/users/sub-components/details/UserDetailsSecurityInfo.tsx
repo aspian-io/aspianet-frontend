@@ -30,18 +30,20 @@ const UserDetailsSecurityInfo: FC<IProps> = ({ userData }) => {
           <h4 className="font-bold text-primary text-base underline">
             Security Info:
           </h4>
-          <DropdownMenu className="self-end">
-            <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
-              General Edit
-            </DropdownMenu.Item>
-            <AuthGuard claims={[ClaimsEnum.ADMIN]}>
-              <DropdownMenu.Item
-                onClick={() => router.push(`/admin/users/claims/${id}`)}
-              >
-                Edit Claims
+          <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_EDIT]}>
+            <DropdownMenu className="self-end">
+              <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
+                General Edit
               </DropdownMenu.Item>
-            </AuthGuard>
-          </DropdownMenu>
+              <AuthGuard claims={[ClaimsEnum.ADMIN]}>
+                <DropdownMenu.Item
+                  onClick={() => router.push(`/admin/users/claims/${id}`)}
+                >
+                  Edit Claims
+                </DropdownMenu.Item>
+              </AuthGuard>
+            </DropdownMenu>
+          </AuthGuard>
         </div>
         <div className="space-y-2 w-full">
           <div className="flex text-dark font-bold">
