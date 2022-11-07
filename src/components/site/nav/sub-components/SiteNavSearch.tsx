@@ -1,9 +1,11 @@
+import { Field, Form, Formik } from 'formik';
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getLayoutState,
   setIsSearchOpen,
 } from '../../../../store/slices/layout-slice';
+import FormikInput, { InputTypeEnum } from '../../../common/FormikInput';
 
 export interface ISiteNavSearchProps {
   responsive: boolean;
@@ -31,16 +33,24 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
 
   return (
     <div className={searchWrapperCss}>
-      {/* <Input
-        placeholderText={searchPlaceholderLabel}
-        rounded="rounded-lg"
-        size={responsive ? 'h-8' : 'h-11'}
-        type={InputTypeEnum.text}
-        block
-        extraCSSClasses={
-          responsive ? 'pr-11 placeholder:text-sm text-sm' : 'pr-12'
-        }
-      /> */}
+      <Formik initialValues={{ search: '' }} onSubmit={(values) => {}}>
+        {({ isSubmitting }) => (
+          <Form className="w-full">
+            <Field
+              type={InputTypeEnum.text}
+              name="firstName"
+              placeholder={searchPlaceholderLabel}
+              className={`rounded-lg w-full ${
+                responsive
+                  ? 'pr-11 placeholder:text-sm text-sm h-8'
+                  : 'h-11 pr-12'
+              }`}
+              labelClassName="hidden"
+              component={FormikInput}
+            />
+          </Form>
+        )}
+      </Formik>
       {!responsive && (
         <button
           type="button"
