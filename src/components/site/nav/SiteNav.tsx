@@ -90,12 +90,12 @@ const Item: FC<PropsWithChildren<INavItemProps>> = ({
     ? 'lg:flex lg:relative lg:text-primary lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary'
     : 'lg:hoverable:hover:text-primary';
   return (
-    <Link href={href} passHref>
-      <a
-        className={`block w-full py-3 text-center lg:w-auto lg:py-0 hoverable:hover:text-dark ${css}`}
-      >
-        {children}
-      </a>
+    <Link
+      href={href}
+      className={`block w-full py-3 text-center lg:w-auto lg:py-0 hoverable:hover:text-dark ${css}`}
+      passHref
+    >
+      {children}
     </Link>
   );
 };

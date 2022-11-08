@@ -34,11 +34,9 @@ const Pagination: FC<IPaginationProps> = ({
               : `${baseUrl}?page=${appliedCurrentPage - 1}`
           }
         >
-          <a>
-            <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
-              &lt;
-            </div>
-          </a>
+          <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
+            &lt;
+          </div>
         </Link>
       )}
 
@@ -51,17 +49,15 @@ const Pagination: FC<IPaginationProps> = ({
           }
           key={1}
         >
-          <a>
-            <div
-              className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
-                appliedCurrentPage === 1
-                  ? 'text-light bg-primary'
-                  : 'border-2 border-primary text-primary'
-              } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
-            >
-              1
-            </div>
-          </a>
+          <div
+            className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
+              appliedCurrentPage === 1
+                ? 'text-light bg-primary'
+                : 'border-2 border-primary text-primary'
+            } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
+          >
+            1
+          </div>
         </Link>
       )}
 
@@ -81,17 +77,15 @@ const Pagination: FC<IPaginationProps> = ({
             }
             key={p}
           >
-            <a>
-              <div
-                className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
-                  appliedCurrentPage === p
-                    ? 'text-light bg-primary'
-                    : 'border-2 border-primary text-primary'
-                } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
-              >
-                {p}
-              </div>
-            </a>
+            <div
+              className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
+                appliedCurrentPage === p
+                  ? 'text-light bg-primary'
+                  : 'border-2 border-primary text-primary'
+              } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
+            >
+              {p}
+            </div>
           </Link>
         );
       })}
@@ -111,17 +105,15 @@ const Pagination: FC<IPaginationProps> = ({
           }
           key={totalPages}
         >
-          <a>
-            <div
-              className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
-                appliedCurrentPage === totalPages
-                  ? 'text-light bg-primary'
-                  : 'border-2 border-primary text-primary'
-              } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
-            >
-              {totalPages}
-            </div>
-          </a>
+          <div
+            className={`flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 ${
+              appliedCurrentPage === totalPages
+                ? 'text-light bg-primary'
+                : 'border-2 border-primary text-primary'
+            } rounded-lg hoverable:hover:bg-primary hoverable:hover:text-light text-xs md:text-sm`}
+          >
+            {totalPages}
+          </div>
         </Link>
       )}
 
@@ -133,11 +125,9 @@ const Pagination: FC<IPaginationProps> = ({
               : `${baseUrl}?page=${appliedCurrentPage + 1}`
           }
         >
-          <a>
-            <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
-              &gt;
-            </div>
-          </a>
+          <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
+            &gt;
+          </div>
         </Link>
       )}
     </div>

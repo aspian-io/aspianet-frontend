@@ -151,9 +151,7 @@ const UserDetailsAvatar: FC<IProps> = ({ userData, session }) => {
                       <Image
                         className="hoverable:group-hover:scale-110 hoverable:group-hover:rotate-3 transition-transform duration-700"
                         src={getUserAvatarSrc()}
-                        layout="fill"
-                        objectFit="cover"
-                        objectPosition="center"
+                        fill
                         placeholder="blur"
                         blurDataURL={imgPlaceholderDataURL}
                         alt="Avatar"

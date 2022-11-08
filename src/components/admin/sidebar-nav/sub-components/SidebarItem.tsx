@@ -55,14 +55,13 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
               {itemTitle}
             </div>
           ) : (
-            <Link href={itemHref!}>
-              <a
-                className={`inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500 ${activeLinkCssGen(
-                  itemHref
-                )}`}
-              >
-                {itemTitle}
-              </a>
+            <Link
+              href={itemHref!}
+              className={`inline-block cursor-pointer w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hoverable:group-hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500 ${activeLinkCssGen(
+                itemHref
+              )}`}
+            >
+              {itemTitle}
             </Link>
           )}
         </div>

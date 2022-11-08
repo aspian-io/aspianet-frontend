@@ -152,10 +152,11 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                           />
                         </svg>
                       </div>
-                      <Link href="/admin/settings">
-                        <a className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500">
-                          Settings
-                        </a>
+                      <Link
+                        href="/admin/settings"
+                        className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500"
+                      >
+                        Settings
                       </Link>
                     </div>
                   </li>
@@ -178,10 +179,8 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                         />
                       </svg>
                     </div>
-                    <Link href="/admin/notifications">
-                      <a className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500">
+                    <Link href="/admin/notifications" className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light  transition-all duration-500">
                         Notifications
-                      </a>
                     </Link>
                   </div>
                 </li> */}

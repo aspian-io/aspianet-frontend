@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 import { AvatarSourceEnum } from '../../../models/auth/common';
 import {
   getAdminLayoutState,
@@ -108,9 +109,9 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
                 <Image
                   className="rounded-full"
                   src={getUserAvatarSrc()}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center"
+                  fill
+                  placeholder="blur"
+                  blurDataURL={imgPlaceholderDataURL}
                   alt="User Photo"
                 />
               ) : (
@@ -127,15 +128,17 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
                   : 'invisible -translate-y-2 opacity-0'
               } flex flex-col absolute z-50 drop-shadow-xl top-11 lg:top-14 right-0 p-2 text-zinc-500 bg-light text-sm rounded-lg transition-all duration-300`}
             >
-              <Link href="/admin/profile">
-                <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
-                  Profile
-                </a>
+              <Link
+                href="/admin/profile"
+                className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300"
+              >
+                Profile
               </Link>
-              <Link href="/admin/security">
-                <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
-                  Security
-                </a>
+              <Link
+                href="/admin/security"
+                className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300"
+              >
+                Security
               </Link>
               <button
                 type="button"
@@ -158,10 +161,11 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
                 key={i}
               >
                 {bc.href ? (
-                  <Link href={bc.href}>
-                    <a className="hoverable:hover:text-blue-400 text-xs">
-                      {bc.label}
-                    </a>
+                  <Link
+                    href={bc.href}
+                    className="hoverable:hover:text-blue-400 text-xs"
+                  >
+                    {bc.label}
                   </Link>
                 ) : (
                   <span className="text-xs">{bc.label}</span>

@@ -44,9 +44,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
           <div className="relative h-7 w-7 lg:h-10 lg:w-10 rounded-full overflow-hidden ring-2 ring-primary ring-offset-2 hoverable:hover:ring-offset-0 hoverable:hover:scale-110 transition-all duration-300">
             <Image
               src={getUserAvatarSrc()}
-              layout="fill"
-              objectFit="cover"
-              objectPosition="center"
+              fill
               placeholder="blur"
               blurDataURL={imgPlaceholderDataURL}
               alt="Profile Photo"
@@ -67,36 +65,38 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
         } flex flex-col absolute drop-shadow-xl top-11 lg:top-14 right-0 p-2 text-zinc-500 bg-light text-sm rounded-lg transition-all duration-300`}
       >
         <AuthGuard claims={Object.values(ClaimsEnum)} redirect={false}>
-          <Link href="/admin">
-            <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="inline-block pl-1">Admin</span>
-            </a>
-          </Link>
-        </AuthGuard>
-        <Link href="/users/profile">
-          <a className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300">
+          <Link
+            href="/admin"
+            className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
               className="w-4 h-4"
             >
-              <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+              <path
+                fillRule="evenodd"
+                d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z"
+                clipRule="evenodd"
+              />
             </svg>
-            <span className="inline-block pl-1">Profile</span>
-          </a>
+            <span className="inline-block pl-1">Admin</span>
+          </Link>
+        </AuthGuard>
+        <Link
+          href="/users/profile"
+          className="flex justify-between items-center px-4 py-2 rounded-xl hoverable:hover:bg-primary hoverable:hover:text-light transition-colors duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="w-4 h-4"
+          >
+            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+          </svg>
+          <span className="inline-block pl-1">Profile</span>
         </Link>
         <button
           type="button"

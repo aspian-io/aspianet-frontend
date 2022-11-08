@@ -13,6 +13,13 @@
   }
 }
 
+/* NextJS 13 Image hack for Safari 15 not displaying a gray border while loading */
+@media not all and (min-resolution: 0.001dpcm) {
+  img[loading='lazy'] {
+    clip-path: inset(0.5px);
+  }
+}
+
 /* Toastify */
 :root {
   --toastify-color-light: #fff;

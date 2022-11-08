@@ -34,9 +34,7 @@ const BlogCard: FC<IBlogCardProps> = ({
           <Image
             className="hoverable:hover:scale-110 hoverable:hover:rotate-2 transition-transform duration-700"
             src={featuredImageUrl}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
+            fill
             placeholder="blur"
             blurDataURL={imgPlaceholderDataURL}
             alt="Featured Image"
@@ -146,17 +144,15 @@ const BlogCard: FC<IBlogCardProps> = ({
 
         <div className="flex justify-center items-center w-full mt-auto">
           <Link href={postUrl} passHref>
-            <a>
-              <Button
-                variant="primary"
-                size="h-8"
-                rounded="rounded-xl"
-                type="button"
-                extraCSSClasses="text-xs px-4"
-              >
-                Read More
-              </Button>
-            </a>
+            <Button
+              variant="primary"
+              size="h-8"
+              rounded="rounded-xl"
+              type="button"
+              extraCSSClasses="text-xs px-4"
+            >
+              Read More
+            </Button>
           </Link>
         </div>
       </div>

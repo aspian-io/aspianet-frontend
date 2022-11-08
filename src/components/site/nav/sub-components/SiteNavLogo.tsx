@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
+import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 
 export interface ISiteNavLogoProps {
   isOpen: boolean;
@@ -21,17 +22,15 @@ const SiteNavLogo: FC<ISiteNavLogoProps> = ({
         } w-1/2 h-10 lg:flex lg:w-52 lg:h-24 relative`}
       >
         <Link href={process.env.NEXT_PUBLIC_APP_BASE_URL!}>
-          <a>
-            <Image
-              className="mx-auto z-20"
-              src={logoSrc}
-              layout="fill"
-              objectFit="contain"
-              objectPosition="left center"
-              priority
-              alt="Site Logo"
-            />
-          </a>
+          <Image
+            className="mx-auto z-20"
+            src={logoSrc}
+            fill
+            placeholder="blur"
+            blurDataURL={imgPlaceholderDataURL}
+            priority
+            alt="Site Logo"
+          />
         </Link>
       </div>
       <div
@@ -40,9 +39,9 @@ const SiteNavLogo: FC<ISiteNavLogoProps> = ({
         <Image
           className="mx-auto z-30"
           src={overlayLogoSrc}
-          layout="fill"
-          objectFit="contain"
-          objectPosition="left center"
+          fill
+          placeholder="blur"
+          blurDataURL={imgPlaceholderDataURL}
           priority
           alt="Site Logo"
         />

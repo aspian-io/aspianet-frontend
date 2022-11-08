@@ -17,13 +17,14 @@ import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 
 interface IProps {
   email: string;
   remainingTime: number;
 }
 
-const ResetPassword: FC<IProps> = ({email, remainingTime}) => {
+const ResetPassword: FC<IProps> = ({ email, remainingTime }) => {
   const [resendLoading, setResendLoading] = useState(false);
   const [done, setDone] = useState(false);
   const { status } = useSession();
@@ -94,9 +95,9 @@ const ResetPassword: FC<IProps> = ({email, remainingTime}) => {
                   <div className="flex justify-center items-center w-48 h-14 relative">
                     <Image
                       src="/nav-logo.svg"
-                      layout="fill"
-                      objectFit="contain"
-                      objectPosition="center"
+                      fill
+                      placeholder="blur"
+                      blurDataURL={imgPlaceholderDataURL}
                       priority
                       alt="Site Logo"
                     />
@@ -181,35 +182,36 @@ const ResetPassword: FC<IProps> = ({email, remainingTime}) => {
                   </div>
 
                   <div className="flex justify-center items-center mt-4 sm:mt-6">
-                    <Link href="/auth/login">
-                      <a className="flex items-center justify-center">
-                        <Button
-                          rounded="rounded-xl"
-                          size="h-11"
-                          variant="link"
-                          type="button"
-                          extraCSSClasses="flex text-primary"
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center justify-center"
+                    >
+                      <Button
+                        rounded="rounded-xl"
+                        size="h-11"
+                        variant="link"
+                        type="button"
+                        extraCSSClasses="flex text-primary"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-5 h-5 sm:w-6 sm:h-6"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5 sm:w-6 sm:h-6"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                            />
-                          </svg>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                          />
+                        </svg>
 
-                          <span className="ml-1 sm:ml-2 text-sm sm:text-base">
-                            Back to login
-                          </span>
-                        </Button>
-                      </a>
+                        <span className="ml-1 sm:ml-2 text-sm sm:text-base">
+                          Back to login
+                        </span>
+                      </Button>
                     </Link>
                   </div>
                 </div>

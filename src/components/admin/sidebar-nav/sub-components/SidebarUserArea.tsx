@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useState, useEffect } from 'react';
+import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 
 interface IProps {
   userPhotoSrc?: string;
@@ -26,7 +27,9 @@ const SidebarUserArea: FC<IProps> = ({
 }) => {
   const router = useRouter();
   const pathnames = items.map((i) => i.pathname);
-  const [userTabOpen, setUserTabOpen] = useState(pathnames.includes(router.pathname));
+  const [userTabOpen, setUserTabOpen] = useState(
+    pathnames.includes(router.pathname)
+  );
 
   const activeLinkCssGen = (pathname: string): string => {
     return router.pathname === pathname
@@ -43,9 +46,9 @@ const SidebarUserArea: FC<IProps> = ({
               <Image
                 className="rounded-full"
                 src={userPhotoSrc}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
+                fill
+                placeholder="blur"
+                blurDataURL={imgPlaceholderDataURL}
                 alt="User Photo"
               />
             ) : (
@@ -67,7 +70,7 @@ const SidebarUserArea: FC<IProps> = ({
           className={`text-gray-400 bg-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light ${
             userTabOpen ? '-rotate-90' : 'ltr:rotate-0 rtl:rotate-180'
           } transition-transform duration-300`}
-          onClick={(e) => setUserTabOpen(prev => !prev)}
+          onClick={(e) => setUserTabOpen((prev) => !prev)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -94,14 +97,13 @@ const SidebarUserArea: FC<IProps> = ({
           >
             {items.map((item, i) => (
               <div key={i}>
-                <Link href={item.pathname}>
-                  <a
-                    className={`inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500 ${activeLinkCssGen(
-                      item.pathname
-                    )}`}
-                  >
-                    {item.label}
-                  </a>
+                <Link
+                  href={item.pathname}
+                  className={`inline-block w-full px-4 py-2 text-xs rounded-xl hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:text-light transition-all duration-500 ${activeLinkCssGen(
+                    item.pathname
+                  )}`}
+                >
+                  {item.label}
                 </Link>
               </div>
             ))}

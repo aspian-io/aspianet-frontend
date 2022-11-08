@@ -22,12 +22,11 @@ const SubItem: FC<PropsWithChildren<IAdminSideBarSubItemProps>> = ({
 
   return (
     <div>
-      <Link href={href}>
-        <a
-          className={`inline-block w-full px-4 py-1.5 text-xs rounded-lg hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 focus:text-light transition-all duration-500 ${activeLinkCssGen()}`}
-        >
-          {children}
-        </a>
+      <Link
+        href={href}
+        className={`inline-block w-full px-4 py-1.5 text-xs rounded-lg hoverable:hover:bg-gray-800 hoverable:hover:text-light focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 focus:text-light transition-all duration-500 ${activeLinkCssGen()}`}
+      >
+        {children}
       </Link>
     </div>
   );

@@ -6,11 +6,12 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
 import { AuthAgent } from '../../../lib/axios/agent';
-import {AxiosError} from 'axios';
+import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';
 import { toast } from 'react-toastify';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 
 const ForgetPassword = () => {
   const { status } = useSession();
@@ -19,8 +20,7 @@ const ForgetPassword = () => {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log('AUTHENTICATED!!!')
-
+      console.log('AUTHENTICATED!!!');
     }
   }, [router, status]);
 
@@ -70,9 +70,9 @@ const ForgetPassword = () => {
                   <div className="flex justify-center items-center w-48 h-14 relative">
                     <Image
                       src="/nav-logo.svg"
-                      layout="fill"
-                      objectFit="contain"
-                      objectPosition="center"
+                      fill
+                      placeholder="blur"
+                      blurDataURL={imgPlaceholderDataURL}
                       priority
                       alt="Site Logo"
                     />

@@ -15,6 +15,7 @@ import {
 } from '../../../models/auth/auth-error';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 
 interface IProps {
   csrfToken: string;
@@ -116,9 +117,9 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                   <div className="flex justify-center items-center w-48 h-14 relative">
                     <Image
                       src="/nav-logo.svg"
-                      layout="fill"
-                      objectFit="contain"
-                      objectPosition="center"
+                      fill
+                      placeholder="blur"
+                      blurDataURL={imgPlaceholderDataURL}
                       priority
                       alt="Site Logo"
                     />
@@ -155,21 +156,28 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                     />
                     <div className="text-zinc-400 text-xs self-start mt-2">
                       This site is protected by reCAPTCHA and the Google&nbsp;
-                      <Link href="https://policies.google.com/privacy">
-                        <a className='text-blue-400'>Privacy Policy</a>
+                      <Link
+                        href="https://policies.google.com/privacy"
+                        className="text-blue-400"
+                      >
+                        Privacy Policy
                       </Link>
                       &nbsp;and&nbsp;
-                      <Link href="https://policies.google.com/terms">
-                        <a className='text-blue-400'>Terms of Service</a>
+                      <Link
+                        href="https://policies.google.com/terms"
+                        className="text-blue-400"
+                      >
+                        Terms of Service
                       </Link>
                       &nbsp;apply.
                     </div>
                   </div>
                   <div className="flex justify-start self-start items-center mt-4">
-                    <Link href="/auth/forget-password">
-                      <a className="text-blue-600 text-xs hoverable:hover:underline">
-                        Forget password?
-                      </a>
+                    <Link
+                      href="/auth/forget-password"
+                      className="text-blue-600 text-xs hoverable:hover:underline"
+                    >
+                      Forget password?
                     </Link>
                   </div>
                   <div className="flex justify-center items-center w-full mt-10">
@@ -230,51 +238,47 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                     </Button>
                   </div>
                   <div className="flex w-full h-full items-end justify-center mt-4 sm:hidden">
-                    <Link href="/auth/register">
-                      <a className="w-full">
-                        <Button
-                          rounded="rounded-xl"
-                          size="h-11"
-                          type="button"
-                          block
-                          variant="primary-outline"
-                          extraCSSClasses="text-sm"
-                        >
-                          Register
-                        </Button>
-                      </a>
+                    <Link href="/auth/register" className="w-full">
+                      <Button
+                        rounded="rounded-xl"
+                        size="h-11"
+                        type="button"
+                        block
+                        variant="primary-outline"
+                        extraCSSClasses="text-sm"
+                      >
+                        Register
+                      </Button>
                     </Link>
                   </div>
                   <div className="flex justify-center items-center mt-4 sm:mt-8">
-                    <Link href="/">
-                      <a className="flex items-center justify-center">
-                        <Button
-                          rounded="rounded-xl"
-                          size="h-11"
-                          variant="link"
-                          type="button"
-                          extraCSSClasses="flex text-primary"
+                    <Link href="/" className="flex items-center justify-center">
+                      <Button
+                        rounded="rounded-xl"
+                        size="h-11"
+                        variant="link"
+                        type="button"
+                        extraCSSClasses="flex text-primary"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-5 h-5 sm:w-6 sm:h-6"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5 sm:w-6 sm:h-6"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                            />
-                          </svg>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                          />
+                        </svg>
 
-                          <span className="ml-1 sm:ml-2 text-sm sm:text-base">
-                            Back
-                          </span>
-                        </Button>
-                      </a>
+                        <span className="ml-1 sm:ml-2 text-sm sm:text-base">
+                          Back
+                        </span>
+                      </Button>
                     </Link>
                   </div>
                 </div>
@@ -282,9 +286,9 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                 <div className="hidden sm:flex justify-center flex-col items-center sm:w-80 rounded-r-xl overflow-hidden relative">
                   <Image
                     src="/login-aside.jpg"
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="center"
+                    fill
+                    placeholder="blur"
+                    blurDataURL={imgPlaceholderDataURL}
                     priority
                     alt="Site Logo"
                   />
@@ -297,18 +301,16 @@ const Login: FC<IProps> = ({ csrfToken }) => {
                         Create your account to access all our services
                       </p>
                       <div className="flex w-full h-full items-end justify-center pb-8 mt-6 sm:pb-[6.2rem] sm:mt-auto">
-                        <Link href="/auth/register">
-                          <a className="w-full">
-                            <Button
-                              rounded="rounded-lg sm:rounded-xl"
-                              size="h-9 sm:h-11"
-                              type="button"
-                              block
-                              variant="light-outline"
-                            >
-                              Register
-                            </Button>
-                          </a>
+                        <Link href="/auth/register" className="w-full">
+                          <Button
+                            rounded="rounded-lg sm:rounded-xl"
+                            size="h-9 sm:h-11"
+                            type="button"
+                            block
+                            variant="light-outline"
+                          >
+                            Register
+                          </Button>
                         </Link>
                       </div>
                     </div>

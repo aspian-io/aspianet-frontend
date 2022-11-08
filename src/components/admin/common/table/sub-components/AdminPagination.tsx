@@ -62,16 +62,13 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                         }&${queryString}`
                       : `${baseUrl}?page=${appliedCurrentPage - 1}`
                   }
+                  onClick={() =>
+                    resetForm({ values: { page: appliedCurrentPage - 1 } })
+                  }
                 >
-                  <a
-                    onClick={() =>
-                      resetForm({ values: { page: appliedCurrentPage - 1 } })
-                    }
-                  >
-                    <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
-                      &lt;
-                    </div>
-                  </a>
+                  <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
+                    &lt;
+                  </div>
                 </Link>
               )}
 
@@ -111,16 +108,13 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                         }&${queryString}`
                       : `${baseUrl}?page=${appliedCurrentPage + 1}`
                   }
+                  onClick={() =>
+                    resetForm({ values: { page: appliedCurrentPage + 1 } })
+                  }
                 >
-                  <a
-                    onClick={() =>
-                      resetForm({ values: { page: appliedCurrentPage + 1 } })
-                    }
-                  >
-                    <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
-                      &gt;
-                    </div>
-                  </a>
+                  <div className="flex justify-center items-center min-w-[30px] px-1 md:min-w-[32px] md:px-2 h-7 bg-primary text-light rounded-lg hoverable:hover:bg-primary-dark text-xs md:text-sm">
+                    &gt;
+                  </div>
                 </Link>
               )}
             </div>

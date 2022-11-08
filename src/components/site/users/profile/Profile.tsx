@@ -64,119 +64,116 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         <div className="flex justify-center items-center w-full sm:w-3/4 space-x-2 sm:space-x-3 mt-2 sm:mt-0">
           {/* Profile starts */}
           <div className="flex items-center group h-14">
-            <Link href="?tab=profile">
-              <a
-                onClick={() => setActiveTab('profile')}
-                className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'profile' ? 'bg-primary' : 'bg-light'
+            <Link
+              href="?tab=profile"
+              onClick={() => setActiveTab('profile')}
+              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'profile' ? 'bg-primary' : 'bg-light'
+              } transition-all duration-300`}
+            >
+              <div
+                className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
+                  activeTab === 'profile' ? 'text-light' : 'text-primary'
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`text-xs hoverable:group-hover:text-light ${
+                  activeTab === 'profile' ? 'text-light' : 'text-primary'
                 } transition-all duration-300`}
               >
-                <div
-                  className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
-                    activeTab === 'profile' ? 'text-light' : 'text-primary'
-                  }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`text-xs hoverable:group-hover:text-light ${
-                    activeTab === 'profile' ? 'text-light' : 'text-primary'
-                  } transition-all duration-300`}
-                >
-                  Profile
-                </div>
-              </a>
+                Profile
+              </div>
             </Link>
           </div>
           {/* Privacy starts */}
           <div className="flex items-center group h-14">
-            <Link href="?tab=security">
-              <a
-                onClick={() => setActiveTab('privacy')}
-                className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'privacy' ? 'bg-primary' : 'bg-light'
+            <Link
+              href="?tab=security"
+              onClick={() => setActiveTab('privacy')}
+              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'privacy' ? 'bg-primary' : 'bg-light'
+              } transition-all duration-300`}
+            >
+              <div
+                className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
+                  activeTab === 'privacy' ? 'text-light' : 'text-primary'
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`text-xs hoverable:group-hover:text-light ${
+                  activeTab === 'privacy' ? 'text-light' : 'text-primary'
                 } transition-all duration-300`}
               >
-                <div
-                  className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
-                    activeTab === 'privacy' ? 'text-light' : 'text-primary'
-                  }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`text-xs hoverable:group-hover:text-light ${
-                    activeTab === 'privacy' ? 'text-light' : 'text-primary'
-                  } transition-all duration-300`}
-                >
-                  Security
-                </div>
-              </a>
+                Security
+              </div>
             </Link>
           </div>
           {/* Bookmarks starts */}
           <div className="flex items-center group h-14">
-            <Link href="?tab=bookmarks">
-              <a
-                onClick={() => setActiveTab('bookmark')}
-                className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'bookmark' ? 'bg-primary' : 'bg-light'
+            <Link
+              href="?tab=bookmarks"
+              onClick={() => setActiveTab('bookmark')}
+              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'bookmark' ? 'bg-primary' : 'bg-light'
+              } transition-all duration-300`}
+            >
+              <div
+                className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
+                  activeTab === 'bookmark' ? 'text-light' : 'text-primary'
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`text-xs hoverable:group-hover:text-light ${
+                  activeTab === 'bookmark' ? 'text-light' : 'text-primary'
                 } transition-all duration-300`}
               >
-                <div
-                  className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
-                    activeTab === 'bookmark' ? 'text-light' : 'text-primary'
-                  }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`text-xs hoverable:group-hover:text-light ${
-                    activeTab === 'bookmark' ? 'text-light' : 'text-primary'
-                  } transition-all duration-300`}
-                >
-                  Bookmarks
-                </div>
-              </a>
+                Bookmarks
+              </div>
             </Link>
           </div>
         </div>
@@ -188,7 +185,10 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
       <div className="hidden lg:flex flex-col min-w-[270px] lg:w-1/4 rounded-2xl py-10 px-8 bg-zinc-100">
         <div className="flex flex-col justify-center items-center">
           <div className="group">
-            <ProfileAvatar user={session!.user} isUpdateAvatarAllowed={isUpdateAvatarAllowed} />
+            <ProfileAvatar
+              user={session!.user}
+              isUpdateAvatarAllowed={isUpdateAvatarAllowed}
+            />
           </div>
           <div className="mt-6 text-lg text-dark font-semibold">
             Hi {session?.user.firstName}
@@ -226,105 +226,102 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         </div>
         <div className="flex flex-col justify-center">
           <div className="flex items-center group h-14">
-            <Link href="?tab=profile">
-              <a
-                onClick={() => setActiveTab('profile')}
-                className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'profile' ? 'bg-primary' : ''
+            <Link
+              href="?tab=profile"
+              onClick={() => setActiveTab('profile')}
+              className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'profile' ? 'bg-primary' : ''
+              } transition-all duration-300`}
+            >
+              <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`pl-4 text-md hoverable:group-hover:text-light ${
+                  activeTab === 'profile' ? 'text-light' : 'text-zinc-600'
                 } transition-all duration-300`}
               >
-                <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`pl-4 text-md hoverable:group-hover:text-light ${
-                    activeTab === 'profile' ? 'text-light' : 'text-zinc-600'
-                  } transition-all duration-300`}
-                >
-                  Profile
-                </div>
-              </a>
+                Profile
+              </div>
             </Link>
           </div>
           <div className="flex items-center group h-14">
-            <Link href="?tab=security">
-              <a
-                onClick={() => setActiveTab('privacy')}
-                className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'privacy' ? 'bg-primary' : ''
+            <Link
+              href="?tab=security"
+              onClick={() => setActiveTab('privacy')}
+              className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'privacy' ? 'bg-primary' : ''
+              } transition-all duration-300`}
+            >
+              <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`pl-4 text-md hoverable:group-hover:text-light ${
+                  activeTab === 'privacy' ? 'text-light' : 'text-zinc-600'
                 } transition-all duration-300`}
               >
-                <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`pl-4 text-md hoverable:group-hover:text-light ${
-                    activeTab === 'privacy' ? 'text-light' : 'text-zinc-600'
-                  } transition-all duration-300`}
-                >
-                  Security
-                </div>
-              </a>
+                Security
+              </div>
             </Link>
           </div>
           <div className="flex items-center group h-14">
-            <Link href="?tab=bookmarks">
-              <a
-                onClick={() => setActiveTab('bookmark')}
-                className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                  activeTab === 'bookmark' ? 'bg-primary' : ''
+            <Link
+              href="?tab=bookmarks"
+              onClick={() => setActiveTab('bookmark')}
+              className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'bookmark' ? 'bg-primary' : ''
+              } transition-all duration-300`}
+            >
+              <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`pl-4 text-md hoverable:group-hover:text-light ${
+                  activeTab === 'bookmark' ? 'text-light' : 'text-zinc-600'
                 } transition-all duration-300`}
               >
-                <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                    />
-                  </svg>
-                </div>
-                <div
-                  className={`pl-4 text-md hoverable:group-hover:text-light ${
-                    activeTab === 'bookmark' ? 'text-light' : 'text-zinc-600'
-                  } transition-all duration-300`}
-                >
-                  Bookmarks
-                </div>
-              </a>
+                Bookmarks
+              </div>
             </Link>
           </div>
         </div>

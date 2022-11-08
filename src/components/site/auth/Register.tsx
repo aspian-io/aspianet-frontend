@@ -3,16 +3,17 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { IUserRegister, UserRegister } from '../../../models/auth/register';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
 import { AuthAgent } from '../../../lib/axios/agent';
-import {AxiosError} from 'axios';
+import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';
 import { toast } from 'react-toastify';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 
 const Register = () => {
   const { status } = useSession();
@@ -70,9 +71,9 @@ const Register = () => {
                 <div className="hidden sm:flex justify-center flex-col items-center sm:w-80 rounded-l-xl overflow-hidden relative">
                   <Image
                     src="/login-aside.jpg"
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="center"
+                    fill
+                    placeholder="blur"
+                    blurDataURL={imgPlaceholderDataURL}
                     priority
                     alt="Site Logo"
                   />
@@ -82,18 +83,16 @@ const Register = () => {
                         Already have an account?
                       </h3>
                       <div className="flex w-full h-full items-end justify-center pb-8 mt-6 sm:pb-[6.2rem] sm:mt-auto">
-                        <Link href="/auth/login">
-                          <a className="w-full">
-                            <Button
-                              rounded="rounded-xl"
-                              size="h-9 sm:h-11"
-                              type="button"
-                              block
-                              variant="light-outline"
-                            >
-                              Login
-                            </Button>
-                          </a>
+                        <Link href="/auth/login" className="w-full">
+                          <Button
+                            rounded="rounded-xl"
+                            size="h-9 sm:h-11"
+                            type="button"
+                            block
+                            variant="light-outline"
+                          >
+                            Login
+                          </Button>
                         </Link>
                       </div>
                     </div>
@@ -104,9 +103,9 @@ const Register = () => {
                   <div className="flex justify-center items-center w-48 h-14 relative">
                     <Image
                       src="/nav-logo.svg"
-                      layout="fill"
-                      objectFit="contain"
-                      objectPosition="center"
+                      fill
+                      placeholder="blur"
+                      blurDataURL={imgPlaceholderDataURL}
                       priority
                       alt="Site Logo"
                     />
@@ -174,19 +173,17 @@ const Register = () => {
                     </Button>
                   </div>
                   <div className="flex w-full h-full items-end justify-center mt-4 sm:pb-[6.2rem] sm:mt-auto sm:hidden">
-                    <Link href="/auth/login">
-                      <a className="w-full">
-                        <Button
-                          rounded="rounded-xl"
-                          size="h-11"
-                          type="button"
-                          block
-                          variant="primary-outline"
-                          extraCSSClasses="text-sm"
-                        >
-                          Login
-                        </Button>
-                      </a>
+                    <Link href="/auth/login" className="w-full">
+                      <Button
+                        rounded="rounded-xl"
+                        size="h-11"
+                        type="button"
+                        block
+                        variant="primary-outline"
+                        extraCSSClasses="text-sm"
+                      >
+                        Login
+                      </Button>
                     </Link>
                   </div>
                   <div className="flex justify-center items-center mt-4 sm:mt-8">
