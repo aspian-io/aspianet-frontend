@@ -1,3 +1,5 @@
+import { IBaseMinimalEntity } from "../common/base-entities";
+
 export enum FilePolicyEnum {
   PUBLIC_READ = "public-read",
   PRIVATE = "private"
@@ -15,7 +17,7 @@ export enum ImageSizeCategories {
   ORIGINAL = "ORIGINAL"
 }
 
-export interface IFile {
+export interface IFile extends IBaseMinimalEntity {
   key: string;
   policy: FilePolicyEnum;
   filename: string;

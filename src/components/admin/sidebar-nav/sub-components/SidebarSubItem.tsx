@@ -8,16 +8,23 @@ const SubItem: FC<PropsWithChildren<IAdminSideBarSubItemProps>> = ({
   onActive,
   children,
 }) => {
+  const removeLeadingTrailingPathSlash = (path: string) =>
+    path.replace(/^\/|\/$/g, '');
   const router = useRouter();
 
+  const subPathsMatch =
+    removeLeadingTrailingPathSlash(router.pathname).split('/').length > 2 &&
+    removeLeadingTrailingPathSlash(href).split('/').length > 2 &&
+    router.pathname.startsWith(href);
+
   const activeLinkCssGen = (): string => {
-    return router.pathname === href
+    return router.pathname === href || subPathsMatch
       ? 'outline-none bg-gray-800 text-light'
       : '';
   };
 
   useEffect(() => {
-    if (router.pathname === href) onActive();
+    if (router.pathname.startsWith(href)) onActive();
   }, [href, onActive, router.pathname]);
 
   return (

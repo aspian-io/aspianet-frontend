@@ -42,8 +42,6 @@ const AdminUserClaims = () => {
 
   const isClaimsForCurrentUser = session?.user.id === id;
   const userClaimsIds = userData.claims.map((uc) => uc.id);
-  const userClaimsNames = userData.claims.map((uc) => uc.name);
-  const isSuperUser = userClaimsNames.includes(ClaimsEnum.ADMIN);
   const initialValues: { claimIds: string[] } = { claimIds: userClaimsIds };
 
   function getClaimIdByName(claimName: ClaimsEnum) {

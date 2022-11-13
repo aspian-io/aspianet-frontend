@@ -1,6 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
@@ -11,6 +12,7 @@ import {
   setMinimizeSidebarCss,
   setSidebarSideLayoutCss,
 } from '../../../store/slices/admin/admin-layout-slice';
+import Button from '../../common/Button';
 import {
   SIDEBAR_HIDE_BACKDROP_CSS,
   SIDEBAR_HIDE_CSS,
@@ -30,6 +32,10 @@ interface IProps {
 
 const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
   const { data: session } = useSession();
+  const router = useRouter();
+  const pathNamePartsLength = router.pathname
+    .replace(/^\/|\/$/g, '')
+    .split('/').length;
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -53,7 +59,7 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
   }, []);
 
   return (
-    <div className="flex justify-start items-center w-full h-28 px-6 mb-6 bg-light rounded-3xl shadow">
+    <div className="flex justify-start items-center w-full min-h-[7rem] py-4 px-6 mb-6 bg-light rounded-3xl shadow">
       <div className="flex flex-col justify-center items-start w-full">
         <div className="flex justify-end items-center w-full">
           <button
@@ -152,9 +158,33 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
         </div>
 
         <hr className="w-full my-2.5 border-primary/20" />
-        <div className="flex justify-center items-start">
-          <div className="text-primary font-bold sm:text-xl">{title}</div>
-          <div className="text-sm text-zinc-400 self-center mt-1 ml-6">
+        <div className="flex flex-col sm:flex-row justify-center items-start">
+          <div className="flex justify-center items-center space-x-4 text-primary font-bold sm:text-xl">
+            {pathNamePartsLength > 2 && (
+              <Button
+                rounded="rounded"
+                size="h-9"
+                type="button"
+                variant="link"
+                onClick={() => router.back()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </Button>
+            )}
+            <span>{title}</span>
+          </div>
+          <div className="text-sm text-zinc-400 self-center sm:mt-1 sm:ml-6">
             {breadCrumbs.map((bc, i) => (
               <span
                 className="[&:not(:first-child)]:before:content-['•'] [&:not(:first-child)]:before:mx-2"

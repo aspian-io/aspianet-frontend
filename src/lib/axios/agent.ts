@@ -1,4 +1,4 @@
-import axios, { AxiosRequestHeaders, AxiosResponse, AxiosRequestConfig } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
@@ -8,8 +8,10 @@ import { IUserProfile, UserProfileFormValues } from "../../models/users/profile"
 import { IUserRegister } from "../../models/auth/register";
 import { IPaginated } from "../../models/common/paginated-result";
 import { IBookmarkPost } from "../../models/users/bookmark";
-import { IUserEntity } from "../../models/users/admin/user";
+import { ICreateUser, IUserEntity } from "../../models/users/admin/user";
 import { IClaimEntity } from "../../models/auth/common";
+import { ISettingsEntity, ISettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
+import { IPostEntity, PostCreateFormValues, PostEditFormValues } from "../../models/posts/admin/post";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -29,7 +31,7 @@ const sleep = ( ms: number ) => ( response: AxiosResponse ) =>
   );
 
 // Generate Authorization header
-const authHeader = ( session: Session | null ): AxiosRequestHeaders | undefined => {
+const authHeader = ( session: Session | null ) => {
   if ( session?.user.accessToken ) {
     return { Authorization: `Bearer ${ session.user.accessToken }` };
   }
@@ -76,8 +78,17 @@ const apiRequests = {
 
 /*********** ADMIN REGION START **************/
 
+// Settings Agent
+export const AdminSettingsAgent = {
+  settingsList: ( session: Session | null, settingsService: SettingsServiceEnum ): Promise<ISettingsEntity[]> => apiRequests.get( `/admin/settings?settingService=${ settingsService }`, { headers: authHeader( session ) } ),
+  settingDetails: ( session: Session | null, key: SettingsKeyEnum ): Promise<ISettingsEntity> => apiRequests.get( `/admin/settings/${ key }`, { headers: authHeader( session ) } ),
+  upsertSettings: ( session: Session | null, settingsArray: ISettingsFormValues[] ): Promise<ISettingsEntity[]> => apiRequests.patch( '/admin/settings/upsert', settingsArray, { headers: authHeader( session ) } ),
+  deleteSetting: ( session: Session | null, settingsKey: SettingsKeyEnum ): Promise<ISettingsEntity> => apiRequests.del( `/admin/settings/permanent-delete/${ settingsKey }`, { headers: authHeader( session ) } )
+};
+
 // User Agent
 export const AdminUserAgent = {
+  createUser: ( userInfo: ICreateUser ): Promise<IUserAuth> => apiRequests.post( '/users/register-by-email', userInfo ),
   list: ( session: Session | null, path: string ): Promise<IPaginated<IUserEntity>> => apiRequests.get( path, { headers: authHeader( session ) } ),
   details: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.get( `/admin/users/${ userId }`, { headers: authHeader( session ) } ),
   uploadAvatar: ( session: Session | null, userId: string, formData: FormData ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/edit-avatar/${ userId }`, formData, {
@@ -91,7 +102,15 @@ export const AdminUserAgent = {
   recoverUser: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/recover/${ userId }`, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/permanent-delete/${ userId }`, { headers: authHeader( session ) } ),
   claimsList: ( session: Session | null ): Promise<IClaimEntity[]> => apiRequests.get( '/admin/claims', { headers: authHeader( session ) } ),
-  editUserClaims: ( session: Session | null, userId: string, claimIds: string[] ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/update-claims/${ userId }`, {claimIds}, { headers: authHeader( session ) } )
+  editUserClaims: ( session: Session | null, userId: string, claimIds: string[] ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/update-claims/${ userId }`, { claimIds }, { headers: authHeader( session ) } ),
+};
+
+// Post Agent
+export const AdminPostAgent = {
+  create: ( session: Session | null, post: PostCreateFormValues ): Promise<IPostEntity> => apiRequests.post( `/admin/posts`, post, { headers: authHeader( session ) } ),
+  edit: ( session: Session | null, postId: string, post: PostEditFormValues ): Promise<IPostEntity> => apiRequests.patch( `/admin/posts/${ postId }`, post, { headers: authHeader( session ) } ),
+  details: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.get( `/admin/posts/${ postId }`, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, postId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/posts/permanent-delete/${ postId }`, { headers: authHeader( session ) } ),
 };
 
 /*********** ADMIN REGION END **************/

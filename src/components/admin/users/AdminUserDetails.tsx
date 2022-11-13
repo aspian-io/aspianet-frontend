@@ -29,6 +29,7 @@ const AdminUserDetails = () => {
 
   if (error) router.push('/500');
   if (!userData) return <Loading />;
+
   return (
     <div className="flex flex-col justify-center items-center pb-4 space-y-4">
       <div className="flex flex-col lg:flex-row justify-center items-center w-full lg:space-x-4 space-y-4 lg:space-y-0">

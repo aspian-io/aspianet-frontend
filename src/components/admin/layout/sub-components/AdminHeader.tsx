@@ -1,11 +1,18 @@
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
 import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/auth/common';
 import { AuthGuard } from '../../../common/AuthGuard';
 import AdminSideBar from '../../sidebar-nav/AdminSideBar';
 
 const AdminHeader = () => {
   const { data: session } = useSession();
+  // const router = useRouter();
+  // const pathName = router.pathname;
+  // const pathNameParts = pathName.replace(/^\/|\/$/g, '').split('/');
+  // const itemIsActive = (itemName: string) =>
+  //   pathNameParts.length > 1 &&
+  //   pathNameParts[1].toLowerCase() === itemName.toLowerCase();
 
   const getUserAvatarSrc = () => {
     if (session?.user.avatar) {

@@ -1,5 +1,7 @@
+import { Expose, plainToClassFromExist, Transform } from "class-transformer";
 import { IBaseEntity, IBaseMinimalEntity } from "../../common/base-entities";
 import { IFileEntity } from "../../files/admin/file";
+import { IFile } from "../../files/file";
 import { ITaxonomyEntity } from "../../taxonomies/admin/taxonomy";
 import { IUserEntity } from "../../users/admin/user";
 
@@ -35,7 +37,7 @@ export interface IPostEntity extends IBaseEntity {
   excerpt: string | null;
   content: string | null;
   slug: string;
-  featuredImage?: File;
+  featuredImage?: IFile;
   visibility: PostVisibilityEnum;
   status: PostStatusEnum;
   scheduledToPublish: Date | null;
@@ -45,8 +47,8 @@ export interface IPostEntity extends IBaseEntity {
   type: PostTypeEnum;
   isPinned?: Boolean;
   order?: number;
-  child: IPostEntity;
-  parent: IPostEntity;
+  child?: IPostEntity;
+  parent?: IPostEntity;
   taxonomies: ITaxonomyEntity[];
   attachments: IFileEntity[];
   commentsNum: number;
@@ -60,4 +62,59 @@ export interface IPostEntity extends IBaseEntity {
 export interface IPostSlugsHistoryEntity extends IBaseMinimalEntity {
   slug: string;
   post: IPostEntity;
+}
+
+export class PostCreateFormValues implements Partial<IPostEntity> {
+  @Expose() @Transform( v => v.value ?? '' ) title?: string;
+  @Expose() @Transform( v => v.value ?? '' ) subtitle?: string;
+  @Expose() @Transform( v => v.value ?? '' ) excerpt?: string;
+  @Expose() @Transform( v => v.value ?? '' ) content?: string;
+  @Expose() @Transform( v => v.value ?? '' ) slug?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) featuredImageId?: string = undefined;
+  @Expose() visibility: PostVisibilityEnum = PostVisibilityEnum.PUBLIC;
+  @Expose() status: PostStatusEnum = PostStatusEnum.PUBLISH;
+  @Expose() scheduledToPublish?: Date = undefined;
+  @Expose() scheduledToArchive?: Date = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) commentAllowed?: Boolean | undefined;
+  @Expose() type: PostTypeEnum = PostTypeEnum.BLOG;
+  @Expose() isPinned?: Boolean | undefined = false;
+  @Expose() @Transform( v => v.value ?? undefined ) order?: number | undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) parentId?: string;
+  @Expose() taxonomiesIds: string[] = [];
+  @Expose() attachmentsIds: string[] = [];
+
+  constructor ( init?: PostCreateFormValues ) {
+    plainToClassFromExist(
+      this,
+      init,
+      { excludeExtraneousValues: true }
+    );
+  }
+}
+
+export class PostEditFormValues implements Partial<IPostEntity> {
+  @Expose() @Transform( v => v.value ?? '' ) title?: string;
+  @Expose() @Transform( v => v.value ?? '' ) subtitle?: string;
+  @Expose() @Transform( v => v.value ?? '' ) excerpt?: string;
+  @Expose() @Transform( v => v.value ?? '' ) content?: string;
+  @Expose() @Transform( v => v.value ?? '' ) slug?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) featuredImageId?: string = undefined;
+  @Expose() visibility: PostVisibilityEnum = PostVisibilityEnum.PUBLIC;
+  @Expose() status: PostStatusEnum = PostStatusEnum.PUBLISH;
+  @Expose() scheduledToPublish?: Date = undefined;
+  @Expose() scheduledToArchive?: Date = undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) commentAllowed?: Boolean | undefined;
+  @Expose() isPinned?: Boolean | undefined = false;
+  @Expose() @Transform( v => v.value ?? undefined ) order?: number | undefined;
+  @Expose() @Transform( v => v.value ?? undefined ) parentId?: string;
+  @Expose() taxonomiesIds: string[] = [];
+  @Expose() attachmentsIds: string[] = [];
+
+  constructor ( init?: IPostEntity ) {
+    plainToClassFromExist(
+      this,
+      init,
+      { excludeExtraneousValues: true }
+    );
+  }
 }

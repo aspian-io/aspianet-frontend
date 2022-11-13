@@ -3,6 +3,7 @@ import { AvatarSourceEnum, GenderEnum, IClaimEntity } from "../../auth/common";
 import { IBaseMinimalEntity } from "../../common/base-entities";
 import { IPostEntity } from "../../posts/admin/post";
 
+// User Entity
 export interface IUserEntity extends IBaseMinimalEntity {
   isActivated: boolean;
   email: string;
@@ -120,6 +121,29 @@ export class AdminUserDetailsSecurityInfo implements Partial<IUserEntity> {
   @Expose() @Transform( v => v.value ?? undefined ) mobilePhoneVerified?: boolean;
 
   constructor ( init?: IUserEntity ) {
+    plainToClassFromExist(
+      this,
+      init,
+      { excludeExtraneousValues: true }
+    );
+  }
+}
+
+// Create User Form Values
+export interface ICreateUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export class CreateUser implements ICreateUser {
+  @Expose() firstName: string = '';
+  @Expose() lastName: string = '';
+  @Expose() email: string = '';
+  @Expose() password: string = '';
+
+  constructor ( init?: ICreateUser ) {
     plainToClassFromExist(
       this,
       init,
