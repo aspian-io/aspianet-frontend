@@ -11,14 +11,14 @@ const ModalComponent: FC<IProps> = ({ show, onClose, children }) => {
     <div
       className={`${
         show ? 'visible opacity-100' : 'invisible opacity-0'
-      } fixed z-50 flex justify-center items-center h-screen w-full transition-opacity duration-300`}
+      } fixed z-50 flex justify-center items-center h-screen w-full transition-opacity duration-300 py-6`}
     >
       <div
         className={`fixed w-full h-screen bg-primary/60`}
         onClick={() => onClose()}
       ></div>
       <div
-        className={`relative flex flex-col items-center justify-center max-w-xl mx-6 my-6 bg-light px-10 sm:px-12 pt-14 pb-10 rounded-xl text-dark text-center text-xs sm:text-sm drop-shadow-2xl ${
+        className={`relative flex flex-col items-center justify-center w-full sm:w-fit max-w-screen mx-6 bg-light px-4 sm:px-12 pt-8 pb-4 rounded-xl text-dark text-center text-xs sm:text-sm drop-shadow-2xl max-h-full ${
           show
             ? 'visible opacity-100 translate-y-0 transition-all duration-300 delay-300'
             : 'invisible opacity-0 -translate-y-4 transition-all duration-300'
@@ -43,7 +43,7 @@ const ModalComponent: FC<IProps> = ({ show, onClose, children }) => {
             />
           </svg>
         </div>
-        {children}
+        <div className="px-6 py-2 my-6 w-full h-full scrollbar-thin scrollbar-thumb-primary/40 scrollbar-track-primary/10">{children}</div>
       </div>
     </div>
   );

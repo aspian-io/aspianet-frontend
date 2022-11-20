@@ -189,28 +189,28 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-3 sm:mt-4">
-              <div className="flex flex-col w-full sm:w-1/2">
-                <label
-                  className={`self-start ${
-                    touched['gender'] && errors['gender'] ? 'text-danger' : ''
-                  } text-dark text-xs`}
-                >
-                  Gender:
-                </label>
-                <select
-                  name="gender"
-                  className={`text-xs sm:text-sm h-10 bg-zinc-100 border-0 rounded-xl ${
-                    !!values.gender ? 'text-dark' : 'text-zinc-400'
-                  } focus:text-dark focus:border-2 focus:border-primary focus:bg-light`}
-                  value={values.gender ?? undefined}
-                  onChange={handleChange}
-                >
-                  <option value="default" disabled>
-                    Gender
-                  </option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                </select>
+                <div className="flex flex-col w-full sm:w-1/2">
+                  <label
+                    className={`self-start ${
+                      touched['gender'] && errors['gender'] ? 'text-danger' : ''
+                    } text-dark text-xs`}
+                  >
+                    Gender:
+                  </label>
+                  <select
+                    name="gender"
+                    className={`text-xs sm:text-sm h-10 bg-zinc-100 border-0 rounded-xl ${
+                      !!values.gender ? 'text-dark' : 'text-zinc-400'
+                    } focus:text-dark focus:border-2 focus:border-primary focus:bg-light`}
+                    value={values.gender ?? undefined}
+                    onChange={handleChange}
+                  >
+                    <option value="default" disabled>
+                      Gender
+                    </option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
                 </div>
                 <div className="flex flex-col w-full sm:w-1/2">
                   <Field

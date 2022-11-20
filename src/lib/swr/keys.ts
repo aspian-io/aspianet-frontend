@@ -27,6 +27,12 @@ export const AdminPostKeys = {
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,
 } as const;
 
+// FILE KEYS
+export const AdminFileKeys = {
+  GET_ALL_FILES: `${ BaseURLs.API }/admin/files`,
+  GET_FILE_DETAILS: `${ BaseURLs.API }/admin/files`,
+} as const;
+
 /*********** ADMIN REGION END **************/
 
 

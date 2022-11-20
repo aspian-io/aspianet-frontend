@@ -3,7 +3,7 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   images: {
     remotePatterns: [
@@ -16,6 +16,9 @@ const nextConfig = {
         hostname: '**.googleusercontent.com',
       },
     ],
+    deviceSizes: [480, 640, 768, 1024, 1280, 1536],
+    imageSizes: [48, 64, 76, 100, 128, 160],
+    formats: ['image/webp'],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.plugins.push(

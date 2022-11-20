@@ -73,6 +73,15 @@
   --toastify-color-progress-error: #ff7595;
 }
 
+.uppy-Dashboard-inner {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+.uppy-Dashboard-AddFiles {
+  border-radius: 12px !important;
+}
+
 .grecaptcha-badge {
   visibility: hidden;
 }

@@ -8,7 +8,7 @@ export enum FilePolicyEnum {
 export enum ImageSizeCategories {
   SIZE_75 = "SIZE_75",
   SIZE_160 = "SIZE_160",
-  SIZE_240 = "SIZE_320",
+  SIZE_320 = "SIZE_320",
   SIZE_480 = "SIZE_480",
   SIZE_640 = "SIZE_640",
   SIZE_800 = "SIZE_800",

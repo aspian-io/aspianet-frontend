@@ -209,6 +209,7 @@ const AdminUsersSettings = () => {
       <AdminCard className="pb-8">
         <Formik
           initialValues={initialValues}
+          enableReinitialize={true}
           onSubmit={async (values, { resetForm }) => {
             const settings = Object.entries(values).map(([key, value]) => {
               return new SettingsFormValues({
@@ -216,7 +217,7 @@ const AdminUsersSettings = () => {
                 value: value ?? '',
                 service: SettingsServiceEnum.USERS,
               });
-            }) as ISettingsFormValues[];
+            });
 
             try {
               await AdminSettingsAgent.upsertSettings(session, settings);
@@ -229,7 +230,6 @@ const AdminUsersSettings = () => {
                 }
               );
             } catch (error) {
-              const err = error as AxiosError<INestError>;
               toast.error('Something went wrong.', {
                 className: 'bg-danger text-light',
               });

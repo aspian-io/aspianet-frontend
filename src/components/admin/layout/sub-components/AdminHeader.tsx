@@ -157,7 +157,7 @@ const AdminHeader = () => {
           >
             <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.FILE_READ]}>
               <AdminSideBar.Item.SubItem
-                href="/admin/media/library"
+                href="/admin/media"
                 onActive={() => setActiveMedia(true)}
               >
                 Library
@@ -169,6 +169,14 @@ const AdminHeader = () => {
                 onActive={() => setActiveMedia(true)}
               >
                 Add New
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard claims={[ClaimsEnum.ADMIN]}>
+              <AdminSideBar.Item.SubItem
+                href="/admin/media/settings"
+                onActive={() => setActiveMedia(true)}
+              >
+                Settings
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>

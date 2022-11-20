@@ -36,6 +36,9 @@ module.exports = {
         dark: '#091069',
         light: '#FFFFFF',
       },
+      screens: {
+        xs: '480px',
+      },
       fontFamily: {
         sans: ['Rubik', 'sans-serif'],
       },

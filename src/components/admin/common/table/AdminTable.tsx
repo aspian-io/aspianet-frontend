@@ -111,6 +111,19 @@ const AdminTable: FC<IProps> = ({
 
   return (
     <div className="rounded-3xl bg-light py-6 px-2 w-full">
+      <div className="px-4 my-4">
+        {pagination && !loading && data && (
+          <AdminPagination
+            totalPages={pagination.totalPages}
+            baseUrl={pagination.baseUrl}
+            currentPage={pagination.currentPage}
+            onSubmit={pagination.onSubmit}
+            onItemsPerPageChange={pagination.onItemsPerPageChange}
+            queryString={pagination.queryString}
+            disabled={!data.length}
+          />
+        )}
+      </div>
       <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
         <div className="flex justify-start items-center w-full">
           {trashBtnOnClick && (
@@ -252,7 +265,10 @@ const AdminTable: FC<IProps> = ({
             )}
             {data.length > 0 &&
               data.map((d, i) => (
-                <tr className="shadow-sm rounded-xl" key={i}>
+                <tr
+                  className="hoverable:hover:shadow-md hoverable:hover:-translate-y-0.5 transition-all duration-200 rounded-xl"
+                  key={i}
+                >
                   {selectable && (
                     <td className="text-center p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
                       <input

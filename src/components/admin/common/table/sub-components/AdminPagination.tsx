@@ -10,35 +10,48 @@ export interface IAdminPaginationProps {
   currentPage?: number;
   baseUrl: string;
   queryString?: string;
-  onSubmit: (page: number) => any;
+  onSubmit?: (page: number) => any;
   onItemsPerPageChange?: (items: number) => any;
   disabled?: boolean;
+  className?: string;
+  fieldsBgClassName?: string;
 }
 
 const AdminPagination: FC<IAdminPaginationProps> = ({
   totalPages = 1,
-  currentPage = 1,
+  currentPage,
   baseUrl,
   queryString,
-  onSubmit,
-  onItemsPerPageChange,
+  onSubmit = () => {},
+  onItemsPerPageChange = () => {},
   disabled = false,
+  className,
+  fieldsBgClassName,
 }) => {
   const appliedCurrentPage =
-    currentPage >= 1 && currentPage <= totalPages ? currentPage : 1;
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+    currentPage && currentPage >= 1 && currentPage <= totalPages
+      ? currentPage
+      : 1;
   const router = useRouter();
+  const [itemsPerPage, setItemsPerPage] = useState(
+    router.query.limit ? +router.query.limit : 10
+  );
 
   const initialValues: { page: number } = { page: appliedCurrentPage };
 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize
       onSubmit={async (values) => {
         router.push(
           queryString
-            ? `${baseUrl}?page=${values.page}&${queryString}`
-            : `${baseUrl}?page=${values.page}`
+            ? `${baseUrl}?page=${values.page}${
+                itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
+              }&${queryString}`
+            : `${baseUrl}?page=${values.page}${
+                itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
+              }`
         );
         await onSubmit(values.page);
       }}
@@ -49,7 +62,7 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
             disabled
               ? 'hidden'
               : 'flex flex-col sm:flex-row justify-between items-center w-full'
-          }`}
+          } ${className}`}
         >
           <div className="flex flex-col justify-center items-center">
             <div className="flex justify-center items-center space-x-2">
@@ -57,10 +70,12 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                 <Link
                   href={
                     queryString
-                      ? `${baseUrl}?page=${
-                          appliedCurrentPage - 1
+                      ? `${baseUrl}?page=${appliedCurrentPage - 1}${
+                          itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
                         }&${queryString}`
-                      : `${baseUrl}?page=${appliedCurrentPage - 1}`
+                      : `${baseUrl}?page=${appliedCurrentPage - 1}${
+                          itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
+                        }`
                   }
                   onClick={() =>
                     resetForm({ values: { page: appliedCurrentPage - 1 } })
@@ -80,7 +95,7 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                         type={InputTypeEnum.text}
                         name="page"
                         placeholder="Page"
-                        className="text-xs h-7 w-20 rounded-lg pr-8 pl-1 border-primary border-2 text-center"
+                        className={`text-xs h-7 w-20 rounded-lg pr-8 pl-1 border-primary border-2 text-center drop-shadow ${fieldsBgClassName}`}
                         labelClassName="hidden"
                         component={FormikInput}
                       />
@@ -103,10 +118,12 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                 <Link
                   href={
                     queryString
-                      ? `${baseUrl}?page=${
-                          appliedCurrentPage + 1
+                      ? `${baseUrl}?page=${appliedCurrentPage + 1}${
+                          itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
                         }&${queryString}`
-                      : `${baseUrl}?page=${appliedCurrentPage + 1}`
+                      : `${baseUrl}?page=${appliedCurrentPage + 1}${
+                          itemsPerPage !== 10 ? `&limit=${itemsPerPage}` : ''
+                        }`
                   }
                   onClick={() =>
                     resetForm({ values: { page: appliedCurrentPage + 1 } })
@@ -119,18 +136,25 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
               )}
             </div>
             <div className="text-xs text-zinc-400 mt-1">
-              Page {appliedCurrentPage} From {totalPages}
+              {!currentPage && (
+                <LoadingSpinner className="w-4 h-4 text-primary mt-1" />
+              )}
+              {currentPage && (
+                <>
+                  Page {appliedCurrentPage} From {totalPages}
+                </>
+              )}
             </div>
           </div>
           <div className="hidden sm:flex self-start">
             <select
               name="gender"
-              className={`text-xs h-7 py-0 bg-zinc-100 border-0 rounded-lg text-dark focus:text-dark focus:border-2 focus:border-primary focus:bg-light`}
-              value={router.query['limit'] ? +router.query['limit'] : 10}
+              className={`text-xs h-7 py-0 ${
+                fieldsBgClassName ?? 'bg-zinc-100'
+              } border-0 rounded-lg text-dark focus:text-dark focus:border-2 focus:border-primary focus:bg-light drop-shadow`}
+              value={router.query.limit ? +router.query.limit : 10}
               onChange={(e) => {
-                setItemsPerPage(
-                  router.query['limit'] ? +router.query['limit'] : 10
-                );
+                setItemsPerPage(+e.target.value);
                 router.push(
                   queryString
                     ? `${baseUrl}?page=${appliedCurrentPage}&limit=${+e.target
@@ -138,7 +162,7 @@ const AdminPagination: FC<IAdminPaginationProps> = ({
                     : `${baseUrl}?page=${appliedCurrentPage}&limit=${+e.target
                         .value}`
                 );
-                if (onItemsPerPageChange) onItemsPerPageChange(+e.target.value);
+                onItemsPerPageChange(+e.target.value);
               }}
             >
               <option value={10}>10 / Page</option>

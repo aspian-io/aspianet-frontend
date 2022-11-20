@@ -10,8 +10,9 @@ import { IPaginated } from "../../models/common/paginated-result";
 import { IBookmarkPost } from "../../models/users/bookmark";
 import { ICreateUser, IUserEntity } from "../../models/users/admin/user";
 import { IClaimEntity } from "../../models/auth/common";
-import { ISettingsEntity, ISettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
+import { ISettingsEntity, SettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
 import { IPostEntity, PostCreateFormValues, PostEditFormValues } from "../../models/posts/admin/post";
+import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -82,7 +83,7 @@ const apiRequests = {
 export const AdminSettingsAgent = {
   settingsList: ( session: Session | null, settingsService: SettingsServiceEnum ): Promise<ISettingsEntity[]> => apiRequests.get( `/admin/settings?settingService=${ settingsService }`, { headers: authHeader( session ) } ),
   settingDetails: ( session: Session | null, key: SettingsKeyEnum ): Promise<ISettingsEntity> => apiRequests.get( `/admin/settings/${ key }`, { headers: authHeader( session ) } ),
-  upsertSettings: ( session: Session | null, settingsArray: ISettingsFormValues[] ): Promise<ISettingsEntity[]> => apiRequests.patch( '/admin/settings/upsert', settingsArray, { headers: authHeader( session ) } ),
+  upsertSettings: ( session: Session | null, settingsArray: SettingsFormValues[] ): Promise<ISettingsEntity[]> => apiRequests.patch( '/admin/settings/upsert', settingsArray, { headers: authHeader( session ) } ),
   deleteSetting: ( session: Session | null, settingsKey: SettingsKeyEnum ): Promise<ISettingsEntity> => apiRequests.del( `/admin/settings/permanent-delete/${ settingsKey }`, { headers: authHeader( session ) } )
 };
 
@@ -111,6 +112,16 @@ export const AdminPostAgent = {
   edit: ( session: Session | null, postId: string, post: PostEditFormValues ): Promise<IPostEntity> => apiRequests.patch( `/admin/posts/${ postId }`, post, { headers: authHeader( session ) } ),
   details: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.get( `/admin/posts/${ postId }`, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, postId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/posts/permanent-delete/${ postId }`, { headers: authHeader( session ) } ),
+};
+
+// File Agent
+export const AdminFileAgent = {
+  create: ( session: Session | null, file: FileCreateFormValues ): Promise<IFileEntity> => apiRequests.post( `/admin/files`, file, { headers: authHeader( session ) } ),
+  edit: ( session: Session | null, fileId: string, file: FileUpdateFormValues ): Promise<IFileEntity> => apiRequests.patch( `/admin/files/${ fileId }`, file, { headers: authHeader( session ) } ),
+  list: ( session: Session | null, qs?: string ): Promise<IPaginated<IFileEntity>> => apiRequests.get( `/admin/files${ qs }`, { headers: authHeader( session ) } ),
+  details: ( session: Session | null, fileId: string ): Promise<IFileEntity> => apiRequests.get( `/admin/files/${ fileId }`, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, fileId: string ): Promise<IFileEntity> => apiRequests.del( `/admin/files/permanent-remove/${ fileId }`, { headers: authHeader( session ) } ),
+  bulkDeletePermanently: ( session: Session | null, fileIds: string[] ): Promise<IFileEntity[]> => apiRequests.del( `/admin/files/bulk-permanent-remove`, { headers: authHeader( session ), data: { ids: [ ...fileIds ] } } ),
 };
 
 /*********** ADMIN REGION END **************/

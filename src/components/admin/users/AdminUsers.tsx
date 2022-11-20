@@ -242,10 +242,10 @@ const AdminUsers = () => {
           }}
           pagination={{
             baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/users`,
-            currentPage: users?.meta.currentPage,
+            currentPage: router.query.page
+              ? +router.query.page
+              : users?.meta.currentPage,
             totalPages: users?.meta.totalPages,
-            onSubmit: () => {},
-            onItemsPerPageChange: () => {},
           }}
         />
       </div>
