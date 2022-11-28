@@ -22,7 +22,7 @@ interface IDataType extends ITableDataType {
   actions: JSX.Element;
 }
 
-const AdminCategoriesTrash = () => {
+const AdminTagsTrash = () => {
   const router = useRouter();
   const page =
     router.query['page'] && +router.query['page'] >= 1
@@ -55,14 +55,9 @@ const AdminCategoriesTrash = () => {
   };
 
   const fetcher = () =>
-    AdminTaxonomyAgent.softDeletedCategoriesList(
-      session,
-      page,
-      limit,
-      initialSort()
-    );
+    AdminTaxonomyAgent.softDeletedTagsList(session, page, limit, initialSort());
   const {
-    data: categoriesData,
+    data: tagsData,
     error,
     mutate,
   } = useSWR<IPaginated<ITaxonomyEntity>, AxiosError<INestError>>(
@@ -88,7 +83,7 @@ const AdminCategoriesTrash = () => {
             await AdminTaxonomyAgent.recoverTaxonomy(session, id);
             await mutate();
             setRecoverLoading(false);
-            toast.success('The category recovered successfully.', {
+            toast.success('The tag recovered successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setBtnId(null);
@@ -147,22 +142,18 @@ const AdminCategoriesTrash = () => {
     </div>
   );
 
-  function formatData(category: ITaxonomyEntity): IDataType {
+  function formatData(tag: ITaxonomyEntity): IDataType {
     return {
-      id: category.id,
-      name: category.term,
-      description: category.description ?? '',
-      slug: category.slug,
-      children:
-        category.children && category.children.length > 0
-          ? category.children.map((ch) => formatData(ch))
-          : [],
-      actions: actionsColumn(category.id),
+      id: tag.id,
+      name: tag.term,
+      description: tag.description ?? '',
+      slug: tag.slug,
+      actions: actionsColumn(tag.id),
     };
   }
 
-  const data: IDataType[] = categoriesData
-    ? categoriesData.items.map((c) => formatData(c))
+  const data: IDataType[] = tagsData
+    ? tagsData.items.map((c) => formatData(c))
     : [];
 
   return (
@@ -176,7 +167,7 @@ const AdminCategoriesTrash = () => {
             setRemoveLoading(true);
             await AdminTaxonomyAgent.emptyTrash(session);
             await mutate();
-            toast.success('Categories trash emptied successfully.', {
+            toast.success('Tags trash emptied successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setRemoveLoading(false);
@@ -191,7 +182,7 @@ const AdminCategoriesTrash = () => {
         }}
         show={emptyTrashConfirm}
         onConfirmLoading={removeLoading}
-        text="Are you sure you want to empty the categories trash and delete all the items permanently?"
+        text="Are you sure you want to empty the tags trash and delete all the items permanently?"
       />
       <AuthGuard
         claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
@@ -211,7 +202,7 @@ const AdminCategoriesTrash = () => {
                   itemToDelete
                 );
                 await mutate();
-                toast.success('The category deleted successfully.', {
+                toast.success('The tag deleted successfully.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -231,15 +222,13 @@ const AdminCategoriesTrash = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the category permanently?"
+          text="Are you sure you want to delete the tag permanently?"
         />
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
           selectable={false}
-          emptyTrashButton={
-            categoriesData?.items && categoriesData.items.length > 0
-          }
+          emptyTrashButton={tagsData?.items && tagsData.items.length > 0}
           onEmptyTrashButtonClick={() => setEmptyTrashConfirm(true)}
           columns={[
             {
@@ -256,14 +245,13 @@ const AdminCategoriesTrash = () => {
             },
           ]}
           data={data}
-          showChildren
-          loading={!categoriesData}
+          loading={!tagsData}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/categories`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/tags`,
             currentPage: router.query.page
               ? +router.query.page
-              : categoriesData?.meta.currentPage,
-            totalPages: categoriesData?.meta.totalPages,
+              : tagsData?.meta.currentPage,
+            totalPages: tagsData?.meta.totalPages,
           }}
         />
       </div>
@@ -271,4 +259,4 @@ const AdminCategoriesTrash = () => {
   );
 };
 
-export default AdminCategoriesTrash;
+export default AdminTagsTrash;

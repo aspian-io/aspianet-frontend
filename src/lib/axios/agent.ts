@@ -111,14 +111,16 @@ export const AdminUserAgent = {
 export const AdminTaxonomyAgent = {
   create: ( session: Session | null, taxonomy: TaxonomyCreateFormValues ): Promise<ITaxonomyEntity> => apiRequests.post( `/admin/taxonomies`, taxonomy, { headers: authHeader( session ) } ),
   edit: ( session: Session | null, taxonomyId: string, taxonomy: TaxonomyEditFormValues ): Promise<IPostEntity> => apiRequests.patch( `/admin/taxonomies/${ taxonomyId }`, taxonomy, { headers: authHeader( session ) } ),
-  list: ( session: Session | null, qs?: string ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/categories${ qs }`, { headers: authHeader( session ) } ),
+  categoriesList: ( session: Session | null, qs?: string ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/categories${ qs }`, { headers: authHeader( session ) } ),
+  tagsList: ( session: Session | null, qs?: string ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/tags${ qs }`, { headers: authHeader( session ) } ),
   details: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.get( `/admin/taxonomies/${ taxonomyId }`, { headers: authHeader( session ) } ),
   deleteOldSlug: ( session: Session | null, slugId: string ): Promise<ITaxonomySlugsHistoryEntity> => apiRequests.del( `/admin/taxonomies/slug-history/${ slugId }`, { headers: authHeader( session ) } ),
   softDelete: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.del( `/admin/taxonomies/soft-delete/${ taxonomyId }`, { headers: authHeader( session ) } ),
   softDeleteAll: ( session: Session | null, taxonomyIds: string[] ): Promise<ITaxonomyEntity[]> => apiRequests.del( `/admin/taxonomies/soft-delete-all`, { headers: authHeader( session ), data: { ids: taxonomyIds } } ),
   recoverTaxonomy: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.patch( `/admin/taxonomies/recover/${ taxonomyId }`, {}, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.del( `/admin/taxonomies/permanent-delete/${ taxonomyId }`, { headers: authHeader( session ) } ),
-  softDeletedTaxonomiesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/soft-deleted/trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
+  softDeletedCategoriesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/soft-deleted/categories-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
+  softDeletedTagsList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/soft-deleted/tags-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
   emptyTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/taxonomies/empty-trash`, { headers: authHeader( session ) } ),
 };
 
