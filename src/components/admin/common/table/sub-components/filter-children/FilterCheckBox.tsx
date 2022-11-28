@@ -3,6 +3,7 @@ import React, { FC, useState, useEffect, useRef } from 'react';
 import Button from '../../../../../common/Button';
 
 export interface IFilterCheckBoxProps {
+  initialValue?: any;
   items: {
     label: string;
     name: string;
@@ -11,7 +12,7 @@ export interface IFilterCheckBoxProps {
   onReset?: Function;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 const FilterCheckBox: FC<IFilterCheckBoxProps> = ({
@@ -20,10 +21,11 @@ const FilterCheckBox: FC<IFilterCheckBoxProps> = ({
   onReset,
   className = '',
   dropDownAlignment = 'right',
-  disabled = false
+  disabled = false,
+  initialValue = undefined,
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
   const filterBtnRef = useRef<HTMLDivElement>(null);
 
   function dropDownAlignmentClassNames() {
@@ -76,10 +78,10 @@ const FilterCheckBox: FC<IFilterCheckBoxProps> = ({
           filterShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex flex-col absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex flex-col absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
-          initialValues={{}}
+          initialValues={initialValue}
           onSubmit={(values) => {
             onFilter(values);
             setFilterActive(true);

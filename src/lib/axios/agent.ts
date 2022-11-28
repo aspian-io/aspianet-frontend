@@ -13,6 +13,7 @@ import { IClaimEntity } from "../../models/auth/common";
 import { ISettingsEntity, SettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
 import { IPostEntity, PostCreateFormValues, PostEditFormValues } from "../../models/posts/admin/post";
 import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
+import { ITaxonomyEntity, ITaxonomySlugsHistoryEntity, TaxonomyCreateFormValues, TaxonomyEditFormValues } from "../../models/taxonomies/admin/taxonomy";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -100,16 +101,32 @@ export const AdminUserAgent = {
     apiRequests.patch( `/admin/users/${ userId }`, userFormValues, { headers: authHeader( session ) } ),
   softDelete: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/soft-delete/${ userId }`, { headers: authHeader( session ) } ),
   softDeletedUsersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IUserEntity>> => apiRequests.get( `/admin/users/soft-deleted/trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
-  recoverUser: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/recover/${ userId }`, { headers: authHeader( session ) } ),
+  recoverUser: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/recover/${ userId }`, {}, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, userId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/users/permanent-delete/${ userId }`, { headers: authHeader( session ) } ),
   claimsList: ( session: Session | null ): Promise<IClaimEntity[]> => apiRequests.get( '/admin/claims', { headers: authHeader( session ) } ),
   editUserClaims: ( session: Session | null, userId: string, claimIds: string[] ): Promise<IUserEntity> => apiRequests.patch( `/admin/users/update-claims/${ userId }`, { claimIds }, { headers: authHeader( session ) } ),
+};
+
+// Taxonomy Agent
+export const AdminTaxonomyAgent = {
+  create: ( session: Session | null, taxonomy: TaxonomyCreateFormValues ): Promise<ITaxonomyEntity> => apiRequests.post( `/admin/taxonomies`, taxonomy, { headers: authHeader( session ) } ),
+  edit: ( session: Session | null, taxonomyId: string, taxonomy: TaxonomyEditFormValues ): Promise<IPostEntity> => apiRequests.patch( `/admin/taxonomies/${ taxonomyId }`, taxonomy, { headers: authHeader( session ) } ),
+  list: ( session: Session | null, qs?: string ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/categories${ qs }`, { headers: authHeader( session ) } ),
+  details: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.get( `/admin/taxonomies/${ taxonomyId }`, { headers: authHeader( session ) } ),
+  deleteOldSlug: ( session: Session | null, slugId: string ): Promise<ITaxonomySlugsHistoryEntity> => apiRequests.del( `/admin/taxonomies/slug-history/${ slugId }`, { headers: authHeader( session ) } ),
+  softDelete: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.del( `/admin/taxonomies/soft-delete/${ taxonomyId }`, { headers: authHeader( session ) } ),
+  softDeleteAll: ( session: Session | null, taxonomyIds: string[] ): Promise<ITaxonomyEntity[]> => apiRequests.del( `/admin/taxonomies/soft-delete-all`, { headers: authHeader( session ), data: { ids: taxonomyIds } } ),
+  recoverTaxonomy: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.patch( `/admin/taxonomies/recover/${ taxonomyId }`, {}, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, taxonomyId: string ): Promise<ITaxonomyEntity> => apiRequests.del( `/admin/taxonomies/permanent-delete/${ taxonomyId }`, { headers: authHeader( session ) } ),
+  softDeletedTaxonomiesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<ITaxonomyEntity>> => apiRequests.get( `/admin/taxonomies/soft-deleted/trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
+  emptyTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/taxonomies/empty-trash`, { headers: authHeader( session ) } ),
 };
 
 // Post Agent
 export const AdminPostAgent = {
   create: ( session: Session | null, post: PostCreateFormValues ): Promise<IPostEntity> => apiRequests.post( `/admin/posts`, post, { headers: authHeader( session ) } ),
   edit: ( session: Session | null, postId: string, post: PostEditFormValues ): Promise<IPostEntity> => apiRequests.patch( `/admin/posts/${ postId }`, post, { headers: authHeader( session ) } ),
+  list: ( session: Session | null, path: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( path, { headers: authHeader( session ) } ),
   details: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.get( `/admin/posts/${ postId }`, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, postId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/posts/permanent-delete/${ postId }`, { headers: authHeader( session ) } ),
 };

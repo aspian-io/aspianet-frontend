@@ -70,6 +70,7 @@ const AdminHeader = () => {
             ClaimsEnum.POST_EDIT,
             ClaimsEnum.POST_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -92,7 +93,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activePosts}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/posts"
                 onActive={() => setActivePosts(true)}
@@ -100,7 +104,10 @@ const AdminHeader = () => {
                 All Posts
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/posts/add-new"
                 onActive={() => setActivePosts(true)}
@@ -108,15 +115,18 @@ const AdminHeader = () => {
                 Add New
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
-                href="/admin/categories"
+                href="/admin/posts/categories"
                 onActive={() => setActivePosts(true)}
               >
                 Categories
               </AdminSideBar.Item.SubItem>
               <AdminSideBar.Item.SubItem
-                href="/admin/tags"
+                href="/admin/posts/tags"
                 onActive={() => setActivePosts(true)}
               >
                 Tags
@@ -133,6 +143,7 @@ const AdminHeader = () => {
             ClaimsEnum.FILE_EDIT,
             ClaimsEnum.FILE_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -155,7 +166,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activeMedia}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.FILE_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.FILE_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/media"
                 onActive={() => setActiveMedia(true)}
@@ -163,7 +177,10 @@ const AdminHeader = () => {
                 Library
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.FILE_CREATE]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.FILE_CREATE]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/media/add-new"
                 onActive={() => setActiveMedia(true)}
@@ -171,7 +188,7 @@ const AdminHeader = () => {
                 Add New
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN]}>
+            <AuthGuard claims={[ClaimsEnum.ADMIN]} redirect={false}>
               <AdminSideBar.Item.SubItem
                 href="/admin/media/settings"
                 onActive={() => setActiveMedia(true)}
@@ -190,6 +207,7 @@ const AdminHeader = () => {
             ClaimsEnum.POST_EDIT,
             ClaimsEnum.POST_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -212,7 +230,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activePages}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/pages"
                 onActive={() => setActivePages(true)}
@@ -220,7 +241,10 @@ const AdminHeader = () => {
                 All Pages
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/pages/add-new"
                 onActive={() => setActivePages(true)}
@@ -238,6 +262,7 @@ const AdminHeader = () => {
             ClaimsEnum.COMMENT_EDIT,
             ClaimsEnum.COMMENT_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -268,6 +293,7 @@ const AdminHeader = () => {
             ClaimsEnum.NEWSLETTER_EDIT,
             ClaimsEnum.NEWSLETTER_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -290,7 +316,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activeNewsletter}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.NEWSLETTER_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.NEWSLETTER_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/newsletter/all-campaigns"
                 onActive={() => setActiveNewsletter(true)}
@@ -300,6 +329,7 @@ const AdminHeader = () => {
             </AuthGuard>
             <AuthGuard
               claims={[ClaimsEnum.ADMIN, ClaimsEnum.NEWSLETTER_CREATE]}
+              redirect={false}
             >
               <AdminSideBar.Item.SubItem
                 href="/admin/newsletter/add-new-campaign"
@@ -308,7 +338,10 @@ const AdminHeader = () => {
                 Add New Campaign
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.NEWSLETTER_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.NEWSLETTER_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/newsletter/subscribers"
                 onActive={() => setActiveNewsletter(true)}
@@ -328,6 +361,7 @@ const AdminHeader = () => {
             ClaimsEnum.SETTING_READ,
             ClaimsEnum.SETTING_EDIT,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -350,7 +384,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activeAppearance}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/appearance/personalization"
                 onActive={() => setActiveAppearance(true)}
@@ -366,6 +403,7 @@ const AdminHeader = () => {
                 ClaimsEnum.TAXONOMY_CREATE,
                 ClaimsEnum.TAXONOMY_DELETE,
               ]}
+              redirect={false}
             >
               <AdminSideBar.Item.SubItem
                 href="/admin/appearance/widgets"
@@ -381,6 +419,7 @@ const AdminHeader = () => {
                 ClaimsEnum.TAXONOMY_CREATE,
                 ClaimsEnum.TAXONOMY_DELETE,
               ]}
+              redirect={false}
             >
               <AdminSideBar.Item.SubItem
                 href="/admin/appearance/menus"
@@ -399,6 +438,7 @@ const AdminHeader = () => {
             ClaimsEnum.USER_EDIT,
             ClaimsEnum.USER_READ,
           ]}
+          redirect={false}
         >
           <AdminSideBar.Item
             itemIcon={
@@ -421,7 +461,10 @@ const AdminHeader = () => {
             hasSubItems={true}
             activeItem={activeUsers}
           >
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_READ]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_READ]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/users"
                 onActive={() => setActiveUsers(true)}
@@ -429,7 +472,10 @@ const AdminHeader = () => {
                 All Users
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_CREATE]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_CREATE]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/users/add-new"
                 onActive={() => setActiveUsers(true)}
@@ -437,7 +483,10 @@ const AdminHeader = () => {
                 Add New
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
-            <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}
+              redirect={false}
+            >
               <AdminSideBar.Item.SubItem
                 href="/admin/users/settings"
                 onActive={() => setActiveUsers(true)}

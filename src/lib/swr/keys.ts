@@ -22,6 +22,12 @@ export const AdminUserKeys = {
   GET_ALL_CLAIMS: `${ BaseURLs.API }/admin/claims`,
 } as const;
 
+// TAXONOMY KEYS
+export const AdminTaxonomyKeys = {
+  GET_ALL_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/categories`,
+  GET_SOFT_DELETED_TAXONOMIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/trash`,
+} as const;
+
 // POST KEYS
 export const AdminPostKeys = {
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,

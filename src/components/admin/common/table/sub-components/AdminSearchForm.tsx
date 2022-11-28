@@ -5,23 +5,25 @@ import FormikInput, { InputTypeEnum } from '../../../../common/FormikInput';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
 
 export interface IAdminSearchProps {
+  initialValue?: string;
   onSubmit: (searchString: string | undefined) => any;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 const AdminSearchForm: FC<IAdminSearchProps> = ({
   className,
   onSubmit,
   dropDownAlignment = 'right',
-  disabled = false
+  disabled = false,
+  initialValue = undefined,
 }) => {
   const [searchShow, setSearchShow] = useState(false);
-  const [searchActive, setSearchActive] = useState(false);
+  const [searchActive, setSearchActive] = useState(initialValue ? true : false);
   const searchBtnRef = useRef<HTMLDivElement>(null);
 
-  const initialValues: { search?: string } = { search: '' };
+  const initialValues: { search?: string } = { search: initialValue };
   const validationSchema = Yup.object({
     search: Yup.string().max(
       30,
@@ -79,17 +81,19 @@ const AdminSearchForm: FC<IAdminSearchProps> = ({
           searchShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex flex-col absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex flex-col absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
           initialValues={initialValues}
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={async (values) => {
+            values.search ? setSearchActive(true) : setSearchActive(false);
             await onSubmit(values.search);
             setSearchShow(false);
           }}
         >
-          {({ isSubmitting, isValid, dirty, values, handleChange }) => (
+          {({ isSubmitting }) => (
             <Form>
               <fieldset>
                 <div className="relative group flex flex-col sm:flex-row space-y-2 sm:space-y-0">

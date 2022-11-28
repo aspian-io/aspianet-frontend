@@ -1,7 +1,7 @@
 import { IFile } from "../files/file";
 
 export interface ITaxonomy {
-  href: string;
+  href?: string;
   order?: number;
   parent?: ITaxonomy;
   term: string;

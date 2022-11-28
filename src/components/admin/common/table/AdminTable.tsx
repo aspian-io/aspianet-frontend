@@ -23,6 +23,8 @@ import FilterText, {
 import FilterToggle, {
   IFilterToggleProps,
 } from './sub-components/filter-children/FilterToggle';
+import { ClaimsEnum } from '../../../../models/auth/common';
+import { AuthGuard } from '../../../common/AuthGuard';
 
 interface IProps {
   columns: IColumn[];
@@ -31,7 +33,16 @@ interface IProps {
   onSelectColumns?: (selectedIds: string[]) => any;
   loading?: boolean;
   selectable?: boolean;
+  onBulkDeleteButtonClick?: Function;
+  trashButton?: boolean;
+  trashButtonClaims?: ClaimsEnum[];
   trashBtnOnClick?: Function;
+  showChildren?: boolean;
+  addButton?: boolean;
+  addButtonClaims?: ClaimsEnum[];
+  onAddClick?: Function;
+  emptyTrashButton?: boolean;
+  onEmptyTrashButtonClick?: Function;
 }
 
 interface IColumn {
@@ -48,7 +59,8 @@ interface IColumn {
 }
 
 export interface ITableDataType extends Record<string, any> {
-  rowId: string | number;
+  id: string | number;
+  children?: any[];
 }
 
 const AdminTable: FC<IProps> = ({
@@ -58,7 +70,16 @@ const AdminTable: FC<IProps> = ({
   onSelectColumns,
   loading = false,
   selectable = true,
+  onBulkDeleteButtonClick = () => {},
+  trashButton = false,
+  trashButtonClaims = [],
   trashBtnOnClick,
+  emptyTrashButton = false,
+  onEmptyTrashButtonClick = () => {},
+  showChildren = false,
+  addButton = false,
+  addButtonClaims = [],
+  onAddClick = () => {},
 }) => {
   const [checked, setChecked] = useState<string[]>([]);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
@@ -105,9 +126,101 @@ const AdminTable: FC<IProps> = ({
     });
   }
 
+  function tableTdBlock(
+    data: ITableDataType[],
+    childLevel: number = 0
+  ): JSX.Element[] | null {
+    return data.length > 0
+      ? data.map((d, i) => (
+          <Fragment key={i}>
+            <tr className="hoverable:hover:shadow-md hoverable:hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+              {selectable && (
+                <td className="text-center p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
+                  <input
+                    name="table_record"
+                    value={d.id}
+                    type="checkbox"
+                    onChange={(e) => {
+                      e.target.checked
+                        ? setChecked([...checked, e.target.value])
+                        : setChecked([
+                            ...checked.filter((i) => i !== e.target.value),
+                          ]);
+                      if (!e.target.checked) {
+                        const selectAllInput = document.getElementById(
+                          selectAllInputId
+                        ) as HTMLInputElement;
+                        selectAllInput.checked = false;
+                      } else {
+                        setShowDeleteBtn(true);
+                      }
+
+                      checkIfSomeChecked();
+                      checkIfAllChecked();
+                    }}
+                    className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
+                  />
+                </td>
+              )}
+              {Object.entries(d).map(
+                (v, idx) =>
+                  v[0] !== 'id' &&
+                  v[0] !== 'children' && (
+                    <td
+                      className="p-2 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 max-w-[16rem]"
+                      key={idx}
+                    >
+                      {childLevel === 0 && v[1]}
+                      {childLevel > 0 && (
+                        <>
+                          <div className="flex justify-start items-center truncate">
+                            {idx === 1 &&
+                              [...Array(childLevel)].map((_, arrIdx) => {
+                                return <Fragment key={arrIdx}>&emsp;</Fragment>;
+                              })}
+                            {idx === 1 && (
+                              <>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  className="w-4 h-4 -rotate-90 text-primary"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M2.232 12.207a.75.75 0 011.06.025l3.958 4.146V6.375a5.375 5.375 0 0110.75 0V9.25a.75.75 0 01-1.5 0V6.375a3.875 3.875 0 00-7.75 0v10.003l3.957-4.146a.75.75 0 011.085 1.036l-5.25 5.5a.75.75 0 01-1.085 0l-5.25-5.5a.75.75 0 01.025-1.06z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                <span className="ml-2">{v[1]}</span>
+                              </>
+                            )}
+                            {idx !== 1 && v[1]}
+                          </div>
+                        </>
+                      )}
+                    </td>
+                  )
+              )}
+            </tr>
+            {showChildren &&
+              d.children &&
+              d.children.length > 0 &&
+              tableTdBlock(d.children, childLevel + 1)}
+          </Fragment>
+        ))
+      : null;
+  }
+
   useEffect(() => {
     if (onSelectColumns) onSelectColumns(checked);
   }, [checked, onSelectColumns]);
+
+  useEffect(() => {
+    setChecked([]);
+    setShowDeleteBtn(false);
+    document.querySelectorAll('input').forEach((i) => (i.checked = false));
+  }, [data.length]);
 
   return (
     <div className="rounded-3xl bg-light py-6 px-2 w-full">
@@ -125,24 +238,64 @@ const AdminTable: FC<IProps> = ({
         )}
       </div>
       <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
-        <div className="flex justify-start items-center w-full">
-          {trashBtnOnClick && (
+        <div className="flex justify-start items-center min-w-max">
+          {emptyTrashButton && (
             <Button
               type="button"
               size="h-9"
               rounded="rounded-xl"
-              variant="primary"
-              extraCSSClasses="px-4 ml-4 mt-2 text-sm transition-all duration-300"
+              variant="danger"
+              extraCSSClasses="px-4 ml-4 mt-2 text-xs sm:text-sm transition-all duration-300 flex items-center"
               onClick={() => {
-                trashBtnOnClick();
+                onEmptyTrashButtonClick();
               }}
             >
-              Go to Trash
+              <span>Empty Trash</span>
             </Button>
           )}
+          <AuthGuard claims={addButtonClaims} redirect={false}>
+            {addButton && (
+              <Button
+                type="button"
+                size="h-9"
+                rounded="rounded-xl"
+                variant="primary"
+                extraCSSClasses="pl-2 pr-4 ml-4 mt-2 text-xs sm:text-sm transition-all duration-300 flex items-center"
+                onClick={() => {
+                  onAddClick();
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
+                >
+                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                <span>Add</span>
+              </Button>
+            )}
+          </AuthGuard>
+          <AuthGuard claims={trashButtonClaims} redirect={false}>
+            {trashButton && trashBtnOnClick && (
+              <Button
+                type="button"
+                size="h-9"
+                rounded="rounded-xl"
+                variant="primary"
+                extraCSSClasses="px-4 ml-4 mt-2 text-xs sm:text-sm transition-all duration-300"
+                onClick={() => {
+                  trashBtnOnClick();
+                }}
+              >
+                Trash
+              </Button>
+            )}
+          </AuthGuard>
           {selectable && (
             <div
-              className={`h-12 transition-all duration-300 overflow-hidden ${
+              className={`h-11 transition-all duration-300 overflow-hidden mt-2 pr-1 py-1 ${
                 showDeleteBtn ? '' : 'invisible opacity-0'
               }`}
             >
@@ -151,12 +304,12 @@ const AdminTable: FC<IProps> = ({
                 size="h-9"
                 rounded="rounded-xl"
                 variant="danger"
-                extraCSSClasses={`px-4 mt-2.5 ml-4 text-sm transition-all duration-300 ${
+                extraCSSClasses={`px-4 ml-4 text-xs sm:text-sm transition-all duration-300 ${
                   showDeleteBtn ? '' : 'invisible opacity-0'
                 }`}
-                onClick={() => {}}
+                onClick={() => onBulkDeleteButtonClick()}
               >
-                Delete Items
+                Bulk Delete
               </Button>
             </div>
           )}
@@ -185,12 +338,14 @@ const AdminTable: FC<IProps> = ({
                     <div className="flex flex-1 justify-end items-center ml-3">
                       {c.search && (
                         <AdminSearchForm
+                          initialValue={c.search.initialValue}
                           onSubmit={c.search.onSubmit}
                           dropDownAlignment={`${i === 0 ? 'left' : 'right'}`}
                         />
                       )}
                       {c.filter?.toggle && (
                         <FilterToggle
+                          initialValue={c.filter.toggle.initialValue}
                           onFilter={c.filter.toggle.onFilter}
                           onReset={c.filter.toggle.onReset}
                           dropDownAlignment={`${i === 0 ? 'left' : 'right'}`}
@@ -198,6 +353,7 @@ const AdminTable: FC<IProps> = ({
                       )}
                       {c.filter?.dateRange && (
                         <FilterDateRange
+                          initialValue={c.filter.dateRange.initialValue}
                           onFilter={c.filter.dateRange.onFilter}
                           onReset={c.filter.dateRange.onReset}
                           dropDownAlignment={`${i === 0 ? 'left' : 'right'}`}
@@ -205,6 +361,7 @@ const AdminTable: FC<IProps> = ({
                       )}
                       {c.filter?.textInput && (
                         <FilterText
+                          initialValue={c.filter.textInput.initialValue}
                           placeholder={c.filter.textInput.placeholder}
                           onFilter={c.filter.textInput.onFilter}
                           onReset={c.filter.textInput.onReset}
@@ -213,6 +370,7 @@ const AdminTable: FC<IProps> = ({
                       )}
                       {c.filter?.checkbox && (
                         <FilterCheckBox
+                          initialValue={c.filter.checkbox.initialValue}
                           items={c.filter?.checkbox.items}
                           onFilter={c.filter?.checkbox.onFilter}
                           onReset={c.filter?.checkbox.onReset}
@@ -221,6 +379,7 @@ const AdminTable: FC<IProps> = ({
                       )}
                       {c.filter?.radioBtn && (
                         <FilterRadio
+                          initialValue={c.filter.radioBtn.initialValue}
                           items={c.filter?.radioBtn.items}
                           onFilter={c.filter?.radioBtn.onFilter}
                           onReset={c.filter?.radioBtn.onReset}
@@ -229,6 +388,7 @@ const AdminTable: FC<IProps> = ({
                       )}
                       {c.sort && (
                         <AdminSortForm
+                          initialValue={c.sort.initialValue}
                           onSortChange={c.sort.onSortChange}
                           onReset={c.sort.onReset}
                           dropDownAlignment={`${i === 0 ? 'left' : 'right'}`}
@@ -263,51 +423,7 @@ const AdminTable: FC<IProps> = ({
                 </td>
               </tr>
             )}
-            {data.length > 0 &&
-              data.map((d, i) => (
-                <tr
-                  className="hoverable:hover:shadow-md hoverable:hover:-translate-y-0.5 transition-all duration-200 rounded-xl"
-                  key={i}
-                >
-                  {selectable && (
-                    <td className="text-center p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
-                      <input
-                        name="table_record"
-                        value={d.rowId}
-                        type="checkbox"
-                        onChange={(e) => {
-                          e.target.checked
-                            ? setChecked([...checked, e.target.value])
-                            : setChecked([
-                                ...checked.filter((i) => i !== e.target.value),
-                              ]);
-                          if (!e.target.checked) {
-                            const selectAllInput = document.getElementById(
-                              selectAllInputId
-                            ) as HTMLInputElement;
-                            selectAllInput.checked = false;
-                          } else {
-                            setShowDeleteBtn(true);
-                          }
-
-                          checkIfSomeChecked();
-                          checkIfAllChecked();
-                        }}
-                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
-                      />
-                    </td>
-                  )}
-                  {Object.entries(d).map((v, i) => (
-                    <Fragment key={i}>
-                      {v[0] !== 'rowId' && (
-                        <td className="p-3 bg-zinc-100 first:rounded-l-xl last:rounded-r-xl [&:not(:last-child)]:mb-0.5 truncate">
-                          {v[1]}
-                        </td>
-                      )}
-                    </Fragment>
-                  ))}
-                </tr>
-              ))}
+            {tableTdBlock(data)}
           </tbody>
         </table>
       </div>

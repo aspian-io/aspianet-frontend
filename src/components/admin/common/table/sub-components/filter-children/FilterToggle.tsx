@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useRef, useId } from 'react';
 import Button from '../../../../../common/Button';
 
 export interface IFilterToggleProps {
+  initialValue?: boolean;
   onFilter: (value: boolean) => any;
   onReset?: Function;
   className?: string;
@@ -15,9 +16,10 @@ const FilterToggle: FC<IFilterToggleProps> = ({
   className = '',
   dropDownAlignment = 'right',
   disabled = false,
+  initialValue = false
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
   const filterBtnRef = useRef<HTMLDivElement>(null);
   const toggleId = useId();
 
@@ -73,7 +75,7 @@ const FilterToggle: FC<IFilterToggleProps> = ({
           filterShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <div className="flex justify-center items-center">
           <label
@@ -96,6 +98,7 @@ const FilterToggle: FC<IFilterToggleProps> = ({
                   setFilterShow(false);
                 }
               }}
+              checked={initialValue}
             />
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
           </label>

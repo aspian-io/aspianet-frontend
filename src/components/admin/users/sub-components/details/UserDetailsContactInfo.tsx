@@ -5,7 +5,6 @@ import { AuthGuard } from '../../../../common/AuthGuard';
 import DropdownMenu from '../../../../common/DropdownMenu';
 import AdminCard from '../../../common/AdminCard';
 import UserDetailsContactInfoForm from './UserDetailsContactInfoForm';
-// import ContactInfoFormModal from './ContactInfoFormModal';
 
 interface IProps {
   userData: IUserEntity;

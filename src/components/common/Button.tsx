@@ -1,6 +1,7 @@
 import React, { FC, PropsWithChildren } from 'react';
 
 export interface IButtonProps {
+  id?: string;
   type: 'button' | 'submit';
   variant:
     | 'primary'
@@ -196,6 +197,7 @@ const Button: FC<PropsWithChildren<IButtonProps>> = (props) => {
 
   return (
     <button
+      id={props.id ? props.id : undefined}
       type={props.type}
       className={`
         ${btnVariantCssClass} 

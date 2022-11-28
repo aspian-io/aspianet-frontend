@@ -5,6 +5,7 @@ import Button from '../../../../../common/Button';
 import FormikInput, { InputTypeEnum } from '../../../../../common/FormikInput';
 
 export interface IFilterTextProps {
+  initialValue?: string;
   placeholder?: string;
   onFilter: (value: string) => any;
   onReset?: Function;
@@ -19,10 +20,11 @@ const FilterText: FC<IFilterTextProps> = ({
   placeholder,
   className = '',
   dropDownAlignment = 'right',
-  disabled = false
+  disabled = false,
+  initialValue = ''
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
   const filterBtnRef = useRef<HTMLDivElement>(null);
 
   function dropDownAlignmentClassNames() {
@@ -75,10 +77,10 @@ const FilterText: FC<IFilterTextProps> = ({
           filterShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex flex-col absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex flex-col absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
-          initialValues={{ value: '' }}
+          initialValues={{ value: initialValue }}
           validationSchema={Yup.object({
             value: Yup.string().max(
               30,

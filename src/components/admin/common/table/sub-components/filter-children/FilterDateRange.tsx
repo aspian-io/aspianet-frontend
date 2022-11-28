@@ -5,11 +5,15 @@ import * as Yup from 'yup';
 import Button from '../../../../../common/Button';
 
 export interface IFilterDateRangeProps {
+  initialValue?: {
+    startDate: string;
+    endDate: string;
+  };
   onFilter: (startDate: string, endDate: string) => any;
   onReset?: Function;
   className?: string;
   dropDownAlignment?: 'left' | 'right' | 'center';
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 const FilterDateRange: FC<IFilterDateRangeProps> = ({
@@ -17,10 +21,11 @@ const FilterDateRange: FC<IFilterDateRangeProps> = ({
   onReset,
   className = '',
   dropDownAlignment = 'right',
-  disabled = false
+  disabled = false,
+  initialValue = undefined,
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
   const filterBtnRef = useRef<HTMLDivElement>(null);
   const startDateRef = useRef<ReactDatePicker<never, undefined>>(null);
   const endDateRef = useRef<ReactDatePicker<never, undefined>>(null);
@@ -82,7 +87,10 @@ const FilterDateRange: FC<IFilterDateRangeProps> = ({
         } flex flex-col absolute z-50 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
-          initialValues={{ startDate: '', endDate: '' }}
+          initialValues={{
+            startDate: initialValue?.startDate ?? '',
+            endDate: initialValue?.endDate ?? '',
+          }}
           validationSchema={Yup.object({
             startDate: Yup.date().typeError('Please enter a standard date'),
             endDate: Yup.date().typeError('Please enter a standard date'),

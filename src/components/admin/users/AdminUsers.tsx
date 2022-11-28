@@ -97,7 +97,7 @@ const AdminUsers = () => {
 
   const data: IDataType[] = users
     ? users.items.map((user) => ({
-        rowId: user.id,
+        id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -154,6 +154,7 @@ const AdminUsers = () => {
             {
               title: 'Email',
               search: {
+                initialValue: router.query['searchBy.email'] as string,
                 onSubmit: (s) => {
                   if (!s?.length) delete router.query['searchBy.email'];
                   else router.query['searchBy.email'] = s;
@@ -161,6 +162,7 @@ const AdminUsers = () => {
                 },
               },
               sort: {
+                initialValue: router.query['orderBy.email'] as 'ASC' | 'DESC',
                 onSortChange: (sort) => {
                   router.query['orderBy.email'] = sort;
                   router.push(router);
@@ -174,6 +176,7 @@ const AdminUsers = () => {
             {
               title: 'First Name',
               search: {
+                initialValue: router.query['searchBy.firstName'] as string,
                 onSubmit: (s) => {
                   if (!s?.length) delete router.query['searchBy.firstName'];
                   else router.query['searchBy.firstName'] = s;
@@ -181,6 +184,9 @@ const AdminUsers = () => {
                 },
               },
               sort: {
+                initialValue: router.query['orderBy.firstName'] as
+                  | 'ASC'
+                  | 'DESC',
                 onSortChange: (sort) => {
                   router.query['orderBy.firstName'] = sort;
                   router.push(router);
@@ -194,6 +200,7 @@ const AdminUsers = () => {
             {
               title: 'Last Name',
               search: {
+                initialValue: router.query['searchBy.lastName'] as string,
                 onSubmit: (s) => {
                   if (!s?.length) delete router.query['searchBy.lastName'];
                   else router.query['searchBy.lastName'] = s;
@@ -201,6 +208,9 @@ const AdminUsers = () => {
                 },
               },
               sort: {
+                initialValue: router.query['orderBy.lastName'] as
+                  | 'ASC'
+                  | 'DESC',
                 onSortChange: (sort) => {
                   router.query['orderBy.lastName'] = sort;
                   router.push(router);
@@ -214,6 +224,7 @@ const AdminUsers = () => {
             {
               title: 'Mobile Phone',
               search: {
+                initialValue: router.query['searchBy.mobilePhone'] as string,
                 onSubmit: (s) => {
                   if (!s?.length) delete router.query['searchBy.mobilePhone'];
                   else router.query['searchBy.mobilePhone'] = s;
@@ -221,6 +232,9 @@ const AdminUsers = () => {
                 },
               },
               sort: {
+                initialValue: router.query['orderBy.mobilePhone'] as
+                  | 'ASC'
+                  | 'DESC',
                 onSortChange: (sort) => {
                   router.query['orderBy.mobilePhone'] = sort;
                   router.push(router);
@@ -237,6 +251,8 @@ const AdminUsers = () => {
           ]}
           data={data}
           loading={!users}
+          trashButton
+          trashButtonClaims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_DELETE]}
           trashBtnOnClick={() => {
             router.push('users/trash');
           }}

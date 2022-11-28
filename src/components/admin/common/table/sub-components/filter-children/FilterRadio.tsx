@@ -3,6 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import Button from '../../../../../common/Button';
 
 export interface IFilterRadioProps {
+  initialValue?: string;
   items: {
     label: string;
     name: string;
@@ -21,9 +22,10 @@ const FilterRadio: FC<IFilterRadioProps> = ({
   className = '',
   dropDownAlignment = 'right',
   disabled = false,
+  initialValue = '',
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
+  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
   const filterBtnRef = useRef<HTMLDivElement>(null);
 
   function dropDownAlignmentClassNames() {
@@ -76,10 +78,10 @@ const FilterRadio: FC<IFilterRadioProps> = ({
           filterShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex flex-col absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex flex-col absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
-          initialValues={{ value: '' }}
+          initialValues={{ value: initialValue }}
           onSubmit={(values) => {
             onFilter(values.value);
             setFilterActive(true);

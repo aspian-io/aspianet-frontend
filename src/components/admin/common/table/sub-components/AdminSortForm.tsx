@@ -3,6 +3,7 @@ import React, { FC, useState, useEffect, useRef, useId } from 'react';
 import Button from '../../../../common/Button';
 
 export interface IAdminSortProps {
+  initialValue?: 'ASC' | 'DESC';
   onSortChange: (sort: 'ASC' | 'DESC' | undefined) => any;
   onReset?: Function;
   className?: string;
@@ -16,9 +17,10 @@ const AdminSortForm: FC<IAdminSortProps> = ({
   className,
   dropDownAlignment = 'right',
   disabled = false,
+  initialValue = undefined,
 }) => {
   const [sortShow, setSortShow] = useState(false);
-  const [sortActive, setSortActive] = useState(false);
+  const [sortActive, setSortActive] = useState(initialValue ? true : false);
   const sortBtnRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
   const inputAscLabelId = useId();
@@ -75,10 +77,11 @@ const AdminSortForm: FC<IAdminSortProps> = ({
           sortShow
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-2 opacity-0'
-        } flex flex-col absolute drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
+        } flex flex-col absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <Formik
-          initialValues={{ sort: undefined }}
+          initialValues={{ sort: initialValue }}
+          enableReinitialize
           onSubmit={(values) => {
             onSortChange(values.sort);
             setSortActive(true);

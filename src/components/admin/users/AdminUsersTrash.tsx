@@ -125,7 +125,7 @@ const AdminUsersTrash = () => {
 
   const data: IDataType[] = users
     ? users.items.map((user) => ({
-        rowId: user.id,
+        id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
