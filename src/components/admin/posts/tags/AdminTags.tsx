@@ -163,7 +163,7 @@ const AdminTags = () => {
   }
 
   const data: IDataType[] = tagsData
-    ? tagsData.items.map((c) => formatData(c))
+    ? tagsData.items.map((t) => formatData(t))
     : [];
 
   function getTagById(id?: string) {

@@ -16,7 +16,7 @@ const FilterToggle: FC<IFilterToggleProps> = ({
   className = '',
   dropDownAlignment = 'right',
   disabled = false,
-  initialValue = false
+  initialValue = undefined
 }) => {
   const [filterShow, setFilterShow] = useState(false);
   const [filterActive, setFilterActive] = useState(initialValue ? true : false);
@@ -74,7 +74,7 @@ const FilterToggle: FC<IFilterToggleProps> = ({
         className={`${
           filterShow
             ? 'visible translate-y-0 opacity-100'
-            : 'invisible -translate-y-2 opacity-0'
+            : 'invisible -translate-y-2 opacity-0 delay-300'
         } flex absolute z-10 drop-shadow-xl ${dropDownAlignmentClassNames()} top-8 p-2 text-zinc-500 font-normal bg-light text-sm rounded-xl transition-all duration-300`}
       >
         <div className="flex justify-center items-center">

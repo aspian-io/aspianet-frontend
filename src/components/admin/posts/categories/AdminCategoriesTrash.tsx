@@ -66,7 +66,7 @@ const AdminCategoriesTrash = () => {
     error,
     mutate,
   } = useSWR<IPaginated<ITaxonomyEntity>, AxiosError<INestError>>(
-    `${AdminTaxonomyKeys.GET_SOFT_DELETED_TAXONOMIES}?page=${page}&limit=${limit}${initialSort}`,
+    `${AdminTaxonomyKeys.GET_SOFT_DELETED_CATEGORIES}?page=${page}&limit=${limit}${initialSort}`,
     fetcher
   );
 
@@ -174,7 +174,7 @@ const AdminCategoriesTrash = () => {
         onConfirm={async () => {
           try {
             setRemoveLoading(true);
-            await AdminTaxonomyAgent.emptyTrash(session);
+            await AdminTaxonomyAgent.emptyCategoriesTrash(session);
             await mutate();
             toast.success('Categories trash emptied successfully.', {
               className: 'bg-success text-light text-sm',

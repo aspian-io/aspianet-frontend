@@ -4,25 +4,25 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminTaxonomyAgent } from '../../../../lib/axios/agent';
-import { AdminTaxonomyKeys } from '../../../../lib/swr/keys';
-import { ClaimsEnum } from '../../../../models/auth/common';
-import { INestError } from '../../../../models/common/error';
-import { IPaginated } from '../../../../models/common/paginated-result';
-import { ITaxonomyEntity } from '../../../../models/taxonomies/admin/taxonomy';
-import { AuthGuard } from '../../../common/AuthGuard';
-import Button from '../../../common/Button';
-import ConfirmModal from '../../../common/ConfirmModal';
-import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
+import { AdminPostAgent } from '../../../lib/axios/agent';
+import { AdminPostKeys } from '../../../lib/swr/keys';
+import { ClaimsEnum } from '../../../models/auth/common';
+import { INestError } from '../../../models/common/error';
+import { IPaginated } from '../../../models/common/paginated-result';
+import { IPostEntity } from '../../../models/posts/admin/post';
+import { AuthGuard } from '../../common/AuthGuard';
+import Button from '../../common/Button';
+import ConfirmModal from '../../common/ConfirmModal';
+import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {
-  name: string;
-  description: string;
+  title: string;
+  parentTitle?: string;
   slug: string;
   actions: JSX.Element;
 }
 
-const AdminTagsTrash = () => {
+const AdminPostsTrash = () => {
   const router = useRouter();
   const page =
     router.query['page'] && +router.query['page'] >= 1
@@ -55,13 +55,13 @@ const AdminTagsTrash = () => {
   };
 
   const fetcher = () =>
-    AdminTaxonomyAgent.softDeletedTagsList(session, page, limit, initialSort());
+    AdminPostAgent.softDeletedBlogsList(session, page, limit, initialSort());
   const {
-    data: tagsData,
+    data: postsData,
     error,
     mutate,
-  } = useSWR<IPaginated<ITaxonomyEntity>, AxiosError<INestError>>(
-    `${AdminTaxonomyKeys.GET_SOFT_DELETED_TAGS}?page=${page}&limit=${limit}${initialSort}`,
+  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+    `${AdminPostKeys.GET_SOFT_DELETED_BLOGS}?page=${page}&limit=${limit}${initialSort}`,
     fetcher
   );
 
@@ -80,10 +80,10 @@ const AdminTagsTrash = () => {
           setBtnId(id);
           setRecoverLoading(true);
           try {
-            await AdminTaxonomyAgent.recoverTaxonomy(session, id);
+            await AdminPostAgent.recoverPost(session, id);
             await mutate();
             setRecoverLoading(false);
-            toast.success('The tag recovered successfully.', {
+            toast.success('The post recovered successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setBtnId(null);
@@ -112,7 +112,7 @@ const AdminTagsTrash = () => {
           />
         </svg>
       </Button>
-      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}>
+      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}>
         <Button
           rounded="rounded-md"
           size="h-5"
@@ -142,18 +142,18 @@ const AdminTagsTrash = () => {
     </div>
   );
 
-  function formatData(tag: ITaxonomyEntity): IDataType {
+  function formatData(post: IPostEntity): IDataType {
     return {
-      id: tag.id,
-      name: tag.term,
-      description: tag.description ?? '',
-      slug: tag.slug,
-      actions: actionsColumn(tag.id),
+      id: post.id,
+      title: post.title,
+      parentTitle: post?.parent?.title,
+      slug: post.slug,
+      actions: actionsColumn(post.id),
     };
   }
 
-  const data: IDataType[] = tagsData
-    ? tagsData.items.map((t) => formatData(t))
+  const data: IDataType[] = postsData
+    ? postsData.items.map((p) => formatData(p))
     : [];
 
   return (
@@ -165,9 +165,9 @@ const AdminTagsTrash = () => {
         onConfirm={async () => {
           try {
             setRemoveLoading(true);
-            await AdminTaxonomyAgent.emptyTagsTrash(session);
+            await AdminPostAgent.emptyBlogsTrash(session);
             await mutate();
-            toast.success('Tags trash emptied successfully.', {
+            toast.success('Posts trash emptied successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setRemoveLoading(false);
@@ -182,7 +182,7 @@ const AdminTagsTrash = () => {
         }}
         show={emptyTrashConfirm}
         onConfirmLoading={removeLoading}
-        text="Are you sure you want to empty the tags trash and delete all the items permanently?"
+        text="Are you sure you want to empty the posts trash and delete all the items permanently?"
       />
       <AuthGuard
         claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
@@ -197,12 +197,9 @@ const AdminTagsTrash = () => {
             try {
               setRemoveLoading(true);
               if (itemToDelete) {
-                await AdminTaxonomyAgent.deletePermanently(
-                  session,
-                  itemToDelete
-                );
+                await AdminPostAgent.deletePermanently(session, itemToDelete);
                 await mutate();
-                toast.success('The tag deleted successfully.', {
+                toast.success('The post deleted successfully.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -222,20 +219,20 @@ const AdminTagsTrash = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the tag permanently?"
+          text="Are you sure you want to delete the post permanently?"
         />
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
           selectable={false}
-          emptyTrashButton={tagsData?.items && tagsData.items.length > 0}
+          emptyTrashButton={postsData?.items && postsData.items.length > 0}
           onEmptyTrashButtonClick={() => setEmptyTrashConfirm(true)}
           columns={[
             {
-              title: 'Name',
+              title: 'Title',
             },
             {
-              title: 'Description',
+              title: 'Parent',
             },
             {
               title: 'Slug',
@@ -245,13 +242,13 @@ const AdminTagsTrash = () => {
             },
           ]}
           data={data}
-          loading={!tagsData}
+          loading={!postsData}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/tags`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/trash`,
             currentPage: router.query.page
               ? +router.query.page
-              : tagsData?.meta.currentPage,
-            totalPages: tagsData?.meta.totalPages,
+              : postsData?.meta.currentPage,
+            totalPages: postsData?.meta.totalPages,
           }}
         />
       </div>
@@ -259,4 +256,4 @@ const AdminTagsTrash = () => {
   );
 };
 
-export default AdminTagsTrash;
+export default AdminPostsTrash;

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const EPubOutline: FC<{ className: string }> = ({ className }) => {
+const EPubOutline: FC<{ className?: string }> = ({ className }) => {
   return (
     <svg
       className={className}

@@ -92,6 +92,7 @@ const FormikInput: FC<IFormikInput> = ({
           dropdownMode="select"
           clearButtonClassName="after:bg-primary/60 hoverable:hover:after:bg-primary after:content-['×']"
           showPopperArrow={false}
+          {...props}
         />
         {touched[field.name] && errors[field.name] && (
           <div className="mt-2 text-danger text-xs">{errors[field.name]}</div>
@@ -152,7 +153,7 @@ const FormikInput: FC<IFormikInput> = ({
 
   // Other Inputs
   return (
-    <div className='flex flex-col w-full'>
+    <div className="flex flex-col w-full">
       <label
         htmlFor={id}
         className={`${

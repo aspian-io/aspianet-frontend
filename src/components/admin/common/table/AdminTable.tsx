@@ -46,7 +46,7 @@ interface IProps {
 }
 
 interface IColumn {
-  title: string;
+  title: string | JSX.Element;
   search?: IAdminSearchProps;
   filter?: {
     checkbox?: IFilterCheckBoxProps;

@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import {
   AdminPostAgent,
   AdminSettingsAgent,
-  AdminUserAgent,
 } from '../../../../../lib/axios/agent';
 import {
   PostCreateFormValues,
@@ -95,7 +94,7 @@ const UsersVerificationAddTemplate: FC<IProps> = ({ settingKey }) => {
         }
       }}
     >
-      {({ isSubmitting, handleChange, handleBlur, isValid, dirty }) => (
+      {({ isSubmitting, handleChange, isValid, dirty }) => (
         <Form>
           <fieldset>
             <div className="bg-light rounded-3xl p-4">

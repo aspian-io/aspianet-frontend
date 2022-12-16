@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const MsExcelOutline: FC<{ className: string }> = ({ className }) => {
+const MsExcelOutline: FC<{ className?: string }> = ({ className }) => {
   return (
     <svg
       className={className}

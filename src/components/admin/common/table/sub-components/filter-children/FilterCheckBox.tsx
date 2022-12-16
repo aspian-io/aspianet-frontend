@@ -1,9 +1,9 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useState, useEffect, useRef } from 'react';
 import Button from '../../../../../common/Button';
 
 export interface IFilterCheckBoxProps {
-  initialValue?: any;
+  initialValue: FormikValues;
   items: {
     label: string;
     name: string;
@@ -22,10 +22,14 @@ const FilterCheckBox: FC<IFilterCheckBoxProps> = ({
   className = '',
   dropDownAlignment = 'right',
   disabled = false,
-  initialValue = undefined,
+  initialValue = {},
 }) => {
   const [filterShow, setFilterShow] = useState(false);
-  const [filterActive, setFilterActive] = useState(initialValue ? true : false);
+  const [filterActive, setFilterActive] = useState(
+    Object.values(initialValue).filter((v) => v !== undefined).length > 0
+      ? true
+      : false
+  );
   const filterBtnRef = useRef<HTMLDivElement>(null);
 
   function dropDownAlignmentClassNames() {
@@ -94,7 +98,6 @@ const FilterCheckBox: FC<IFilterCheckBoxProps> = ({
                 <div className="flex items-center mb-4" key={i}>
                   <Field
                     name={item.name}
-                    id={item.name}
                     type="checkbox"
                     value={undefined}
                     className="w-4 h-4 text-primary bg-gray-100 rounded border-gray-300 focus:ring-0 focus:ring-offset-0"

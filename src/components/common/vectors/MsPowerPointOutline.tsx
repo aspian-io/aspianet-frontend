@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const MsPowerPointOutline: FC<{ className: string }> = ({ className }) => {
+const MsPowerPointOutline: FC<{ className?: string }> = ({ className }) => {
   return (
     <svg
       className={className}

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const EBookOutline: FC<{ className: string }> = ({ className = 'h-7 w-7' }) => {
+const EBookOutline: FC<{ className?: string }> = ({ className = 'h-7 w-7' }) => {
   return (
     <svg
       className={className}

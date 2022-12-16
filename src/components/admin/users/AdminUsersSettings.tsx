@@ -11,7 +11,6 @@ import { AdminSettingsKeys } from '../../../lib/swr/keys';
 import { INestError } from '../../../models/common/error';
 import {
   ISettingsEntity,
-  ISettingsFormValues,
   SettingsFormValues,
   SettingsKeyEnum,
   SettingsServiceEnum,

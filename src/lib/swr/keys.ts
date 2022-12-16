@@ -25,12 +25,15 @@ export const AdminUserKeys = {
 // TAXONOMY KEYS
 export const AdminTaxonomyKeys = {
   GET_ALL_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/categories`,
-  GET_SOFT_DELETED_TAXONOMIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/trash`,
+  GET_SOFT_DELETED_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/categories-trash`,
+  GET_SOFT_DELETED_TAGS: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/tags-trash`,
 } as const;
 
 // POST KEYS
 export const AdminPostKeys = {
+  GET_BLOGS_LIST: `${ BaseURLs.API }/admin/posts/blogs`,
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,
+  GET_SOFT_DELETED_BLOGS: `${ BaseURLs.API }/admin/posts/soft-deleted/blogs-trash`,
 } as const;
 
 // FILE KEYS

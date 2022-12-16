@@ -17,8 +17,7 @@ export const categoryValidationSchema = Yup.object( {
       slugRegex,
       'Uppercase letters, lowercase letters, hyphens and numbers are allowed'
     )
-    .max( 50, 'Slug must be less than 50 characters' )
-    .required( 'Please enter a unique slug' ),
+    .max( 100, 'Slug must be less than 100 characters' ),
   href: Yup.string()
     .nullable()
     .url( 'Please enter a standard URL' ),

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const MsWordOutline: FC<{ className: string }> = ({
+const MsWordOutline: FC<{ className?: string }> = ({
   className = 'h-7 w-7',
 }) => {
   return (

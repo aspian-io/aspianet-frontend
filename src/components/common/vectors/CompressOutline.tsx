@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-const CompressOutline: FC<{ className: string }> = ({
+const CompressOutline: FC<{ className?: string }> = ({
   className = 'h-7 w-7',
 }) => {
   return (

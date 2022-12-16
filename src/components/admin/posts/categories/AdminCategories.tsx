@@ -68,7 +68,8 @@ const AdminCategories = () => {
 
   const fetcher = () =>
     AdminTaxonomyAgent.categoriesList(session, `${qs}${initialSort()}`);
-  const {
+  
+    const {
     data: categoriesData,
     error,
     mutate,
