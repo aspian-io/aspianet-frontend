@@ -11,32 +11,32 @@ import { authOptions } from '../../../api/auth/[...nextauth]';
 
 interface IProps {
   id: string;
-  postData: IPostEntity;
+  pageData: IPostEntity;
 }
 
-const PostEditPage: NextPage<IProps> = ({ id, postData }) => {
+const PagesEditPage: NextPage<IProps> = ({ id, pageData }) => {
   return (
     <AuthGuard
       claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE, ClaimsEnum.POST_EDIT]}
     >
       <AdminLayout
-        pageTitle="Edit"
+        pageTitle="Edit Page"
         breadCrumbs={[
-          { label: 'Posts', href: '/admin/posts' },
+          { label: 'Pages', href: '/admin/pages' },
           { label: 'Edit' },
         ]}
       >
         <AdminPostForm
-          postType={postData.type}
+          postType={pageData.type}
           editPostId={id}
-          editPostData={postData}
+          editPostData={pageData}
         />
       </AdminLayout>
     </AuthGuard>
   );
 };
 
-export default PostEditPage;
+export default PagesEditPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await unstable_getServerSession(
@@ -53,12 +53,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session) {
     try {
-      const postData = await AdminPostAgent.details(session, id);
+      const pageData = await AdminPostAgent.details(session, id);
 
       return {
         props: {
           id,
-          postData,
+          pageData,
         },
       };
     } catch (error) {

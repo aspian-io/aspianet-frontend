@@ -25,17 +25,12 @@ import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {
   title: string | JSX.Element;
-  categories: string | JSX.Element;
-  parentTitle?: string;
   slug: string;
   viewCount?: number;
-  commentsNum: number;
-  likesNum: number;
-  bookmarksNum: number;
   actions: JSX.Element;
 }
 
-const AdminPosts = () => {
+const AdminPages = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [removeLoading, setRemoveLoading] = useState(false);
@@ -60,14 +55,14 @@ const AdminPosts = () => {
   };
 
   const fetcher = () =>
-    AdminPostAgent.blogsList(session, `${qs}${initialSort()}`);
+    AdminPostAgent.pagesList(session, `${qs}${initialSort()}`);
 
   const {
-    data: postsData,
+    data: pagesData,
     error,
     mutate,
   } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
-    `${AdminPostKeys.GET_BLOGS_LIST}${qs}${initialSort()}`,
+    `${AdminPostKeys.GET_PAGES_LIST}${qs}${initialSort()}`,
     fetcher
   );
 
@@ -105,7 +100,7 @@ const AdminPosts = () => {
           variant="warning"
           extraCSSClasses="px-1.5 text-xs"
           onClick={() => {
-            router.push(`/admin/posts/edit/${id}`);
+            router.push(`/admin/pages/edit/${id}`);
           }}
         >
           <svg
@@ -176,43 +171,17 @@ const AdminPosts = () => {
             <div className="bg-primary-light rounded text-light px-1">
               Status: {post.status}
             </div>
-            {post.isPinned && (
-              <div className="bg-primary-light rounded text-light px-1">
-                Pinned
-              </div>
-            )}
           </div>
         </div>
       ),
-      categories: (
-        <div className="flex flex-wrap justify-start items-center">
-          {post.taxonomies &&
-            post.taxonomies.length > 0 &&
-            post.taxonomies.map(
-              (t, i) =>
-                t.type === TaxonomyTypeEnum.CATEGORY && (
-                  <div
-                    className="border-primary border-2 px-2 rounded-md text-primary mx-0.5 my-0.5"
-                    key={i}
-                  >
-                    {t.term}
-                  </div>
-                )
-            )}
-        </div>
-      ),
-      parentTitle: post?.parent?.title,
       slug: post.slug,
       viewCount: post.viewCount,
-      commentsNum: post.commentsNum,
-      likesNum: post.likesNum,
-      bookmarksNum: post.bookmarksNum,
       actions: actionsColumn(post.id),
     };
   }
 
-  const data: IDataType[] = postsData
-    ? postsData.items.map((p) => formatData(p))
+  const data: IDataType[] = pagesData
+    ? pagesData.items.map((p) => formatData(p))
     : [];
 
   return (
@@ -271,7 +240,7 @@ const AdminPosts = () => {
               if (itemToDelete) {
                 await AdminPostAgent.softDelete(session, itemToDelete);
                 await mutate();
-                toast.success('The post moved to trash.', {
+                toast.success('The page moved to trash.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -291,7 +260,7 @@ const AdminPosts = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the post?"
+          text="Are you sure you want to delete the page?"
         />
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
@@ -300,12 +269,12 @@ const AdminPosts = () => {
             items: [
               {
                 value: 'Add',
-                onClick: () => router.push('/admin/posts/add-new'),
+                onClick: () => router.push('/admin/pages/add-new'),
                 claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE],
               },
               {
                 value: 'Trash',
-                onClick: () => router.push('/admin/posts/trash'),
+                onClick: () => router.push('/admin/pages/trash'),
                 claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE],
               },
             ],
@@ -329,28 +298,6 @@ const AdminPosts = () => {
                 },
                 onReset: () => {
                   delete router.query['orderBy.title'];
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: 'Categories',
-              search: {
-                initialValue: router.query['searchBy.category'] as string,
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.category'];
-                  else router.query['searchBy.category'] = s;
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: 'Parent',
-              search: {
-                initialValue: router.query['searchBy.parentTitle'] as string,
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.parentTitle'];
-                  else router.query['searchBy.parentTitle'] = s;
                   router.push(router);
                 },
               },
@@ -392,94 +339,19 @@ const AdminPosts = () => {
               },
             },
             {
-              title: <MiniComment />,
-              filter: {
-                textInput: {
-                  placeholder: '>=',
-                  onFilter: (value) => {
-                    console.log(value);
-                  },
-                  onReset: () => {},
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.commentsNum'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.commentsNum'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.commentsNum'];
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: <MiniLike />,
-              filter: {
-                textInput: {
-                  placeholder: '>=',
-                  onFilter: (value) => {
-                    console.log(value);
-                  },
-                  onReset: () => {},
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.likesNum'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.likesNum'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.likesNum'];
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: <MiniBookmark />,
-              filter: {
-                textInput: {
-                  placeholder: '>=',
-                  onFilter: (value) => {
-                    console.log(value);
-                  },
-                  onReset: () => {},
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.bookmarksNum'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.bookmarksNum'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.bookmarksNum'];
-                  router.push(router);
-                },
-              },
-            },
-            {
               title: 'Actions',
             },
           ]}
           data={data}
-          loading={!postsData}
+          loading={!pagesData}
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/pages`,
             currentPage: router.query.page
               ? +router.query.page
-              : postsData?.meta.currentPage,
-            totalPages: postsData?.meta.totalPages,
+              : pagesData?.meta.currentPage,
+            totalPages: pagesData?.meta.totalPages,
           }}
         />
       </div>
@@ -487,4 +359,4 @@ const AdminPosts = () => {
   );
 };
 
-export default AdminPosts;
+export default AdminPages;

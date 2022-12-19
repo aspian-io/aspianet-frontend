@@ -33,15 +33,14 @@ export const AdminTaxonomyKeys = {
 // POST KEYS
 export const AdminPostKeys = {
   GET_BLOGS_LIST: `${ BaseURLs.API }/admin/posts/blogs`,
-  GET_BLOGS_QUEUE: `${ BaseURLs.API }/admin/posts/posts-jobs/delayed?type=${ PostTypeEnum.BLOG }`,
   GET_NEWS_LIST: `${ BaseURLs.API }/admin/posts/news`,
-  GET_NEWS_QUEUE: `{ BaseURLs.API }/admin/posts/posts-jobs/delayed?type=${ PostTypeEnum.NEWS }`,
   GET_BANNERS_LIST: `${ BaseURLs.API }/admin/posts/banners`,
-  GET_BANNERS_QUEUE: `${ BaseURLs.API }/admin/posts/posts-jobs/delayed?type=${ PostTypeEnum.BANNER }`,
+  GET_PAGES_LIST: `${ BaseURLs.API }/admin/posts/banners`,
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,
   GET_SOFT_DELETED_BLOGS: `${ BaseURLs.API }/admin/posts/soft-deleted/blogs-trash`,
   GET_SOFT_DELETED_NEWS: `${ BaseURLs.API }/admin/posts/soft-deleted/news-trash`,
   GET_SOFT_DELETED_BANNERS: `${ BaseURLs.API }/admin/posts/soft-deleted/banners-trash`,
+  GET_SOFT_DELETED_PAGES: `${ BaseURLs.API }/admin/posts/soft-deleted/pages-trash`,
 } as const;
 
 // FILE KEYS

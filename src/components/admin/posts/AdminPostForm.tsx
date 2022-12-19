@@ -41,12 +41,14 @@ interface IProps {
   editPostId?: string;
   editPostData?: IPostEntity;
   postType: PostTypeEnum;
+  onCreateSuccess?: (id: string) => any;
 }
 
 const AdminPostForm: FC<IProps> = ({
   postType,
   editPostId = undefined,
   editPostData = undefined,
+  onCreateSuccess = () => {},
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -189,12 +191,15 @@ const AdminPostForm: FC<IProps> = ({
     ),
   });
 
+  const pinCheckBoxNeeded =
+    postType === PostTypeEnum.BLOG || postType === PostTypeEnum.NEWS;
+
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       validationSchema={validationSchema}
-      onSubmit={async (values, { setFieldError, setValues, resetForm }) => {
+      onSubmit={async (values, { setFieldError }) => {
         try {
           const post = new PostFormValues(values);
           post.type = postType;
@@ -246,7 +251,7 @@ const AdminPostForm: FC<IProps> = ({
               className: 'bg-success text-light',
             });
 
-            router.push(`/admin/posts/edit/${result.id}`);
+            onCreateSuccess(result.id);
           }
         } catch (error) {
           const err = error as AxiosError<INestError>;
@@ -462,21 +467,23 @@ const AdminPostForm: FC<IProps> = ({
                         component={FormikInput}
                       />
                     </div>
-                    <div className="flex flex-row justify-start items-start space-x-2">
-                      <Field
-                        id="isPinned"
-                        type={InputTypeEnum.checkbox}
-                        name="isPinned"
-                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
-                        checked={values.isPinned ? true : false}
-                      />
-                      <label
-                        htmlFor="isPinned"
-                        className="text-zinc-700 text-sm"
-                      >
-                        Stick to the top (Pinned)
-                      </label>
-                    </div>
+                    {pinCheckBoxNeeded && (
+                      <div className="flex flex-row justify-start items-start space-x-2">
+                        <Field
+                          id="isPinned"
+                          type={InputTypeEnum.checkbox}
+                          name="isPinned"
+                          className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
+                          checked={values.isPinned ? true : false}
+                        />
+                        <label
+                          htmlFor="isPinned"
+                          className="text-zinc-700 text-sm"
+                        >
+                          Stick to the top (Pinned)
+                        </label>
+                      </div>
+                    )}
                     <div className="flex flex-row justify-start items-start space-x-2">
                       <Field
                         id="commentAllowed"
