@@ -122,7 +122,7 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
             />
 
             <AdminCard className='flex flex-col justify-start items-center min-w-max h-72'>
-              <DropdownMenu className="self-end">
+              <DropdownMenu className="self-end mb-6">
                 <DropdownMenu.Item
                   onClick={() => {
                     document.getElementById(avatarUploadFieldId)?.click();

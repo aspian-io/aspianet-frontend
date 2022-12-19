@@ -4,40 +4,35 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminTaxonomyAgent } from '../../../../lib/axios/agent';
-import { ClaimsEnum } from '../../../../models/auth/common';
-import { INestError } from '../../../../models/common/error';
-import { IPaginated } from '../../../../models/common/paginated-result';
+import { AdminPostAgent } from '../../../lib/axios/agent';
+import { AdminPostKeys } from '../../../lib/swr/keys';
+import { ClaimsEnum } from '../../../models/auth/common';
+import { INestError } from '../../../models/common/error';
+import { IPaginated } from '../../../models/common/paginated-result';
 import {
-  ITaxonomyEntity,
-  TaxonomyCreateFormValues,
-  TaxonomyEditFormValues,
-} from '../../../../models/taxonomies/admin/taxonomy';
-import { AuthGuard } from '../../../common/AuthGuard';
-import Button from '../../../common/Button';
-import ConfirmModal from '../../../common/ConfirmModal';
-import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
-import AddTagForm from './sub-components/AddTagForm';
-import EditTagForm from './sub-components/EditTagForm';
-import TagDetails from './sub-components/TagDetails';
+  IPostEntity,
+  PostVisibilityEnum,
+} from '../../../models/posts/admin/post';
+import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
+import { AuthGuard } from '../../common/AuthGuard';
+import Button from '../../common/Button';
+import ConfirmModal from '../../common/ConfirmModal';
+import MiniBookmark from '../../common/vectors/mini/MiniBookmark';
+import MiniComment from '../../common/vectors/mini/MiniComment';
+import MiniEye from '../../common/vectors/mini/MiniEye';
+import MiniLike from '../../common/vectors/mini/MiniLike';
+import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {
-  name: string;
-  description: string;
+  title: string | JSX.Element;
   slug: string;
+  viewCount?: number;
   actions: JSX.Element;
 }
 
-const AdminTags = () => {
+const AdminBanners = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const [detailsModal, setDetailsModal] = useState<{
-    show: boolean;
-    tag?: ITaxonomyEntity;
-  }>({ show: false, tag: undefined });
-  const [addTagModalShow, setAddTagModalShow] = useState(false);
-  const [editTagModalShow, setEditTagModalShow] = useState(false);
-  const [tagIdToEdit, setTagIdToEdit] = useState<string | undefined>(undefined);
   const [removeLoading, setRemoveLoading] = useState(false);
 
   const [removeConfirm, setRemoveConfirm] = useState(false);
@@ -60,13 +55,14 @@ const AdminTags = () => {
   };
 
   const fetcher = () =>
-    AdminTaxonomyAgent.tagsList(session, `${qs}${initialSort()}`);
+    AdminPostAgent.bannersList(session, `${qs}${initialSort()}`);
+
   const {
-    data: tagsData,
+    data: bannersData,
     error,
     mutate,
-  } = useSWR<IPaginated<ITaxonomyEntity>, AxiosError<INestError>>(
-    router.asPath,
+  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+    `${AdminPostKeys.GET_BANNERS_LIST}${qs}${initialSort()}`,
     fetcher
   );
 
@@ -74,33 +70,7 @@ const AdminTags = () => {
 
   const actionsColumn = (id: string) => (
     <div className="flex justify-center items-center w-full space-x-2 py-1">
-      <Button
-        rounded="rounded-md"
-        size="h-5"
-        type="button"
-        variant="primary"
-        extraCSSClasses="px-1.5 text-xs"
-        onClick={() => {
-          const tag = getTagById(id);
-          setDetailsModal({ show: true, tag });
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-3 h-3"
-        >
-          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-          <path
-            fillRule="evenodd"
-            d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Button>
-
-      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_EDIT]}>
+      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_EDIT]}>
         <Button
           rounded="rounded-md"
           size="h-5"
@@ -108,8 +78,7 @@ const AdminTags = () => {
           variant="warning"
           extraCSSClasses="px-1.5 text-xs"
           onClick={() => {
-            setTagIdToEdit(id);
-            setEditTagModalShow(true);
+            router.push(`/admin/posts/edit/${id}`);
           }}
         >
           <svg
@@ -123,7 +92,7 @@ const AdminTags = () => {
           </svg>
         </Button>
       </AuthGuard>
-      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}>
+      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}>
         <Button
           rounded="rounded-md"
           size="h-5"
@@ -152,28 +121,56 @@ const AdminTags = () => {
     </div>
   );
 
-  function formatData(tag: ITaxonomyEntity): IDataType {
+  function formatData(post: IPostEntity): IDataType {
     return {
-      id: tag.id,
-      name: tag.term,
-      description: tag.description ?? '',
-      slug: tag.slug,
-      actions: actionsColumn(tag.id),
+      id: post.id,
+      title: (
+        <div className="flex flex-col space-y-1">
+          <div className="flex justify-start items-center">
+            {post.visibility === PostVisibilityEnum.PRIVATE && (
+              <div className="w-4 h-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-3.5 h-3.5 mr-1 text-primary mb-0.5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+            {post.title}
+          </div>
+          <div className="flex justify-start items-center text-xs space-x-1">
+            <div className="bg-primary-light rounded text-light px-1">
+              Status: {post.status}
+            </div>
+            {post.isPinned && (
+              <div className="bg-primary-light rounded text-light px-1">
+                Pinned
+              </div>
+            )}
+          </div>
+        </div>
+      ),
+      slug: post.slug,
+      viewCount: post.viewCount,
+      actions: actionsColumn(post.id),
     };
   }
 
-  const data: IDataType[] = tagsData
-    ? tagsData.items.map((t) => formatData(t))
+  const data: IDataType[] = bannersData
+    ? bannersData.items.map((p) => formatData(p))
     : [];
-
-  function getTagById(id?: string) {
-    return tagsData?.items.filter((t) => t.id === id)[0];
-  }
 
   return (
     <>
       <AuthGuard
-        claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
+        claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
         redirect={false}
       >
         <ConfirmModal
@@ -185,10 +182,7 @@ const AdminTags = () => {
             try {
               setRemoveLoading(true);
               if (itemsToBulkDelete && itemsToBulkDelete.length > 0) {
-                await AdminTaxonomyAgent.softDeleteAll(
-                  session,
-                  itemsToBulkDelete
-                );
+                await AdminPostAgent.softDeleteAll(session, itemsToBulkDelete);
                 setItemsToBulkDelete(null);
                 await mutate();
                 toast.success('The selected items moved to trash.', {
@@ -215,7 +209,7 @@ const AdminTags = () => {
         />
       </AuthGuard>
       <AuthGuard
-        claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
+        claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
         redirect={false}
       >
         <ConfirmModal
@@ -227,9 +221,9 @@ const AdminTags = () => {
             try {
               setRemoveLoading(true);
               if (itemToDelete) {
-                await AdminTaxonomyAgent.softDelete(session, itemToDelete);
+                await AdminPostAgent.softDelete(session, itemToDelete);
                 await mutate();
-                toast.success('The tag moved to trash.', {
+                toast.success('The banner moved to trash.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -249,103 +243,44 @@ const AdminTags = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the tag?"
+          text="Are you sure you want to delete the banner?"
         />
       </AuthGuard>
-      <TagDetails
-        tag={detailsModal.tag}
-        show={detailsModal.show}
-        onClose={() => setDetailsModal({ show: false, tag: undefined })}
-        onDeleteSlugHistorySuccess={async (deletedItem) => {
-          await mutate();
-        }}
-      />
-      <AddTagForm
-        addTagModalShow={addTagModalShow}
-        onSuccess={async () => {
-          await mutate();
-          setAddTagModalShow(false);
-        }}
-        onClose={() => {
-          setAddTagModalShow(false);
-        }}
-      />
-      <EditTagForm
-        initialValues={
-          new TaxonomyEditFormValues(
-            getTagById(tagIdToEdit) as TaxonomyCreateFormValues
-          )
-        }
-        tagIdToEdit={tagIdToEdit!}
-        editTagModalShow={editTagModalShow}
-        onSuccess={async () => {
-          await mutate();
-          setTagIdToEdit(undefined);
-          setEditTagModalShow(false);
-        }}
-        onClose={() => {
-          setEditTagModalShow(false);
-        }}
-      />
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
           menu={{
             items: [
               {
                 value: 'Add',
-                onClick: () => setAddTagModalShow(true),
-                claims: [ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_CREATE],
+                onClick: () => router.push('/admin/posts/add-banner'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE],
               },
               {
                 value: 'Trash',
-                onClick: () => router.push('/admin/posts/tags/trash'),
-                claims: [ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE],
+                onClick: () => router.push('/admin/posts/banners-trash'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE],
               },
             ],
           }}
           columns={[
             {
-              title: 'Name',
+              title: 'Title',
               search: {
-                initialValue: router.query['searchBy.term'] as string,
+                initialValue: router.query['searchBy.title'] as string,
                 onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.term'];
-                  else router.query['searchBy.term'] = s;
+                  if (!s?.length) delete router.query['searchBy.title'];
+                  else router.query['searchBy.title'] = s;
                   router.push(router);
                 },
               },
               sort: {
-                initialValue: router.query['orderBy.term'] as 'ASC' | 'DESC',
+                initialValue: router.query['orderBy.title'] as 'ASC' | 'DESC',
                 onSortChange: (sort) => {
-                  router.query['orderBy.term'] = sort;
+                  router.query['orderBy.title'] = sort;
                   router.push(router);
                 },
                 onReset: () => {
-                  delete router.query['orderBy.term'];
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: 'Description',
-              search: {
-                initialValue: router.query['searchBy.description'] as string,
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.description'];
-                  else router.query['searchBy.description'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.description'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.description'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.description'];
+                  delete router.query['orderBy.title'];
                   router.push(router);
                 },
               },
@@ -362,19 +297,44 @@ const AdminTags = () => {
               },
             },
             {
+              title: <MiniEye />,
+              filter: {
+                textInput: {
+                  placeholder: '>=',
+                  onFilter: (value) => {
+                    console.log(value);
+                  },
+                  onReset: () => {},
+                },
+              },
+              sort: {
+                initialValue: router.query['orderBy.viewCount'] as
+                  | 'ASC'
+                  | 'DESC',
+                onSortChange: (sort) => {
+                  router.query['orderBy.viewCount'] = sort;
+                  router.push(router);
+                },
+                onReset: () => {
+                  delete router.query['orderBy.viewCount'];
+                  router.push(router);
+                },
+              },
+            },
+            {
               title: 'Actions',
             },
           ]}
           data={data}
-          loading={!tagsData}
+          loading={!bannersData}
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/tags`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/news`,
             currentPage: router.query.page
               ? +router.query.page
-              : tagsData?.meta.currentPage,
-            totalPages: tagsData?.meta.totalPages,
+              : bannersData?.meta.currentPage,
+            totalPages: bannersData?.meta.totalPages,
           }}
         />
       </div>
@@ -382,4 +342,4 @@ const AdminTags = () => {
   );
 };
 
-export default AdminTags;
+export default AdminBanners;

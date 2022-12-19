@@ -105,11 +105,6 @@ const ContactInfoFormModal: FC<IProps> = ({
       >
         {({
           isSubmitting,
-          errors,
-          touched,
-          values,
-          handleBlur,
-          handleChange,
           isValid,
           dirty,
         }) => (

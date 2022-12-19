@@ -25,6 +25,7 @@ import FilterToggle, {
 } from './sub-components/filter-children/FilterToggle';
 import { ClaimsEnum } from '../../../../models/auth/common';
 import { AuthGuard } from '../../../common/AuthGuard';
+import DropdownMenu from '../../../common/DropdownMenu';
 
 interface IProps {
   columns: IColumn[];
@@ -34,13 +35,15 @@ interface IProps {
   loading?: boolean;
   selectable?: boolean;
   onBulkDeleteButtonClick?: Function;
-  trashButton?: boolean;
-  trashButtonClaims?: ClaimsEnum[];
-  trashBtnOnClick?: Function;
   showChildren?: boolean;
-  addButton?: boolean;
-  addButtonClaims?: ClaimsEnum[];
-  onAddClick?: Function;
+  menu?: {
+    value?: JSX.Element;
+    items: {
+      claims?: ClaimsEnum[];
+      value: string | JSX.Element;
+      onClick: Function;
+    }[];
+  };
   emptyTrashButton?: boolean;
   onEmptyTrashButtonClick?: Function;
 }
@@ -71,15 +74,10 @@ const AdminTable: FC<IProps> = ({
   loading = false,
   selectable = true,
   onBulkDeleteButtonClick = () => {},
-  trashButton = false,
-  trashButtonClaims = [],
-  trashBtnOnClick,
   emptyTrashButton = false,
   onEmptyTrashButtonClick = () => {},
   showChildren = false,
-  addButton = false,
-  addButtonClaims = [],
-  onAddClick = () => {},
+  menu,
 }) => {
   const [checked, setChecked] = useState<string[]>([]);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
@@ -239,6 +237,45 @@ const AdminTable: FC<IProps> = ({
       </div>
       <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
         <div className="flex justify-start items-center min-w-max">
+          {menu && (
+            <DropdownMenu
+              btnValue={
+                <Button
+                  type="button"
+                  size="h-9"
+                  rounded="rounded-xl"
+                  variant="primary"
+                  extraCSSClasses="px-2.5 text-xs sm:text-sm transition-all duration-300 flex items-center focus:ring-0 focus:ring-offset-0"
+                  onClick={() => {
+                    onEmptyTrashButtonClick();
+                  }}
+                >
+                  {menu.value}
+                  {!menu.value && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path d="M17 2.75a.75.75 0 00-1.5 0v5.5a.75.75 0 001.5 0v-5.5zM17 15.75a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5zM3.75 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM4.5 2.75a.75.75 0 00-1.5 0v5.5a.75.75 0 001.5 0v-5.5zM10 11a.75.75 0 01.75.75v5.5a.75.75 0 01-1.5 0v-5.5A.75.75 0 0110 11zM10.75 2.75a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5zM10 6a2 2 0 100 4 2 2 0 000-4zM3.75 10a2 2 0 100 4 2 2 0 000-4zM16.25 10a2 2 0 100 4 2 2 0 000-4z" />
+                    </svg>
+                  )}
+                </Button>
+              }
+              alignment="left"
+              dropDownFromTopCss="top-11"
+              className="mt-2 ml-4"
+            >
+              {menu.items.map((item, i) => (
+                <AuthGuard key={i} claims={item.claims ?? []} redirect={false}>
+                  <DropdownMenu.Item onClick={() => item.onClick()}>
+                    {item.value}
+                  </DropdownMenu.Item>
+                </AuthGuard>
+              ))}
+            </DropdownMenu>
+          )}
           {emptyTrashButton && (
             <Button
               type="button"
@@ -253,46 +290,6 @@ const AdminTable: FC<IProps> = ({
               <span>Empty Trash</span>
             </Button>
           )}
-          <AuthGuard claims={addButtonClaims} redirect={false}>
-            {addButton && (
-              <Button
-                type="button"
-                size="h-9"
-                rounded="rounded-xl"
-                variant="primary"
-                extraCSSClasses="pl-2 pr-4 ml-4 mt-2 text-xs sm:text-sm transition-all duration-300 flex items-center"
-                onClick={() => {
-                  onAddClick();
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                >
-                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                </svg>
-                <span>Add</span>
-              </Button>
-            )}
-          </AuthGuard>
-          <AuthGuard claims={trashButtonClaims} redirect={false}>
-            {trashButton && trashBtnOnClick && (
-              <Button
-                type="button"
-                size="h-9"
-                rounded="rounded-xl"
-                variant="primary"
-                extraCSSClasses="px-4 ml-4 mt-2 text-xs sm:text-sm transition-all duration-300"
-                onClick={() => {
-                  trashBtnOnClick();
-                }}
-              >
-                Trash
-              </Button>
-            )}
-          </AuthGuard>
           {selectable && (
             <div
               className={`h-11 transition-all duration-300 overflow-hidden mt-2 pr-1 py-1 ${

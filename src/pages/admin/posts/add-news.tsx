@@ -5,22 +5,22 @@ import { AuthGuard } from '../../../components/common/AuthGuard';
 import { ClaimsEnum } from '../../../models/auth/common';
 import { PostTypeEnum } from '../../../models/posts/admin/post';
 
-const PostsAddNewPostPage: NextPage = () => {
+const PostsAddNewsPage: NextPage = () => {
   return (
     <>
       <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}>
         <AdminLayout
-          pageTitle="Add New Post"
+          pageTitle="Add News"
           breadCrumbs={[
             { label: 'Posts', href: '/admin/posts' },
-            { label: 'Add New Post' },
+            { label: 'Add News' },
           ]}
         >
-          <AdminPostForm postType={PostTypeEnum.BLOG} />
+          <AdminPostForm postType={PostTypeEnum.NEWS} />
         </AdminLayout>
       </AuthGuard>
     </>
   );
 };
 
-export default PostsAddNewPostPage;
+export default PostsAddNewsPage;

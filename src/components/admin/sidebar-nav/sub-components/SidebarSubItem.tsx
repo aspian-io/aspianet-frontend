@@ -17,8 +17,12 @@ const SubItem: FC<PropsWithChildren<IAdminSideBarSubItemProps>> = ({
     removeLeadingTrailingPathSlash(href).split('/').length > 2 &&
     router.pathname.startsWith(href);
 
+  const isDeeperPath =
+    removeLeadingTrailingPathSlash(href).split('/').length >
+    removeLeadingTrailingPathSlash(router.pathname).split('/').length;
+
   const activeLinkCssGen = (): string => {
-    return router.pathname === href || subPathsMatch
+    return router.pathname === href || (subPathsMatch && isDeeperPath)
       ? 'outline-none bg-gray-800 text-light'
       : '';
   };

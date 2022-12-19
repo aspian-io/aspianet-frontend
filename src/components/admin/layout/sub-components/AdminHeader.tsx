@@ -1,18 +1,11 @@
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/auth/common';
 import { AuthGuard } from '../../../common/AuthGuard';
 import AdminSideBar from '../../sidebar-nav/AdminSideBar';
 
 const AdminHeader = () => {
   const { data: session } = useSession();
-  // const router = useRouter();
-  // const pathName = router.pathname;
-  // const pathNameParts = pathName.replace(/^\/|\/$/g, '').split('/');
-  // const itemIsActive = (itemName: string) =>
-  //   pathNameParts.length > 1 &&
-  //   pathNameParts[1].toLowerCase() === itemName.toLowerCase();
 
   const getUserAvatarSrc = () => {
     if (session?.user.avatar) {
@@ -112,7 +105,7 @@ const AdminHeader = () => {
                 href="/admin/posts/add-new"
                 onActive={() => setActivePosts(true)}
               >
-                Add New
+                Add New Post
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
             <AuthGuard
@@ -130,6 +123,50 @@ const AdminHeader = () => {
                 onActive={() => setActivePosts(true)}
               >
                 Tags
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/news"
+                onActive={() => setActivePosts(true)}
+              >
+                All News
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/add-news"
+                onActive={() => setActivePosts(true)}
+              >
+                Add New News
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/banners"
+                onActive={() => setActivePosts(true)}
+              >
+                All Banners
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/add-banner"
+                onActive={() => setActivePosts(true)}
+              >
+                Add New Banner
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>

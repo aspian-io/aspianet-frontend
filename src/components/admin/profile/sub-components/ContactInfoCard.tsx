@@ -24,7 +24,7 @@ const ContactInfoCard: FC<IProps> = ({ userData }) => {
           <h4 className="font-bold text-primary text-base underline">
             Contact Info:
           </h4>
-          <DropdownMenu className="self-end">
+          <DropdownMenu className="self-end mb-6">
             <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
               Edit
             </DropdownMenu.Item>

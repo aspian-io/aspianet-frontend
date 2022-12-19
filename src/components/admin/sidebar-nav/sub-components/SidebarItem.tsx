@@ -91,7 +91,7 @@ const Item: IAdminSideBarItem<IAdminSideBarItemProps> = ({
       {hasSubItems && (
         <div
           className={`pt-2 ltr:pl-4 rtl:pr-4 overflow-hidden ${
-            tabOpen ? 'max-h-40' : 'max-h-0'
+            tabOpen ? 'max-h-72' : 'max-h-0'
           } transition-all duration-300`}
         >
           <div

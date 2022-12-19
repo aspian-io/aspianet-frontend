@@ -296,10 +296,19 @@ const AdminPosts = () => {
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
-          addButton
-          addButtonClaims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
-          onAddClick={() => {
-            router.push('/admin/posts/add-new');
+          menu={{
+            items: [
+              {
+                value: 'Add',
+                onClick: () => router.push('/admin/posts/add-new'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE],
+              },
+              {
+                value: 'Trash',
+                onClick: () => router.push('/admin/posts/trash'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE],
+              },
+            ],
           }}
           columns={[
             {
@@ -465,11 +474,6 @@ const AdminPosts = () => {
           loading={!postsData}
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
-          trashButton
-          trashButtonClaims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
-          trashBtnOnClick={() => {
-            router.push('/admin/posts/trash');
-          }}
           pagination={{
             baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts`,
             currentPage: router.query.page

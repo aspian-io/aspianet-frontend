@@ -31,7 +31,7 @@ const UserDetailsSecurityInfo: FC<IProps> = ({ userData }) => {
             Security Info:
           </h4>
           <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_EDIT]}>
-            <DropdownMenu className="self-end">
+            <DropdownMenu className="self-end mb-6">
               <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
                 General Edit
               </DropdownMenu.Item>

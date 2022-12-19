@@ -17,12 +17,11 @@ import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {
   title: string;
-  parentTitle?: string;
   slug: string;
   actions: JSX.Element;
 }
 
-const AdminPostsTrash = () => {
+const AdminNewsTrash = () => {
   const router = useRouter();
   const page =
     router.query['page'] && +router.query['page'] >= 1
@@ -55,13 +54,13 @@ const AdminPostsTrash = () => {
   };
 
   const fetcher = () =>
-    AdminPostAgent.softDeletedBlogsList(session, page, limit, initialSort());
+    AdminPostAgent.softDeletedNewsList(session, page, limit, initialSort());
   const {
-    data: postsData,
+    data: newsData,
     error,
     mutate,
   } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
-    `${AdminPostKeys.GET_SOFT_DELETED_BLOGS}?page=${page}&limit=${limit}${initialSort}`,
+    `${AdminPostKeys.GET_SOFT_DELETED_NEWS}?page=${page}&limit=${limit}${initialSort}`,
     fetcher
   );
 
@@ -83,7 +82,7 @@ const AdminPostsTrash = () => {
             await AdminPostAgent.recoverPost(session, id);
             await mutate();
             setRecoverLoading(false);
-            toast.success('The post recovered successfully.', {
+            toast.success('The news recovered successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setBtnId(null);
@@ -146,14 +145,13 @@ const AdminPostsTrash = () => {
     return {
       id: post.id,
       title: post.title,
-      parentTitle: post?.parent?.title,
       slug: post.slug,
       actions: actionsColumn(post.id),
     };
   }
 
-  const data: IDataType[] = postsData
-    ? postsData.items.map((p) => formatData(p))
+  const data: IDataType[] = newsData
+    ? newsData.items.map((p) => formatData(p))
     : [];
 
   return (
@@ -165,9 +163,9 @@ const AdminPostsTrash = () => {
         onConfirm={async () => {
           try {
             setRemoveLoading(true);
-            await AdminPostAgent.emptyBlogsTrash(session);
+            await AdminPostAgent.emptyNewsTrash(session);
             await mutate();
-            toast.success('Posts trash emptied successfully.', {
+            toast.success('News trash emptied successfully.', {
               className: 'bg-success text-light text-sm',
             });
             setRemoveLoading(false);
@@ -182,7 +180,7 @@ const AdminPostsTrash = () => {
         }}
         show={emptyTrashConfirm}
         onConfirmLoading={removeLoading}
-        text="Are you sure you want to empty the posts trash and delete all the items permanently?"
+        text="Are you sure you want to empty the news trash and delete all the items permanently?"
       />
       <AuthGuard
         claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
@@ -199,7 +197,7 @@ const AdminPostsTrash = () => {
               if (itemToDelete) {
                 await AdminPostAgent.deletePermanently(session, itemToDelete);
                 await mutate();
-                toast.success('The post deleted successfully.', {
+                toast.success('The news deleted successfully.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -219,20 +217,17 @@ const AdminPostsTrash = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the post permanently?"
+          text="Are you sure you want to delete the news permanently?"
         />
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
           selectable={false}
-          emptyTrashButton={postsData?.items && postsData.items.length > 0}
+          emptyTrashButton={newsData?.items && newsData.items.length > 0}
           onEmptyTrashButtonClick={() => setEmptyTrashConfirm(true)}
           columns={[
             {
               title: 'Title',
-            },
-            {
-              title: 'Parent',
             },
             {
               title: 'Slug',
@@ -242,13 +237,13 @@ const AdminPostsTrash = () => {
             },
           ]}
           data={data}
-          loading={!postsData}
+          loading={!newsData}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/trash`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/news-trash`,
             currentPage: router.query.page
               ? +router.query.page
-              : postsData?.meta.currentPage,
-            totalPages: postsData?.meta.totalPages,
+              : newsData?.meta.currentPage,
+            totalPages: newsData?.meta.totalPages,
           }}
         />
       </div>
@@ -256,4 +251,4 @@ const AdminPostsTrash = () => {
   );
 };
 
-export default AdminPostsTrash;
+export default AdminNewsTrash;

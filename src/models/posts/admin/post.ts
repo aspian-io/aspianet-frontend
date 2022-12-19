@@ -1,7 +1,6 @@
 import { Expose, plainToClassFromExist, Transform } from "class-transformer";
 import { IBaseEntity, IBaseMinimalEntity } from "../../common/base-entities";
 import { IFileEntity } from "../../files/admin/file";
-import { IFile } from "../../files/file";
 import { ITaxonomyEntity } from "../../taxonomies/admin/taxonomy";
 import { IUserEntity } from "../../users/admin/user";
 
@@ -39,6 +38,15 @@ export enum PostErrorsEnum {
 export enum PostErrorsInternalCodeEnum {
   DUPLICATE_POST = 4001,
   DUPLICATE_SLUG = 4002,
+}
+
+export interface IPostsDelayedJobs {
+  jobId: string;
+  title: string;
+  slug: string;
+  type: PostTypeEnum;
+  scheduledToPublish: Date;
+  scheduledToArchive: Date;
 }
 
 export interface IPostEntity extends IBaseEntity {
@@ -82,7 +90,7 @@ export class PostFormValues implements Partial<IPostEntity> {
   @Expose() excerpt?: string = '';
   @Expose() content?: string = '';
   @Expose() slug?: string = '';
-  @Expose() featuredImageId?: string = '';
+  @Expose() featuredImageId?: string = undefined;
   @Expose() visibility: PostVisibilityEnum = PostVisibilityEnum.PUBLIC;
   @Expose() status: PostStatusEnum = PostStatusEnum.PUBLISH;
   @Expose() scheduledToPublish?: Date = undefined;
@@ -91,7 +99,7 @@ export class PostFormValues implements Partial<IPostEntity> {
   @Expose() type: PostTypeEnum = PostTypeEnum.BLOG;
   @Expose() isPinned?: boolean | undefined = false;
   @Expose() order?: number | undefined = 0;
-  @Expose() parentId?: string = '';
+  @Expose() parentId?: string = undefined;
   @Expose() taxonomiesIds: string[] = [];
   @Expose() attachmentsIds: string[] = [];
   @Expose() slugsHistory: IPostSlugsHistoryEntity[] = [];

@@ -27,7 +27,7 @@ const UserDetailsSocialInfo: FC<IProps> = ({ userData }) => {
             Social Network Info:
           </h4>
           <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_EDIT]}>
-            <DropdownMenu className="self-end">
+            <DropdownMenu className="self-end mb-6">
               <DropdownMenu.Item onClick={() => setShowEditModal(true)}>
                 Edit
               </DropdownMenu.Item>

@@ -1,26 +1,25 @@
 import { NextPage } from 'next';
 import AdminLayout from '../../../components/admin/layout/AdminLayout';
-import AdminPostForm from '../../../components/admin/posts/AdminPostForm';
+import AdminNewsTrash from '../../../components/admin/posts/AdminNewsTrash';
 import { AuthGuard } from '../../../components/common/AuthGuard';
 import { ClaimsEnum } from '../../../models/auth/common';
-import { PostTypeEnum } from '../../../models/posts/admin/post';
 
-const PostsAddNewPostPage: NextPage = () => {
+const PostsNewsTrashPage: NextPage = () => {
   return (
     <>
-      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}>
+      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}>
         <AdminLayout
-          pageTitle="Add New Post"
+          pageTitle="News Trash"
           breadCrumbs={[
             { label: 'Posts', href: '/admin/posts' },
-            { label: 'Add New Post' },
+            { label: 'News Trash' },
           ]}
         >
-          <AdminPostForm postType={PostTypeEnum.BLOG} />
+          <AdminNewsTrash />
         </AdminLayout>
       </AuthGuard>
     </>
   );
 };
 
-export default PostsAddNewPostPage;
+export default PostsNewsTrashPage;

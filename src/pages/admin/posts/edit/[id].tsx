@@ -20,14 +20,14 @@ const PostEditPage: NextPage<IProps> = ({ id, postData }) => {
       claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE, ClaimsEnum.POST_EDIT]}
     >
       <AdminLayout
-        pageTitle="Post Edit"
+        pageTitle="Edit"
         breadCrumbs={[
           { label: 'Posts', href: '/admin/posts' },
           { label: 'Edit' },
         ]}
       >
         <AdminPostForm
-          postType={PostTypeEnum.BLOG}
+          postType={postData.type}
           editPostId={id}
           editPostData={postData}
         />
