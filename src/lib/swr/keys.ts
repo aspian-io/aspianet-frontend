@@ -43,6 +43,14 @@ export const AdminPostKeys = {
   GET_SOFT_DELETED_PAGES: `${ BaseURLs.API }/admin/posts/soft-deleted/pages-trash`,
 } as const;
 
+// COMMENT KEYS
+export const AdminCommentKeys = {
+  GET_LIST: `${ BaseURLs.API }/admin/comments`,
+  GET_COMMENT_REPLIES: `${ BaseURLs.API }/admin/comments/replies`,
+  GET_DETAILS: `${ BaseURLs.API }/admin/comments`,
+  GET_SOFT_DELETED_COMMENTS: `${ BaseURLs.API }/admin/comments/soft-deleted/trash`,
+} as const;
+
 // FILE KEYS
 export const AdminFileKeys = {
   GET_ALL_FILES: `${ BaseURLs.API }/admin/files`,

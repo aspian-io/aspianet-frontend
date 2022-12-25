@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import { AdminUserAgent } from '../../../lib/axios/agent';
@@ -40,42 +40,17 @@ const AdminUsers = () => {
 
   if (error) router.push('/500');
 
-  const actionsColumn = (id: string) => (
-    <div className="flex justify-center items-center w-full space-x-2">
-      <Button
-        rounded="rounded-md"
-        size="h-5"
-        type="button"
-        variant="primary"
-        extraCSSClasses="px-1.5 text-xs"
-        onClick={() => {
-          router.push(`users/details/${id}`);
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-3 h-3"
-        >
-          <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-          <path
-            fillRule="evenodd"
-            d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Button>
-      <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_DELETE]}>
+  const actionsColumn = useCallback(
+    (id: string) => (
+      <div className="flex justify-center items-center w-full space-x-2">
         <Button
           rounded="rounded-md"
           size="h-5"
           type="button"
-          variant="danger"
+          variant="primary"
           extraCSSClasses="px-1.5 text-xs"
           onClick={() => {
-            setItemToDelete(id);
-            setRemoveConfirm(true);
+            router.push(`users/details/${id}`);
           }}
         >
           <svg
@@ -84,27 +59,59 @@ const AdminUsers = () => {
             fill="currentColor"
             className="w-3 h-3"
           >
+            <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
             <path
               fillRule="evenodd"
-              d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+              d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
               clipRule="evenodd"
             />
           </svg>
         </Button>
-      </AuthGuard>
-    </div>
+        <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_DELETE]}>
+          <Button
+            rounded="rounded-md"
+            size="h-5"
+            type="button"
+            variant="danger"
+            extraCSSClasses="px-1.5 text-xs"
+            onClick={() => {
+              setItemToDelete(id);
+              setRemoveConfirm(true);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-3 h-3"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </Button>
+        </AuthGuard>
+      </div>
+    ),
+    [router]
   );
 
-  const data: IDataType[] = users
-    ? users.items.map((user) => ({
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        mobilePhone: user.mobilePhone,
-        actions: actionsColumn(user.id),
-      }))
-    : [];
+  const data: IDataType[] = useMemo(
+    () =>
+      users
+        ? users.items.map((user) => ({
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            mobilePhone: user.mobilePhone,
+            actions: actionsColumn(user.id),
+          }))
+        : [],
+    [actionsColumn, users]
+  );
 
   return (
     <>
@@ -149,6 +156,20 @@ const AdminUsers = () => {
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
+          menu={{
+            items: [
+              {
+                value: 'Add',
+                onClick: () => router.push('/admin/users/add-new'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.USER_CREATE],
+              },
+              {
+                value: 'Trash',
+                onClick: () => router.push('/admin/users/trash'),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.USER_DELETE],
+              },
+            ],
+          }}
           selectable={false}
           columns={[
             {
@@ -251,11 +272,6 @@ const AdminUsers = () => {
           ]}
           data={data}
           loading={!users}
-          trashButton
-          trashButtonClaims={[ClaimsEnum.ADMIN, ClaimsEnum.USER_DELETE]}
-          trashBtnOnClick={() => {
-            router.push('users/trash');
-          }}
           pagination={{
             baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/users`,
             currentPage: router.query.page

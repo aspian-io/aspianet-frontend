@@ -14,6 +14,7 @@ import { ISettingsEntity, SettingsFormValues, SettingsKeyEnum, SettingsServiceEn
 import { IPostEntity, IPostsDelayedJobs, PostFormValues, PostTypeEnum } from "../../models/posts/admin/post";
 import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
 import { ITaxonomyEntity, ITaxonomySlugsHistoryEntity, TaxonomyCreateFormValues, TaxonomyEditFormValues } from "../../models/taxonomies/admin/taxonomy";
+import { CommentCreateFormValues, CommentEditFormValues, ICommentEntity } from "../../models/comments/admin/comment";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -137,14 +138,14 @@ export const AdminPostAgent = {
   details: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.get( `/admin/posts/${ postId }`, { headers: authHeader( session ) } ),
   softDelete: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.del( `/admin/posts/soft-delete/${ postId }`, { headers: authHeader( session ) } ),
   softDeleteAll: ( session: Session | null, postIds: string[] ): Promise<IPostEntity[]> => apiRequests.del( `/admin/posts/soft-delete-all`, { headers: authHeader( session ), data: { ids: postIds } } ),
-  softDeletedBlogsList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/blogs-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedBannersList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/banners-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedEmailTemplatesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/email-templates-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedNewsList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/news-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedNewsletterHeadersList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-headers-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedNewsletterBodiesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-bodies-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedNewsletterFootersList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-footers-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
-  softDeletedPagesList: ( session: Session | null, page: number, limit: number, initialSort: string = '' ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/pages-trash?page=${ page }&limit=${ limit }${ initialSort }`, { headers: authHeader( session ) } ),
+  softDeletedBlogsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/blogs-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedBannersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/banners-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedEmailTemplatesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/email-templates-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedNewsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/news-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedNewsletterHeadersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-headers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedNewsletterBodiesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-bodies-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedNewsletterFootersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-footers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedPagesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/pages-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   recoverPost: ( session: Session | null, postId: string ): Promise<ITaxonomyEntity> => apiRequests.patch( `/admin/posts/recover/${ postId }`, {}, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, postId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/posts/permanent-delete/${ postId }`, { headers: authHeader( session ) } ),
   emptyBlogsTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-blogs-trash`, { headers: authHeader( session ) } ),
@@ -165,6 +166,24 @@ export const AdminFileAgent = {
   details: ( session: Session | null, fileId: string ): Promise<IFileEntity> => apiRequests.get( `/admin/files/${ fileId }`, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, fileId: string ): Promise<IFileEntity> => apiRequests.del( `/admin/files/permanent-remove/${ fileId }`, { headers: authHeader( session ) } ),
   bulkDeletePermanently: ( session: Session | null, fileIds: string[] ): Promise<IFileEntity[]> => apiRequests.del( `/admin/files/bulk-permanent-remove`, { headers: authHeader( session ), data: { ids: [ ...fileIds ] } } ),
+};
+
+// Comment Agent
+export const AdminCommentAgent = {
+  create: ( session: Session | null, comment: CommentCreateFormValues ): Promise<ICommentEntity> => apiRequests.post( `/admin/comments`, comment, { headers: authHeader( session ) } ),
+  edit: ( session: Session | null, commentId: string, comment: CommentEditFormValues ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/${ commentId }`, comment, { headers: authHeader( session ) } ),
+  approve: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/approve/${ commentId }`, {}, { headers: authHeader( session ) } ),
+  reject: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/reject/${ commentId }`, {}, { headers: authHeader( session ) } ),
+  list: ( session: Session | null, qs?: string ): Promise<IPaginated<ICommentEntity>> => apiRequests.get( `/admin/comments${ qs }`, { headers: authHeader( session ) } ),
+  commentRepliesByParentId: ( session: Session | null, parentId: string ): Promise<ICommentEntity[]> => apiRequests.get( `/admin/comments/replies/${ parentId }`, { headers: authHeader( session ) } ),
+  details: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.get( `/admin/comments/${ commentId }`, { headers: authHeader( session ) } ),
+  unseenNum: ( session: Session | null ): Promise<{ unseenNum: number; }> => apiRequests.get( `/admin/comments/unseen`, { headers: authHeader( session ) } ),
+  softDelete: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.del( `/admin/comments/soft-delete/${ commentId }`, { headers: authHeader( session ) } ),
+  softDeleteAll: ( session: Session | null, commentIds: string[] ): Promise<ICommentEntity[]> => apiRequests.del( `/admin/comments/soft-delete-all`, { headers: authHeader( session ), data: { ids: commentIds } } ),
+  softDeletedCommentsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<ICommentEntity>> => apiRequests.get( `/admin/comments/soft-deleted/trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  recover: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/recover/${ commentId }`, {}, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.del( `/admin/comments/permanent-delete/${ commentId }`, { headers: authHeader( session ) } ),
+  emptyTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/comments/empty-trash`, { headers: authHeader( session ) } ),
 };
 
 /*********** ADMIN REGION END **************/
@@ -198,6 +217,12 @@ export const UserAgent = {
   changePassword: ( body: IChangePassword, session: Session | null ): Promise<IUserProfile> => apiRequests.patch( '/users/change-password', body, { headers: authHeader( session ) } ),
   getBookmarks: ( page: number, session: Session | null ): Promise<IPaginated<IBookmarkPost>> => apiRequests.get( `/users/profile/bookmarks?page=${ page }&limit=6`, { headers: authHeader( session ) } ),
 };
+
+// Comment Agent
+export const CommentAgent = {
+  like: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.post( `/comments/${ commentId }/like`, {}, { headers: authHeader( session ) } ),
+  dislike: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.post( `/comments/${ commentId }/dislike`, {}, { headers: authHeader( session ) } ),
+}
 
 
 /*********** CLIENT REGION START **************/

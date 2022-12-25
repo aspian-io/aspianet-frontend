@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
           const statusCode = err.response?.data.statusCode;
           const internalCode = err.response?.data.internalCode;
 
-          if ( err.response?.data.statusCode === 401 ) {
+          if ( statusCode === 401 ) {
             throw new Error( JSON.stringify( { statusCode: 401, internalCode: 0, message: 'Email or password is incorrect' } ) );
           }
           if ( internalCode && internalCode === UserErrorsInternalCodeEnum.INACTIVE_ACCOUNT ) {

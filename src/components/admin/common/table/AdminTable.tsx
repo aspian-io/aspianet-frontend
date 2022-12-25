@@ -1,4 +1,12 @@
-import React, { FC, useEffect, useId, useState, Fragment } from 'react';
+import React, {
+  FC,
+  useEffect,
+  useId,
+  useState,
+  Fragment,
+  useMemo,
+  memo,
+} from 'react';
 import Button from '../../../common/Button';
 import LoadingSpinner from '../../../common/LoadingSpinner';
 import AdminPagination, {
@@ -62,13 +70,13 @@ interface IColumn {
 }
 
 export interface ITableDataType extends Record<string, any> {
-  id: string | number;
+  id: string;
   children?: any[];
 }
 
 const AdminTable: FC<IProps> = ({
   columns,
-  data,
+  data: rawData,
   pagination,
   onSelectColumns,
   loading = false,
@@ -82,6 +90,12 @@ const AdminTable: FC<IProps> = ({
   const [checked, setChecked] = useState<string[]>([]);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const selectAllInputId = useId();
+  const data = useMemo(() => {
+    setChecked([]);
+    setShowDeleteBtn(false);
+    document.querySelectorAll('input').forEach((i) => (i.checked = false));
+    return rawData;
+  }, [rawData]);
 
   function checkIfSomeChecked() {
     const checkboxes: NodeListOf<HTMLInputElement> = document.getElementsByName(
@@ -156,6 +170,7 @@ const AdminTable: FC<IProps> = ({
                       checkIfSomeChecked();
                       checkIfAllChecked();
                     }}
+                    checked={checked.includes(d.id)}
                     className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0"
                   />
                 </td>
@@ -214,11 +229,11 @@ const AdminTable: FC<IProps> = ({
     if (onSelectColumns) onSelectColumns(checked);
   }, [checked, onSelectColumns]);
 
-  useEffect(() => {
-    setChecked([]);
-    setShowDeleteBtn(false);
-    document.querySelectorAll('input').forEach((i) => (i.checked = false));
-  }, [data.length]);
+  // useEffect(() => {
+  //   setChecked([]);
+  //   setShowDeleteBtn(false);
+  //   document.querySelectorAll('input').forEach((i) => (i.checked = false));
+  // }, []);
 
   return (
     <div className="rounded-3xl bg-light py-6 px-2 w-full">
@@ -441,4 +456,4 @@ const AdminTable: FC<IProps> = ({
   );
 };
 
-export default AdminTable;
+export default memo(AdminTable);

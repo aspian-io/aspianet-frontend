@@ -23,7 +23,7 @@ export interface IAdminSideBarItem<P> extends FC<PropsWithChildren<P>> {
 
 export interface IAdminSideBarItemProps {
   itemIcon: JSX.Element;
-  itemTitle: string;
+  itemTitle: string | JSX.Element;
   itemHref?: string;
   hasSubItems?: boolean;
   activeItem?: boolean;

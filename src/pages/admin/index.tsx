@@ -10,7 +10,9 @@ const AdminPage: NextPage = (props) => {
         <AdminLayout
           pageTitle="Dashboard"
           breadCrumbs={[{ label: 'Dashboard' }]}
-        ></AdminLayout>
+        >
+          <div></div>
+        </AdminLayout>
       </AuthGuard>
     </>
   );

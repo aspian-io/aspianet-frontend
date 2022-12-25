@@ -1,11 +1,33 @@
+import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
+import useSWR from 'swr';
+import { AdminCommentAgent } from '../../../../lib/axios/agent';
 import { AvatarSourceEnum, ClaimsEnum } from '../../../../models/auth/common';
+import { INestError } from '../../../../models/common/error';
 import { AuthGuard } from '../../../common/AuthGuard';
 import AdminSideBar from '../../sidebar-nav/AdminSideBar';
 
 const AdminHeader = () => {
   const { data: session } = useSession();
+
+  const fetcher = () => AdminCommentAgent.unseenNum(session);
+
+  const { data: commentCounter } = useSWR<
+    { unseenNum: number },
+    AxiosError<INestError>
+  >(`/admin/comments/unseen`, fetcher);
+
+  const commentTitle = (
+    <div className="flex justify-center items-center -mr-3">
+      <span className="mr-auto">Comments</span>
+      {commentCounter && commentCounter.unseenNum > 0 && (
+        <div className="px-1.5 py-0.5 rounded-full bg-danger text-light text-xs">
+          {commentCounter.unseenNum}
+        </div>
+      )}
+    </div>
+  );
 
   const getUserAvatarSrc = () => {
     if (session?.user.avatar) {
@@ -318,7 +340,7 @@ const AdminHeader = () => {
                 />
               </svg>
             }
-            itemTitle="Comments"
+            itemTitle={commentTitle}
             itemHref="/admin/comments"
           />
         </AuthGuard>
