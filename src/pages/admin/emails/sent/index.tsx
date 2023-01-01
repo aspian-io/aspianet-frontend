@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
-import AdminLayout from '../../../components/admin/layout/AdminLayout';
-import { AuthGuard } from '../../../components/common/AuthGuard';
-import { ClaimsEnum } from '../../../models/auth/common';
-import AdminPages from '../../../components/admin/pages/AdminPages';
-import AdminSentEmails from '../../../components/admin/emails/AdminSentEmails';
+import AdminLayout from '../../../../components/admin/layout/AdminLayout';
+import { AuthGuard } from '../../../../components/common/AuthGuard';
+import { ClaimsEnum } from '../../../../models/auth/common';
+import AdminSentEmails from '../../../../components/admin/emails/AdminSentEmails';
 
 const SentEmailsPage: NextPage = () => {
   return (

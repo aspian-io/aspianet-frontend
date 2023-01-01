@@ -550,14 +550,19 @@ const AdminHeader = () => {
             activeItem={activeAppearance}
           >
             <AuthGuard
-              claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}
+              claims={[
+                ClaimsEnum.ADMIN,
+                ClaimsEnum.TAXONOMY_EDIT,
+                ClaimsEnum.TAXONOMY_CREATE,
+                ClaimsEnum.TAXONOMY_DELETE,
+              ]}
               redirect={false}
             >
               <AdminSideBar.Item.SubItem
-                href="/admin/appearance/personalization"
+                href="/admin/appearance/menus"
                 onActive={() => setActiveAppearance(true)}
               >
-                Personalization
+                Menus
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
             <AuthGuard
@@ -575,22 +580,6 @@ const AdminHeader = () => {
                 onActive={() => setActiveAppearance(true)}
               >
                 Widgets
-              </AdminSideBar.Item.SubItem>
-            </AuthGuard>
-            <AuthGuard
-              claims={[
-                ClaimsEnum.ADMIN,
-                ClaimsEnum.TAXONOMY_EDIT,
-                ClaimsEnum.TAXONOMY_CREATE,
-                ClaimsEnum.TAXONOMY_DELETE,
-              ]}
-              redirect={false}
-            >
-              <AdminSideBar.Item.SubItem
-                href="/admin/appearance/menus"
-                onActive={() => setActiveAppearance(true)}
-              >
-                Menus
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>
