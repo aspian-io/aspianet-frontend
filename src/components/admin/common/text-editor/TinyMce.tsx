@@ -32,9 +32,9 @@ const TinyMce = forwardRef<Editor, IProps>(
     ref
   ) => {
     const fullPlugins =
-      'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons';
+      'importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media codesample table pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons';
     const fullToolbar =
-      'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl code';
+      'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  print | insertfile image media link anchor codesample | ltr rtl code';
 
     const miniPlugins =
       'autolink directionality code link codesample anchor charmap insertdatetime lists wordcount emoticons';

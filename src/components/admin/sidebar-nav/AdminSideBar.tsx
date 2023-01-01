@@ -21,6 +21,7 @@ import {
 } from './constants';
 import { AuthGuard } from '../../common/AuthGuard';
 import { ClaimsEnum } from '../../../models/auth/common';
+import { useRouter } from 'next/router';
 
 const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
   logo,
@@ -32,6 +33,7 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
 }) => {
   const { sidebar } = useSelector(getAdminLayoutState);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (window.innerWidth >= 768) {
@@ -107,7 +109,13 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                 <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.SETTING_EDIT]}>
                   <li>
                     <div className="relative text-gray-500 group">
-                      <div className="absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-2 rtl:pr-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500">
+                      <div
+                        className={`absolute inset-y-0 ltr:left-0 rtl:right-0 flex items-center ltr:pl-2 rtl:pr-2 pointer-events-none hoverable:group-hover:text-primary-dark group-focus-within:text-primary-dark transition-all duration-500 ${
+                          router.asPath === '/admin/settings'
+                            ? 'text-primary-dark'
+                            : ''
+                        }`}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -130,7 +138,11 @@ const AdminSideBar: IAdminSideBar<IAdminSideBarProps> = ({
                       </div>
                       <Link
                         href="/admin/settings"
-                        className="inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500"
+                        className={`inline-block w-full ltr:pl-9 ltr:pr-4 rtl:pr-9 rtl:pl-4 py-2 text-xs hover:bg-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-gray-500 focus:bg-gray-800 hoverable:group-hover:text-light group-focus-within:text-light transition-all duration-500 ${
+                          router.asPath === '/admin/settings'
+                            ? 'outline-none bg-gray-800 text-light'
+                            : ''
+                        }`}
                       >
                         Settings
                       </Link>

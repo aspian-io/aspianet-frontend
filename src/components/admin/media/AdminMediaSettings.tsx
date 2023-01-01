@@ -51,68 +51,47 @@ const AdminMediaSettings = () => {
   if (error) router.push('/500');
   if (!settingsData) return <Loading />;
 
-  const fileWaterMarkActive = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_ACTIVE
-  )[0];
-
-  const fileWaterMarkImageID = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_IMAGE_ID
-  )[0];
-
-  const fileWaterMarToImageDimensions = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_TO_IMAGE_DIMENSIONS
-  )[0];
-
-  const fileWaterMarkPlacement = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_PLACEMENT
-  )[0];
-
-  const fileWaterMarkMarginsTop = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_MARGINS_TOP
-  )[0];
-
-  const fileWaterMarkMarginsRight = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_MARGINS_RIGHT
-  )[0];
-
-  const fileWaterMarkMarginsBottom = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_MARGINS_BOTTOM
-  )[0];
-
-  const fileWaterMarkMarginsLeft = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_MARGINS_LEFT
-  )[0];
-
-  const fileWaterMarkOpacity = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_OPACITY
-  )[0];
-
-  const fileWaterMarkSizes = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.FILE_WATERMARK_SIZES
-  )[0];
-
   const fileWatermarkSizesIncludes = (
     fileWatermarkSize: '480' | '640' | '800' | '1200' | '1600'
   ) => {
-    if (fileWaterMarkSizes?.value) {
-      const sizes = fileWaterMarkSizes.value.split(',');
+    const fileWaterMarkSizes = getSetting(
+      SettingsKeyEnum.FILE_WATERMARK_SIZES
+    )?.value;
+    if (fileWaterMarkSizes) {
+      const sizes = fileWaterMarkSizes.split(',');
       return sizes.includes(fileWatermarkSize);
     }
     return false;
   };
 
+  function getSetting(key: SettingsKeyEnum) {
+    return settingsData?.filter((s) => s.key === key)[0];
+  }
+
   const initialValues = {
-    FILE_WATERMARK_ACTIVE: fileWaterMarkActive?.value ?? undefined,
-    FILE_WATERMARK_IMAGE_ID: fileWaterMarkImageID?.value ?? undefined,
+    FILE_WATERMARK_ACTIVE:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_ACTIVE)?.value ?? undefined,
+    FILE_WATERMARK_IMAGE_ID:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_IMAGE_ID)?.value ?? undefined,
     FILE_WATERMARK_TO_IMAGE_DIMENSIONS:
-      fileWaterMarToImageDimensions?.value ?? undefined,
-    FILE_WATERMARK_PLACEMENT: fileWaterMarkPlacement?.value ?? undefined,
-    FILE_WATERMARK_MARGINS_TOP: fileWaterMarkMarginsTop?.value ?? undefined,
-    FILE_WATERMARK_MARGINS_RIGHT: fileWaterMarkMarginsRight?.value ?? undefined,
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_TO_IMAGE_DIMENSIONS)?.value ??
+      undefined,
+    FILE_WATERMARK_PLACEMENT:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_PLACEMENT)?.value ?? undefined,
+    FILE_WATERMARK_MARGINS_TOP:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_MARGINS_TOP)?.value ??
+      undefined,
+    FILE_WATERMARK_MARGINS_RIGHT:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_MARGINS_RIGHT)?.value ??
+      undefined,
     FILE_WATERMARK_MARGINS_BOTTOM:
-      fileWaterMarkMarginsBottom?.value ?? undefined,
-    FILE_WATERMARK_MARGINS_LEFT: fileWaterMarkMarginsLeft?.value ?? undefined,
-    FILE_WATERMARK_OPACITY: fileWaterMarkOpacity?.value ?? undefined,
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_MARGINS_BOTTOM)?.value ??
+      undefined,
+    FILE_WATERMARK_MARGINS_LEFT:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_MARGINS_LEFT)?.value ??
+      undefined,
+    FILE_WATERMARK_OPACITY:
+      getSetting(SettingsKeyEnum.FILE_WATERMARK_OPACITY)?.value ?? undefined,
     FILE_WATERMARK_SIZES_480: fileWatermarkSizesIncludes('480'),
     FILE_WATERMARK_SIZES_640: fileWatermarkSizesIncludes('640'),
     FILE_WATERMARK_SIZES_800: fileWatermarkSizesIncludes('800'),
@@ -236,6 +215,7 @@ const AdminMediaSettings = () => {
       >
         {({
           isSubmitting,
+          setFieldValue,
           isValid,
           dirty,
           values,
@@ -268,11 +248,23 @@ const AdminMediaSettings = () => {
                 </Button>
               </div>
               <div className="flex justify-start items-start space-x-2">
-                <Field
+                <input
                   id={SettingsKeyEnum.FILE_WATERMARK_ACTIVE}
                   type={InputTypeEnum.checkbox}
                   name={SettingsKeyEnum.FILE_WATERMARK_ACTIVE}
                   className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
+                  onChange={(e) => {
+                    e.target.checked
+                      ? setFieldValue(
+                          SettingsKeyEnum.FILE_WATERMARK_ACTIVE,
+                          'true'
+                        )
+                      : setFieldValue(
+                          SettingsKeyEnum.FILE_WATERMARK_ACTIVE,
+                          'false'
+                        );
+                  }}
+                  defaultChecked={values.FILE_WATERMARK_ACTIVE === 'true'}
                 />
                 <label
                   htmlFor={SettingsKeyEnum.FILE_WATERMARK_ACTIVE}

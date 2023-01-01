@@ -36,11 +36,15 @@ export const AdminPostKeys = {
   GET_NEWS_LIST: `${ BaseURLs.API }/admin/posts/news`,
   GET_BANNERS_LIST: `${ BaseURLs.API }/admin/posts/banners`,
   GET_PAGES_LIST: `${ BaseURLs.API }/admin/posts/banners`,
+  GET_EMAIL_TEMPLATES_LIST: `${ BaseURLs.API }/admin/posts/email-templates`,
+  GET_NEWSLETTER_TEMPLATES_LIST: `${ BaseURLs.API }/admin/posts/newsletter-templates`,
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,
   GET_SOFT_DELETED_BLOGS: `${ BaseURLs.API }/admin/posts/soft-deleted/blogs-trash`,
   GET_SOFT_DELETED_NEWS: `${ BaseURLs.API }/admin/posts/soft-deleted/news-trash`,
   GET_SOFT_DELETED_BANNERS: `${ BaseURLs.API }/admin/posts/soft-deleted/banners-trash`,
   GET_SOFT_DELETED_PAGES: `${ BaseURLs.API }/admin/posts/soft-deleted/pages-trash`,
+  GET_SOFT_DELETED_EMAIL_TEMPLATES: `${ BaseURLs.API }/admin/posts/soft-deleted/email-templates-trash`,
+  GET_SOFT_DELETED_NEWSLETTER_TEMPLATES: `${ BaseURLs.API }/admin/posts/soft-deleted/newsletter-templates-trash`,
 } as const;
 
 // COMMENT KEYS
@@ -55,6 +59,23 @@ export const AdminCommentKeys = {
 export const AdminFileKeys = {
   GET_ALL_FILES: `${ BaseURLs.API }/admin/files`,
   GET_FILE_DETAILS: `${ BaseURLs.API }/admin/files`,
+} as const;
+
+// EMAIL KEYS
+export const AdminEmailKeys = {
+  GET_SENT_EMAILS_LIST: `${ BaseURLs.API }/admin/emails/all-sent-emails`,
+  GET_SENT_EMAIL_DETAILS: `${ BaseURLs.API }/admin/emails/sent`,
+} as const;
+
+// NEWSLETTER KEYS
+export const AdminNewsletterKeys = {
+  GET_SUBSCRIBERS_LIST: `${ BaseURLs.API }/admin/newsletter/subscribers`,
+  GET_SUBSCRIBER_DETAILS: `${ BaseURLs.API }/admin/newsletter/subscribers`,
+  GET_SOFT_DELETED_SUBSCRIBERS: `${ BaseURLs.API }/admin/newsletter/subscribers/soft-deleted/subscribers-trash`,
+
+  GET_CAMPAIGNS_LIST: `${ BaseURLs.API }/admin/newsletter/campaigns`,
+  GET_CAMPAIGN_DETAILS: `${ BaseURLs.API }/admin/newsletter/campaigns`,
+  GET_SOFT_DELETED_CAMPAIGNS: `${ BaseURLs.API }/admin/newsletter/campaigns/soft-deleted/campaigns-trash`,
 } as const;
 
 /*********** ADMIN REGION END **************/

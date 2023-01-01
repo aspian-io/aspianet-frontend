@@ -10,7 +10,7 @@ export enum AvatarSourceEnum {
 
 export interface IClaimEntity {
   id: string;
-  name: ClaimsEnum
+  name: ClaimsEnum;
 }
 
 export enum ClaimsEnum {
@@ -38,6 +38,8 @@ export enum ClaimsEnum {
   COMMENT_EDIT = 'comment_w+',
   COMMENT_DELETE = 'comment_d',
   EMAIL_SEND = 'mail_send',
+  EMAIL_READ = "mail_read",
+  EMAIL_DELETE = "mail_delete",
   NEWSLETTER_READ = 'newsletter_r',
   NEWSLETTER_CREATE = 'newsletter_w',
   NEWSLETTER_EDIT = 'newsletter_w+',

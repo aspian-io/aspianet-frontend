@@ -15,6 +15,9 @@ import { IPostEntity, IPostsDelayedJobs, PostFormValues, PostTypeEnum } from "..
 import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
 import { ITaxonomyEntity, ITaxonomySlugsHistoryEntity, TaxonomyCreateFormValues, TaxonomyEditFormValues } from "../../models/taxonomies/admin/taxonomy";
 import { CommentCreateFormValues, CommentEditFormValues, ICommentEntity } from "../../models/comments/admin/comment";
+import { AdminSubscriberCreateFormValues, AdminSubscriberUpdateFormValues, ISubscriberEntity } from "../../models/newsletter/subscribers/admin/subscriber";
+import { ICampaignEntity, NewsletterCampaignCreateFormValues, NewsletterCampaignUpdateFormValues } from "../../models/newsletter/admin/campaign";
+import { EmailSendFormValues, IEmailEntity } from "../../models/emails/email";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -135,12 +138,15 @@ export const AdminPostAgent = {
   newsList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/news${ qs }`, { headers: authHeader( session ) } ),
   bannersList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/banners${ qs }`, { headers: authHeader( session ) } ),
   pagesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/pages${ qs }`, { headers: authHeader( session ) } ),
+  emailTemplatesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/email-templates${ qs }`, { headers: authHeader( session ) } ),
+  newsletterTemplatesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/newsletter-templates${ qs }`, { headers: authHeader( session ) } ),
   details: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.get( `/admin/posts/${ postId }`, { headers: authHeader( session ) } ),
   softDelete: ( session: Session | null, postId: string ): Promise<IPostEntity> => apiRequests.del( `/admin/posts/soft-delete/${ postId }`, { headers: authHeader( session ) } ),
   softDeleteAll: ( session: Session | null, postIds: string[] ): Promise<IPostEntity[]> => apiRequests.del( `/admin/posts/soft-delete-all`, { headers: authHeader( session ), data: { ids: postIds } } ),
   softDeletedBlogsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/blogs-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedBannersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/banners-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedEmailTemplatesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/email-templates-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedNewsletterTemplatesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-templates-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedNewsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/news-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedNewsletterHeadersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-headers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedNewsletterBodiesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-bodies-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
@@ -151,6 +157,7 @@ export const AdminPostAgent = {
   emptyBlogsTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-blogs-trash`, { headers: authHeader( session ) } ),
   emptyBannersTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-banners-trash`, { headers: authHeader( session ) } ),
   emptyEmailTemplatesTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-email-templates-trash`, { headers: authHeader( session ) } ),
+  emptyNewsletterTemplatesTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-templates-trash`, { headers: authHeader( session ) } ),
   emptyNewsTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-news-trash`, { headers: authHeader( session ) } ),
   emptyNewsletterHeadersTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-headers-trash`, { headers: authHeader( session ) } ),
   emptyNewsletterBodiesTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-bodies-trash`, { headers: authHeader( session ) } ),
@@ -184,6 +191,47 @@ export const AdminCommentAgent = {
   recover: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/recover/${ commentId }`, {}, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.del( `/admin/comments/permanent-delete/${ commentId }`, { headers: authHeader( session ) } ),
   emptyTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/comments/empty-trash`, { headers: authHeader( session ) } ),
+};
+
+// Email Agent
+export const AdminEmailAgent = {
+  sendMail: ( session: Session | null, email: EmailSendFormValues ): Promise<any> => apiRequests.post( `/admin/emails/send`, email, { headers: authHeader( session ) } ),
+  listSentEmails: ( session: Session | null, qs?: string ): Promise<IPaginated<IEmailEntity>> => apiRequests.get( `/admin/emails/all-sent-emails${ qs }`, { headers: authHeader( session ) } ),
+  sentEmailDetails: ( session: Session | null, emailId: string ): Promise<IEmailEntity> => apiRequests.get( `/admin/emails/sent/${ emailId }`, { headers: authHeader( session ) } ),
+  deletePermanently: ( session: Session | null, emailId: string ): Promise<IEmailEntity> => apiRequests.del( `/admin/emails/sent/permanent-delete/${ emailId }`, { headers: authHeader( session ) } ),
+  permanentDeleteAll: ( session: Session | null, emailId: string[] ): Promise<IEmailEntity[]> => apiRequests.del( `/admin/emails/sent/permanent-delete-all`, { headers: authHeader( session ), data: { ids: emailId } } ),
+  uploadImg: ( session: Session | null, formData: FormData ): Promise<IFileEntity> => apiRequests.post( `/admin/emails/templates/upload-img`, formData, {
+    headers: { "Content-Type": "multipart/form-data", ...authHeader( session ) }
+  } ),
+};
+
+// Newsletter Agent
+export const AdminNewsletterAgent = {
+  createSubscriber: ( session: Session | null, subscriber: AdminSubscriberCreateFormValues ): Promise<ISubscriberEntity> => apiRequests.post( `/admin/newsletter/subscribers/subscribe`, subscriber, { headers: authHeader( session ) } ),
+  editSubscriber: ( session: Session | null, subscriberId: string, subscriber: AdminSubscriberUpdateFormValues ): Promise<ISubscriberEntity> => apiRequests.patch( `/admin/newsletter/subscribers/${ subscriberId }`, subscriber, { headers: authHeader( session ) } ),
+  subscriberDetails: ( session: Session | null, subscriberId: string ): Promise<ISubscriberEntity> => apiRequests.get( `/admin/newsletter/subscribers/${ subscriberId }`, { headers: authHeader( session ) } ),
+  listSubscribers: ( session: Session | null, qs?: string ): Promise<IPaginated<ISubscriberEntity>> => apiRequests.get( `/admin/newsletter/subscribers${ qs }`, { headers: authHeader( session ) } ),
+  softDeleteSubscriber: ( session: Session | null, subscriberId: string ): Promise<ISubscriberEntity> => apiRequests.del( `/admin/newsletter/subscribers/soft-delete/${ subscriberId }`, { headers: authHeader( session ) } ),
+  softDeleteSubscribersAll: ( session: Session | null, subscriberIds: string[] ): Promise<ISubscriberEntity[]> => apiRequests.del( `/admin/newsletter/subscribers/soft-delete-all`, { headers: authHeader( session ), data: { ids: subscriberIds } } ),
+  softDeletedSubscribersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<ISubscriberEntity>> => apiRequests.get( `/admin/newsletter/subscribers/soft-deleted/subscribers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  recoverSubscriber: ( session: Session | null, subscriberId: string ): Promise<ISubscriberEntity> => apiRequests.patch( `/admin/newsletter/subscribers/recover/${ subscriberId }`, {}, { headers: authHeader( session ) } ),
+  deleteSubscriberPermanently: ( session: Session | null, subscriberId: string ): Promise<ISubscriberEntity> => apiRequests.del( `/admin/newsletter/subscribers/permanent-delete/${ subscriberId }`, { headers: authHeader( session ) } ),
+  emptySubscribersTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/newsletter/subscribers/empty-subscribers-trash`, { headers: authHeader( session ) } ),
+
+  createCampaign: ( session: Session | null, campaign: NewsletterCampaignCreateFormValues ): Promise<ICampaignEntity> => apiRequests.post( `/admin/newsletter/campaigns`, campaign, { headers: authHeader( session ) } ),
+  editCampaign: ( session: Session | null, campaignId: string, campaign: NewsletterCampaignUpdateFormValues ): Promise<ICampaignEntity> => apiRequests.patch( `/admin/newsletter/campaigns/${ campaignId }`, campaign, { headers: authHeader( session ) } ),
+  campaignDetails: ( session: Session | null, campaignId: string ): Promise<ICampaignEntity> => apiRequests.get( `/admin/newsletter/campaigns/${ campaignId }`, { headers: authHeader( session ) } ),
+  listCampaigns: ( session: Session | null, qs?: string ): Promise<IPaginated<ICampaignEntity>> => apiRequests.get( `/admin/newsletter/campaigns${ qs }`, { headers: authHeader( session ) } ),
+  softDeleteCampaign: ( session: Session | null, campaignId: string ): Promise<ICampaignEntity> => apiRequests.del( `/admin/newsletter/campaigns/soft-delete/${ campaignId }`, { headers: authHeader( session ) } ),
+  softDeleteCampaignsAll: ( session: Session | null, campaignIds: string[] ): Promise<ICampaignEntity[]> => apiRequests.del( `/admin/newsletter/campaigns/soft-delete-all`, { headers: authHeader( session ), data: { ids: campaignIds } } ),
+  softDeletedCampaignsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<ICampaignEntity>> => apiRequests.get( `/admin/newsletter/campaigns/soft-deleted/campaigns-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  recoverCampaign: ( session: Session | null, campaignId: string ): Promise<ICampaignEntity> => apiRequests.patch( `/admin/newsletter/campaigns/recover/${ campaignId }`, {}, { headers: authHeader( session ) } ),
+  deleteCampaignPermanently: ( session: Session | null, campaignId: string ): Promise<ICampaignEntity> => apiRequests.del( `/admin/newsletter/campaigns/permanent-delete/${ campaignId }`, { headers: authHeader( session ) } ),
+  emptyCampaignsTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/newsletter/campaigns/empty-campaigns-trash`, { headers: authHeader( session ) } ),
+
+  uploadImg: ( session: Session | null, formData: FormData ): Promise<IFileEntity> => apiRequests.post( `/admin/newsletter/templates/upload-img`, formData, {
+    headers: { "Content-Type": "multipart/form-data", ...authHeader( session ) }
+  } ),
 };
 
 /*********** ADMIN REGION END **************/

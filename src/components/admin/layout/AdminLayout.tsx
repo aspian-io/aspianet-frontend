@@ -12,11 +12,13 @@ interface IProps {
     label: string;
     href?: string;
   }[];
+  topBarBackArrow?: boolean;
 }
 
 const AdminLayout: FC<PropsWithChildren<IProps>> = ({
   pageTitle,
   breadCrumbs,
+  topBarBackArrow = true,
   children,
 }) => {
   const { sidebar } = useSelector(getAdminLayoutState);
@@ -32,7 +34,11 @@ const AdminLayout: FC<PropsWithChildren<IProps>> = ({
         <div
           className={`${sidebarSideLayoutCss} rounded-3xl overflow-hidden transition-all duration-300 mb-10 min-h-[400px]`}
         >
-          <TopBar title={pageTitle} breadCrumbs={breadCrumbs} />
+          <TopBar
+            title={pageTitle}
+            breadCrumbs={breadCrumbs}
+            backBtn={topBarBackArrow}
+          />
           {children}
         </div>
         <div

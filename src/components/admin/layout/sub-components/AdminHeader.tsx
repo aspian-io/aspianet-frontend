@@ -19,10 +19,10 @@ const AdminHeader = () => {
   >(`/admin/comments/unseen`, fetcher);
 
   const commentTitle = (
-    <div className="flex justify-center items-center -mr-3">
+    <div className="flex justify-center items-center mr-3">
       <span className="mr-auto">Comments</span>
       {commentCounter && commentCounter.unseenNum > 0 && (
-        <div className="px-1.5 py-0.5 rounded-full bg-danger text-light text-xs">
+        <div className="px-1.5 rounded-full bg-danger text-light text-xs">
           {commentCounter.unseenNum}
         </div>
       )}
@@ -41,6 +41,8 @@ const AdminHeader = () => {
   const [activePosts, setActivePosts] = useState(false);
   const [activeMedia, setActiveMedia] = useState(false);
   const [activePages, setActivePages] = useState(false);
+  const [activeComments, setActiveComments] = useState(false);
+  const [activeEmail, setActiveEmail] = useState(false);
   const [activeNewsletter, setActiveNewsletter] = useState(false);
   const [activeAppearance, setActiveAppearance] = useState(false);
   const [activeUsers, setActiveUsers] = useState(false);
@@ -341,8 +343,93 @@ const AdminHeader = () => {
               </svg>
             }
             itemTitle={commentTitle}
-            itemHref="/admin/comments"
-          />
+            hasSubItems={true}
+            activeItem={activeComments}
+          >
+            <AuthGuard
+              claims={[
+                ClaimsEnum.ADMIN,
+                ClaimsEnum.COMMENT_CREATE,
+                ClaimsEnum.COMMENT_DELETE,
+                ClaimsEnum.COMMENT_EDIT,
+                ClaimsEnum.COMMENT_READ,
+              ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/comments"
+                onActive={() => setActiveComments(true)}
+              >
+                All Comments
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard claims={[ClaimsEnum.ADMIN]} redirect={false}>
+              <AdminSideBar.Item.SubItem
+                href="/admin/comments/settings"
+                onActive={() => setActiveComments(true)}
+              >
+                Settings
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+          </AdminSideBar.Item>
+        </AuthGuard>
+        <AuthGuard
+          claims={[ClaimsEnum.ADMIN, ClaimsEnum.EMAIL_SEND]}
+          redirect={false}
+        >
+          <AdminSideBar.Item
+            itemIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.404 14.596A6.5 6.5 0 1116.5 10a1.25 1.25 0 01-2.5 0 4 4 0 10-.571 2.06A2.75 2.75 0 0018 10a8 8 0 10-2.343 5.657.75.75 0 00-1.06-1.06 6.5 6.5 0 01-9.193 0zM10 7.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+            itemTitle="Emails"
+            hasSubItems={true}
+            activeItem={activeEmail}
+          >
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.EMAIL_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/emails/sent"
+                onActive={() => setActiveEmail(true)}
+              >
+                Sent Emails
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.EMAIL_SEND]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/emails/send"
+                onActive={() => setActiveEmail(true)}
+              >
+                Send Email
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/emails/templates"
+                onActive={() => setActiveEmail(true)}
+              >
+                Templates
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+          </AdminSideBar.Item>
         </AuthGuard>
         <AuthGuard
           claims={[
@@ -380,7 +467,7 @@ const AdminHeader = () => {
               redirect={false}
             >
               <AdminSideBar.Item.SubItem
-                href="/admin/newsletter/all-campaigns"
+                href="/admin/newsletter/campaigns"
                 onActive={() => setActiveNewsletter(true)}
               >
                 All Campaigns
@@ -391,10 +478,21 @@ const AdminHeader = () => {
               redirect={false}
             >
               <AdminSideBar.Item.SubItem
-                href="/admin/newsletter/add-new-campaign"
+                href="/admin/newsletter/campaigns/add-new"
                 onActive={() => setActiveNewsletter(true)}
               >
                 Add New Campaign
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/newsletter/templates"
+                onActive={() => setActiveNewsletter(true)}
+              >
+                Templates
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
             <AuthGuard
@@ -406,6 +504,14 @@ const AdminHeader = () => {
                 onActive={() => setActiveNewsletter(true)}
               >
                 Subscribers
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard claims={[ClaimsEnum.ADMIN]} redirect={false}>
+              <AdminSideBar.Item.SubItem
+                href="/admin/newsletter/settings"
+                onActive={() => setActiveNewsletter(true)}
+              >
+                Settings
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>

@@ -337,6 +337,7 @@ const AdminCategories = () => {
           setEditCategoryModalShow(false);
         }}
         onClose={() => {
+          setCategoryIdToEdit(undefined);
           setEditCategoryModalShow(false);
         }}
       />

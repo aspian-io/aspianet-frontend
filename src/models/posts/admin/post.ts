@@ -1,4 +1,4 @@
-import { Expose, plainToClassFromExist, Transform } from "class-transformer";
+import { Expose, plainToClassFromExist } from "class-transformer";
 import { IBaseEntity, IBaseMinimalEntity } from "../../common/base-entities";
 import { IFileEntity } from "../../files/admin/file";
 import { ITaxonomyEntity } from "../../taxonomies/admin/taxonomy";
@@ -25,9 +25,9 @@ export enum PostTypeEnum {
   NEWS = "NEWS",
   BANNER = "BANNER",
   EMAIL_TEMPLATE = "EMAIL_TEMPLATE",
-  NEWSLETTER_HEADER_TEMPLATE = "NEWSLETTER_HEADER_TEMPLATE",
-  NEWSLETTER_BODY_TEMPLATE = "NEWSLETTER_BODY_TEMPLATE",
-  NEWSLETTER_FOOTER_TEMPLATE = "NEWSLETTER_FOOTER_TEMPLATE",
+  NEWSLETTER_TEMPLATE = "NEWSLETTER_TEMPLATE",
+  AUTH_EMAIL_TEMPLATE = "AUTH_EMAIL_TEMPLATE",
+  CONTACT_EMAIL_TEMPLATE = "CONTACT_EMAIL_TEMPLATE",
 }
 
 export enum PostErrorsEnum {
@@ -54,6 +54,7 @@ export interface IPostEntity extends IBaseEntity {
   subtitle: string | null;
   excerpt: string | null;
   content: string | null;
+  templateDesign: string | null;
   slug: string;
   featuredImage?: IFileEntity;
   visibility: PostVisibilityEnum;
@@ -89,6 +90,7 @@ export class PostFormValues implements Partial<IPostEntity> {
   @Expose() subtitle?: string = '';
   @Expose() excerpt?: string = '';
   @Expose() content?: string = '';
+  @Expose() templateDesign?: string = '';
   @Expose() slug?: string = '';
   @Expose() featuredImageId?: string = undefined;
   @Expose() visibility: PostVisibilityEnum = PostVisibilityEnum.PUBLIC;

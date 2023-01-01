@@ -52,59 +52,46 @@ const AdminUsersSettings = () => {
   if (error) router.push('/500');
   if (!settingsData) return <Loading />;
 
-  const userLoginByEmailSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_LOGIN_BY_EMAIL
-  )[0];
-  const userLoginByPhoneSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE
-  )[0];
-  const userAvatarEnableSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_AVATARS_ENABLE
-  )[0];
-  const userEmailVerificationTemplateIdSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_VERIFICATION_TEMPLATE_ID
-  )[0];
-  const userEmailVerificationSubjectSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_VERIFICATION_SUBJECT
-  )[0];
-  const userEmailTokenExpInMinsSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_TOKEN_EXP_IN_MINS
-  )[0];
-  const userEmailResetPassTemplateIdSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_RESET_PASSWORD_TEMPLATE_ID
-  )[0];
-  const userEmailResetPassSubjectSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_RESET_PASSWORD_SUBJECT
-  )[0];
-  const userEmailChangePassTemplateIdSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_CHANGE_PASSWORD_TEMPLATE_ID
-  )[0];
-  const userEmailChangePassSubjectSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_EMAIL_CHANGE_PASSWORD_SUBJECT
-  )[0];
-  const userMobileVerificationPatternCodeSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_MOBILE_VERIFICATION_SMS_PATTERN_CODE
-  )[0];
-  const userMobileTokenExpInMinsSetting = settingsData.filter(
-    (s) => s.key === SettingsKeyEnum.USERS_MOBILE_TOKEN_EXP_IN_MINS
-  )[0];
+  function getSetting(key: SettingsKeyEnum) {
+    return settingsData?.filter((s) => s.key === key)[0];
+  }
+
+  const userEmailVerificationTemplateIdSetting = getSetting(
+    SettingsKeyEnum.USERS_EMAIL_VERIFICATION_TEMPLATE_ID
+  );
+  const userEmailResetPassTemplateIdSetting = getSetting(
+    SettingsKeyEnum.USERS_EMAIL_RESET_PASSWORD_TEMPLATE_ID
+  );
+  const userEmailChangePassTemplateIdSetting = getSetting(
+    SettingsKeyEnum.USERS_EMAIL_CHANGE_PASSWORD_TEMPLATE_ID
+  );
 
   const initialValues = {
-    USERS_LOGIN_BY_EMAIL: userLoginByEmailSetting?.value ?? undefined,
-    USERS_LOGIN_BY_MOBILE_PHONE: userLoginByPhoneSetting?.value ?? undefined,
-    USERS_AVATARS_ENABLE: userAvatarEnableSetting?.value ?? undefined,
+    USERS_LOGIN_BY_EMAIL:
+      getSetting(SettingsKeyEnum.USERS_LOGIN_BY_EMAIL)?.value ?? undefined,
+    USERS_LOGIN_BY_MOBILE_PHONE:
+      getSetting(SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE)?.value ??
+      undefined,
+    USERS_AVATARS_ENABLE:
+      getSetting(SettingsKeyEnum.USERS_AVATARS_ENABLE)?.value ?? undefined,
     USERS_EMAIL_VERIFICATION_SUBJECT:
-      userEmailVerificationSubjectSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_EMAIL_VERIFICATION_SUBJECT)?.value ??
+      undefined,
     USERS_EMAIL_TOKEN_EXP_IN_MINS:
-      userEmailTokenExpInMinsSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_EMAIL_TOKEN_EXP_IN_MINS)?.value ??
+      undefined,
     USERS_EMAIL_RESET_PASSWORD_SUBJECT:
-      userEmailResetPassSubjectSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_EMAIL_RESET_PASSWORD_SUBJECT)?.value ??
+      undefined,
     USERS_EMAIL_CHANGE_PASSWORD_SUBJECT:
-      userEmailChangePassSubjectSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_EMAIL_CHANGE_PASSWORD_SUBJECT)?.value ??
+      undefined,
     USERS_MOBILE_VERIFICATION_SMS_PATTERN_CODE:
-      userMobileVerificationPatternCodeSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_MOBILE_VERIFICATION_SMS_PATTERN_CODE)
+        ?.value ?? undefined,
     USERS_MOBILE_TOKEN_EXP_IN_MINS:
-      userMobileTokenExpInMinsSetting?.value ?? undefined,
+      getSetting(SettingsKeyEnum.USERS_MOBILE_TOKEN_EXP_IN_MINS)?.value ??
+      undefined,
   };
 
   return (
@@ -116,7 +103,7 @@ const AdminUsersSettings = () => {
             setRemoveLoading(true);
             await AdminPostAgent.deletePermanently(
               session,
-              userEmailVerificationTemplateIdSetting.value!
+              userEmailVerificationTemplateIdSetting!.value!
             );
             await AdminSettingsAgent.deleteSetting(
               session,
@@ -148,7 +135,7 @@ const AdminUsersSettings = () => {
             setRemoveLoading(true);
             await AdminPostAgent.deletePermanently(
               session,
-              userEmailResetPassTemplateIdSetting.value!
+              userEmailResetPassTemplateIdSetting!.value!
             );
             await AdminSettingsAgent.deleteSetting(
               session,
@@ -180,7 +167,7 @@ const AdminUsersSettings = () => {
             setRemoveLoading(true);
             await AdminPostAgent.deletePermanently(
               session,
-              userEmailChangePassTemplateIdSetting.value!
+              userEmailChangePassTemplateIdSetting!.value!
             );
             await AdminSettingsAgent.deleteSetting(
               session,
@@ -237,6 +224,7 @@ const AdminUsersSettings = () => {
         >
           {({
             isSubmitting,
+            setFieldValue,
             isValid,
             dirty,
             values,
@@ -267,12 +255,23 @@ const AdminUsersSettings = () => {
                   </Button>
                 </div>
                 <div className="flex justify-start items-start space-x-2">
-                  <Field
+                  <input
                     id={SettingsKeyEnum.USERS_LOGIN_BY_EMAIL}
                     type={InputTypeEnum.checkbox}
                     name={SettingsKeyEnum.USERS_LOGIN_BY_EMAIL}
                     className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
-                    checked={values.USERS_LOGIN_BY_EMAIL === 'true'}
+                    onChange={(e) => {
+                      e.target.checked
+                        ? setFieldValue(
+                            SettingsKeyEnum.USERS_LOGIN_BY_EMAIL,
+                            'true'
+                          )
+                        : setFieldValue(
+                            SettingsKeyEnum.USERS_LOGIN_BY_EMAIL,
+                            'false'
+                          );
+                    }}
+                    defaultChecked={values.USERS_LOGIN_BY_EMAIL === 'true'}
                   />
                   <label
                     htmlFor={SettingsKeyEnum.USERS_LOGIN_BY_EMAIL}
@@ -282,12 +281,25 @@ const AdminUsersSettings = () => {
                   </label>
                 </div>
                 <div className="flex justify-start items-start space-x-2">
-                  <Field
+                  <input
                     id={SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE}
                     type={InputTypeEnum.checkbox}
                     name={SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE}
                     className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
-                    checked={values.USERS_LOGIN_BY_MOBILE_PHONE === 'true'}
+                    onChange={(e) => {
+                      e.target.checked
+                        ? setFieldValue(
+                            SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE,
+                            'true'
+                          )
+                        : setFieldValue(
+                            SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE,
+                            'false'
+                          );
+                    }}
+                    defaultChecked={
+                      values.USERS_LOGIN_BY_MOBILE_PHONE === 'true'
+                    }
                   />
                   <label
                     htmlFor={SettingsKeyEnum.USERS_LOGIN_BY_MOBILE_PHONE}
@@ -298,14 +310,23 @@ const AdminUsersSettings = () => {
                   </label>
                 </div>
                 <div className="flex justify-start items-start space-x-2">
-                  <Field
+                  <input
                     id={SettingsKeyEnum.USERS_AVATARS_ENABLE}
                     type={InputTypeEnum.checkbox}
-                    name="USERS_AVATARS_ENABLE"
-                    value={values.USERS_AVATARS_ENABLE === 'true'}
+                    name={SettingsKeyEnum.USERS_AVATARS_ENABLE}
                     className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={(e) => {
+                      e.target.checked
+                        ? setFieldValue(
+                            SettingsKeyEnum.USERS_AVATARS_ENABLE,
+                            'true'
+                          )
+                        : setFieldValue(
+                            SettingsKeyEnum.USERS_AVATARS_ENABLE,
+                            'false'
+                          );
+                    }}
+                    defaultChecked={values.USERS_AVATARS_ENABLE === 'true'}
                   />
                   <label
                     htmlFor={SettingsKeyEnum.USERS_AVATARS_ENABLE}

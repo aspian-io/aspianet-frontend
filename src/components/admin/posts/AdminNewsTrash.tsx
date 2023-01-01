@@ -183,7 +183,7 @@ const AdminNewsTrash = () => {
         text="Are you sure you want to empty the news trash and delete all the items permanently?"
       />
       <AuthGuard
-        claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
+        claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
         redirect={false}
       >
         <ConfirmModal

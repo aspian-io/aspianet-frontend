@@ -44,7 +44,7 @@ const Accordion: FC<PropsWithChildren<IProps>> = ({
       </div>
       <div
         className={`w-full ${
-          expand ? 'max-h-96 px-3 py-3 visible' : 'max-h-0 px-3 py-0 invisible overflow-hidden'
+          expand ? 'max-h-[700px] px-3 py-3 visible' : 'max-h-0 px-3 py-0 invisible overflow-hidden'
         } transition-all duration-300 ${bodyClassName}`}
       >
         {children}

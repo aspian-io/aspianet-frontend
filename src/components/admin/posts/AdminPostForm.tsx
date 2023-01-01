@@ -324,24 +324,26 @@ const AdminPostForm: FC<IProps> = ({
                       }}
                     />
                   </div>
-                  <div className="mb-4">
-                    <Field
-                      type={InputTypeEnum.text}
-                      name="subtitle"
-                      placeholder="Subtitle"
-                      className="text-xs sm:text-sm h-11 rounded-xl"
-                      component={FormikInput}
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <Field
-                      type={InputTypeEnum.text}
-                      name="slug"
-                      placeholder="Slug"
-                      className="text-xs sm:text-sm h-11 rounded-xl"
-                      component={FormikInput}
-                    />
-                  </div>
+                  <>
+                    <div className="mb-4">
+                      <Field
+                        type={InputTypeEnum.text}
+                        name="subtitle"
+                        placeholder="Subtitle"
+                        className="text-xs sm:text-sm h-11 rounded-xl"
+                        component={FormikInput}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <Field
+                        type={InputTypeEnum.text}
+                        name="slug"
+                        placeholder="Slug"
+                        className="text-xs sm:text-sm h-11 rounded-xl"
+                        component={FormikInput}
+                      />
+                    </div>
+                  </>
                   {editPostData && editPostData.slug !== values.slug && (
                     <div className="flex flex-row justify-start items-start space-x-2 mb-4">
                       <Field
@@ -599,111 +601,113 @@ const AdminPostForm: FC<IProps> = ({
                       </Accordion>
                     </>
                   )}
-                  <Accordion
-                    title="Featured Image"
-                    expandInitialState={!!editPostData?.featuredImage}
-                  >
-                    <AsyncSelect
-                      components={animatedComponents}
-                      styles={reactSelectStyle}
-                      placeholder="Featured Image"
-                      defaultValue={
-                        editPostData?.featuredImage
-                          ? ({
-                              value: editPostData?.featuredImage?.id,
-                              label: (
-                                <AdminSelectMediaOptions
-                                  {...editPostData.featuredImage}
-                                  fileKey={editPostData.featuredImage.key}
-                                />
-                              ),
-                            } as any)
-                          : undefined
-                      }
-                      isClearable
-                      isSearchable
-                      cacheOptions
-                      defaultOptions
-                      name="featuredImageId"
-                      onChange={(newValue: any, actionMeta) => {
-                        handleChange({
-                          target: {
-                            name: 'featuredImageId',
-                            value: newValue?.value ?? null,
-                          },
-                        });
-                      }}
-                      loadOptions={(inputValue) =>
-                        featuredImageOptionsLoader(inputValue, session) as any
-                      }
-                    />
-                  </Accordion>
-                  <Accordion
-                    title="Attachments"
-                    expandInitialState={!!editPostData?.attachments?.length}
-                  >
-                    <AsyncSelect
-                      components={animatedComponents}
-                      styles={reactSelectStyle}
-                      placeholder="Attachments"
-                      defaultValue={
-                        editPostData?.attachments &&
-                        editPostData?.attachments.length > 0
-                          ? (editPostData.attachments.map((a) => ({
-                              value: a.id,
-                              label: (
-                                <AdminSelectMediaOptions
-                                  {...a}
-                                  fileKey={a.key}
-                                />
-                              ),
-                            })) as any)
-                          : undefined
-                      }
-                      isClearable
-                      isSearchable
-                      cacheOptions
-                      defaultOptions
-                      isMulti={true as any}
-                      name="attachmentsIds"
-                      onChange={(newValue: any, actionMeta) => {
-                        handleChange({
-                          target: {
-                            name: 'attachmentsIds',
-                            value: newValue?.map((i: any) => i.value),
-                          },
-                        });
-                      }}
-                      loadOptions={(inputValue) =>
-                        attachmentsOptionsLoader(inputValue, session) as any
-                      }
-                    />
-                  </Accordion>
-                  <Accordion
-                    title="Excerpt"
-                    expandInitialState={!!values.excerpt}
-                  >
-                    <div className="flex flex-col mt-4 w-full">
-                      <textarea
-                        name="excerpt"
-                        className={`border-0 rounded-xl bg-zinc-100 w-full h-32 placeholder-zinc-400 text-xs sm:text-sm ${
-                          errors.excerpt && touched.excerpt
-                            ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
-                            : ' focus:border-2 focus:border-primary focus:bg-light'
-                        }`}
-                        value={values.excerpt}
-                        maxLength={400}
-                        placeholder="Excerpt..."
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                      ></textarea>
-                      {touched.excerpt && errors.excerpt && (
-                        <div className="mt-2 text-danger text-xs">
-                          {errors.excerpt}
-                        </div>
-                      )}
-                    </div>
-                  </Accordion>
+                  <>
+                    <Accordion
+                      title="Featured Image"
+                      expandInitialState={!!editPostData?.featuredImage}
+                    >
+                      <AsyncSelect
+                        components={animatedComponents}
+                        styles={reactSelectStyle}
+                        placeholder="Featured Image"
+                        defaultValue={
+                          editPostData?.featuredImage
+                            ? ({
+                                value: editPostData?.featuredImage?.id,
+                                label: (
+                                  <AdminSelectMediaOptions
+                                    {...editPostData.featuredImage}
+                                    fileKey={editPostData.featuredImage.key}
+                                  />
+                                ),
+                              } as any)
+                            : undefined
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        name="featuredImageId"
+                        onChange={(newValue: any, actionMeta) => {
+                          handleChange({
+                            target: {
+                              name: 'featuredImageId',
+                              value: newValue?.value ?? null,
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          featuredImageOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
+                    <Accordion
+                      title="Attachments"
+                      expandInitialState={!!editPostData?.attachments?.length}
+                    >
+                      <AsyncSelect
+                        components={animatedComponents}
+                        styles={reactSelectStyle}
+                        placeholder="Attachments"
+                        defaultValue={
+                          editPostData?.attachments &&
+                          editPostData?.attachments.length > 0
+                            ? (editPostData.attachments.map((a) => ({
+                                value: a.id,
+                                label: (
+                                  <AdminSelectMediaOptions
+                                    {...a}
+                                    fileKey={a.key}
+                                  />
+                                ),
+                              })) as any)
+                            : undefined
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        isMulti={true as any}
+                        name="attachmentsIds"
+                        onChange={(newValue: any, actionMeta) => {
+                          handleChange({
+                            target: {
+                              name: 'attachmentsIds',
+                              value: newValue?.map((i: any) => i.value),
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          attachmentsOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
+                    <Accordion
+                      title="Excerpt"
+                      expandInitialState={!!values.excerpt}
+                    >
+                      <div className="flex flex-col mt-4 w-full">
+                        <textarea
+                          name="excerpt"
+                          className={`border-0 rounded-xl bg-zinc-100 w-full h-32 placeholder-zinc-400 text-xs sm:text-sm ${
+                            errors.excerpt && touched.excerpt
+                              ? 'focus:border-2 focus:ring-0 border-danger-light bg-danger-light/10 focus:border-danger focus:bg-danger-light/10'
+                              : ' focus:border-2 focus:border-primary focus:bg-light'
+                          }`}
+                          value={values.excerpt}
+                          maxLength={400}
+                          placeholder="Excerpt..."
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                        ></textarea>
+                        {touched.excerpt && errors.excerpt && (
+                          <div className="mt-2 text-danger text-xs">
+                            {errors.excerpt}
+                          </div>
+                        )}
+                      </div>
+                    </Accordion>
+                  </>
                   {!!editPostId && !!editPostData && (
                     <Accordion title="Slug History">
                       {values?.slugsHistory && (

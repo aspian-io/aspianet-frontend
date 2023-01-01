@@ -229,11 +229,6 @@ const AdminTable: FC<IProps> = ({
     if (onSelectColumns) onSelectColumns(checked);
   }, [checked, onSelectColumns]);
 
-  // useEffect(() => {
-  //   setChecked([]);
-  //   setShowDeleteBtn(false);
-  //   document.querySelectorAll('input').forEach((i) => (i.checked = false));
-  // }, []);
 
   return (
     <div className="rounded-3xl bg-light py-6 px-2 w-full">
@@ -250,7 +245,7 @@ const AdminTable: FC<IProps> = ({
           />
         )}
       </div>
-      <div className="rounded-3xl bg-light w-full max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
+      <div className="rounded-3xl bg-light w-full min-h-[600px] max-h-[350px] sm:max-h-max scrollbar-thin scrollbar-thumb-zinc-200 scrollbar-track-light-900">
         <div className="flex justify-start items-center min-w-max">
           {menu && (
             <DropdownMenu

@@ -28,9 +28,10 @@ interface IProps {
     label: string;
     href?: string;
   }[];
+  backBtn?: boolean;
 }
 
-const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
+const TopBar: FC<IProps> = ({ title, breadCrumbs, backBtn = true }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathNamePartsLength = router.pathname
@@ -160,7 +161,7 @@ const TopBar: FC<IProps> = ({ title, breadCrumbs }) => {
         <hr className="w-full my-2.5 border-primary/20" />
         <div className="flex flex-col sm:flex-row justify-center items-start">
           <div className="flex justify-center items-center space-x-4 text-primary font-bold sm:text-xl">
-            {pathNamePartsLength > 2 && (
+            {pathNamePartsLength > 2 && backBtn && (
               <Button
                 rounded="rounded"
                 size="h-9"

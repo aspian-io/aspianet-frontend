@@ -294,6 +294,7 @@ const AdminTags = () => {
           setEditTagModalShow(false);
         }}
         onClose={() => {
+          setTagIdToEdit(undefined);
           setEditTagModalShow(false);
         }}
       />
