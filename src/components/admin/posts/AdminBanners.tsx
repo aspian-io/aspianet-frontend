@@ -16,10 +16,7 @@ import {
 import { AuthGuard } from '../../common/AuthGuard';
 import Button from '../../common/Button';
 import ConfirmModal from '../../common/ConfirmModal';
-import MiniBookmark from '../../common/vectors/mini/MiniBookmark';
-import MiniComment from '../../common/vectors/mini/MiniComment';
 import MiniEye from '../../common/vectors/mini/MiniEye';
-import MiniLike from '../../common/vectors/mini/MiniLike';
 import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {

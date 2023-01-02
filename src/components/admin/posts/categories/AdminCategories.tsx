@@ -20,7 +20,6 @@ import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
 import AddCategoryForm from './sub-components/AddCategoryForm';
 import CategoryDetails from './sub-components/CategoryDetails';
 import EditCategoryForm from './sub-components/EditCategoryForm';
-import { getCategoryById } from './sub-components/helpers';
 
 interface IDataType extends ITableDataType {
   name: string;
@@ -39,9 +38,9 @@ const AdminCategories = () => {
   }>({ show: false, category: undefined });
   const [addCategoryModalShow, setAddCategoryModalShow] = useState(false);
   const [editCategoryModalShow, setEditCategoryModalShow] = useState(false);
-  const [categoryIdToEdit, setCategoryIdToEdit] = useState<string | undefined>(
-    undefined
-  );
+  const [categoryToEdit, setCategoryToEdit] = useState<
+    ITaxonomyEntity | undefined
+  >(undefined);
   const [categoryParentId, setCategoryParentId] = useState<string | undefined>(
     undefined
   );
@@ -81,7 +80,7 @@ const AdminCategories = () => {
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
-    (id: string, childLevel: number = 0) => (
+    (category: ITaxonomyEntity, childLevel: number = 0) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
         <Button
           rounded="rounded-md"
@@ -90,7 +89,6 @@ const AdminCategories = () => {
           variant="primary"
           extraCSSClasses="px-1.5 text-xs"
           onClick={() => {
-            const category = getCategoryById(id, categoriesData?.items!);
             setDetailsModal({ show: true, category });
           }}
         >
@@ -117,8 +115,8 @@ const AdminCategories = () => {
               variant="success"
               extraCSSClasses="px-1.5 text-xs"
               onClick={() => {
-                setParent(getCategoryById(id, categoriesData?.items!));
-                setCategoryParentId(id);
+                setParent(category);
+                setCategoryParentId(category.id);
                 setAddCategoryModalShow(true);
               }}
             >
@@ -145,7 +143,7 @@ const AdminCategories = () => {
             variant="warning"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              setCategoryIdToEdit(id);
+              setCategoryToEdit(category);
               setEditCategoryModalShow(true);
             }}
           >
@@ -168,7 +166,7 @@ const AdminCategories = () => {
             variant="danger"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              setItemToDelete(id);
+              setItemToDelete(category.id);
               setRemoveConfirm(true);
             }}
           >
@@ -188,7 +186,7 @@ const AdminCategories = () => {
         </AuthGuard>
       </div>
     ),
-    [categoriesData?.items]
+    []
   );
 
   const formatData = useCallback(
@@ -202,7 +200,7 @@ const AdminCategories = () => {
           category.children && category.children.length > 0
             ? category.children.map((ch) => formatData(ch))
             : [],
-        actions: actionsColumn(category.id, category.childLevel),
+        actions: actionsColumn(category, category.childLevel),
       };
     },
     [actionsColumn]
@@ -321,23 +319,20 @@ const AdminCategories = () => {
       <EditCategoryForm
         initialValues={
           new TaxonomyEditFormValues(
-            getCategoryById(
-              categoryIdToEdit!,
-              categoriesData?.items!
-            ) as TaxonomyCreateFormValues
+            categoryToEdit! as TaxonomyCreateFormValues
           )
         }
-        categoryIdToEdit={categoryIdToEdit!}
+        categoryIdToEdit={categoryToEdit?.id!}
         categoryParentId={categoryParentId}
         editCategoryModalShow={editCategoryModalShow}
         parent={parent}
         onSuccess={async () => {
           await mutate();
-          setCategoryIdToEdit(undefined);
+          setCategoryToEdit(undefined);
           setEditCategoryModalShow(false);
         }}
         onClose={() => {
-          setCategoryIdToEdit(undefined);
+          setCategoryToEdit(undefined);
           setEditCategoryModalShow(false);
         }}
       />

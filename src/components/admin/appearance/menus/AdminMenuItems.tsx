@@ -1,35 +1,52 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminPostAgent } from '../../../lib/axios/agent';
-import { AdminPostKeys } from '../../../lib/swr/keys';
-import { ClaimsEnum } from '../../../models/auth/common';
-import { INestError } from '../../../models/common/error';
-import { IPaginated } from '../../../models/common/paginated-result';
+import { AdminTaxonomyAgent } from '../../../../lib/axios/agent';
+import { AdminTaxonomyKeys } from '../../../../lib/swr/keys';
+import { ClaimsEnum } from '../../../../models/auth/common';
+import { INestError } from '../../../../models/common/error';
 import {
-  IPostEntity,
-  PostVisibilityEnum,
-} from '../../../models/posts/admin/post';
-import { AuthGuard } from '../../common/AuthGuard';
-import Button from '../../common/Button';
-import ConfirmModal from '../../common/ConfirmModal';
-import MiniEye from '../../common/vectors/mini/MiniEye';
-import AdminTable, { ITableDataType } from '../common/table/AdminTable';
+  ITaxonomyEntity,
+  TaxonomyCreateFormValues,
+  TaxonomyEditFormValues,
+} from '../../../../models/taxonomies/admin/taxonomy';
+import { AuthGuard } from '../../../common/AuthGuard';
+import Button from '../../../common/Button';
+import ConfirmModal from '../../../common/ConfirmModal';
+import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
+import AddMenuItemForm from './sub-components/AddMenuItemForm';
+import EditMenuItemForm from './sub-components/EditMenuItemForm';
+import MenuItemDetails from './sub-components/MenuItemDetails';
+
+interface IProps {
+  menuId: string;
+}
 
 interface IDataType extends ITableDataType {
-  title: string | JSX.Element;
-  slug: string;
-  viewCount?: number;
+  name: string;
+  description: string;
   actions: JSX.Element;
 }
 
-const AdminPages = () => {
+const AdminMenuItems: FC<IProps> = ({ menuId }) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const [parent, setParent] = useState<ITaxonomyEntity | undefined>(undefined);
+  const [detailsModal, setDetailsModal] = useState<{
+    show: boolean;
+    menuItem?: ITaxonomyEntity;
+  }>({ show: false, menuItem: undefined });
+  const [addMenuItemModalShow, setAddMenuItemModalShow] = useState(false);
+  const [editMenuItemModalShow, setEditMenuItemModalShow] = useState(false);
+  const [menuItemToEdit, setMenuItemToEdit] = useState<
+    ITaxonomyEntity | undefined
+  >(undefined);
+  const [menuItemParentId, setMenuItemParentId] = useState<string | undefined>(
+    undefined
+  );
   const [removeLoading, setRemoveLoading] = useState(false);
 
   const [removeConfirm, setRemoveConfirm] = useState(false);
@@ -40,38 +57,31 @@ const AdminPages = () => {
     null
   );
 
-  const qs = router.asPath.split('?', 2)[1]
-    ? `?${router.asPath.split('?', 2)[1]}`
-    : '';
-
-  const initialSort = () => {
-    if (!router.query['orderBy.createdAt']) {
-      return qs ? '&orderBy.createdAt=DESC' : '?orderBy.createdAt=DESC';
-    }
-    return '';
-  };
-
-  const fetcher = () =>
-    AdminPostAgent.pagesList(session, `${qs}${initialSort()}`);
+  const fetcher = () => AdminTaxonomyAgent.menusItems(session, menuId);
 
   const {
-    data: pagesData,
+    data: menuItemsData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
-    `${AdminPostKeys.GET_PAGES_LIST}${qs}${initialSort()}`,
+  } = useSWR<ITaxonomyEntity[], AxiosError<INestError>>(
+    AdminTaxonomyKeys.GET_ALL_MENU_ITEMS,
     fetcher
   );
 
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
-    (id: string, slug: string) => (
+    (menuItem: ITaxonomyEntity, childLevel: number = 0) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
-        <Link
-          href={`/pages/${slug}`}
-          className="bg-primary text-light py-1 px-1.5 rounded-md"
-          target="_blank"
+        <Button
+          rounded="rounded-md"
+          size="h-5"
+          type="button"
+          variant="primary"
+          extraCSSClasses="px-1.5 text-xs"
+          onClick={() => {
+            setDetailsModal({ show: true, menuItem });
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +96,37 @@ const AdminPages = () => {
               clipRule="evenodd"
             />
           </svg>
-        </Link>
-        <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_EDIT]}>
+        </Button>
+        {childLevel < +process.env.NEXT_PUBLIC_CATEGORY_CHILD_LEVEL! && (
+          <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_CREATE]}>
+            <Button
+              rounded="rounded-md"
+              size="h-5"
+              type="button"
+              variant="success"
+              extraCSSClasses="px-1.5 text-xs"
+              onClick={() => {
+                setParent(menuItem);
+                setMenuItemParentId(menuItem.id);
+                setAddMenuItemModalShow(true);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-3 h-3 -rotate-90"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M2.232 12.207a.75.75 0 011.06.025l3.958 4.146V6.375a5.375 5.375 0 0110.75 0V9.25a.75.75 0 01-1.5 0V6.375a3.875 3.875 0 00-7.75 0v10.003l3.957-4.146a.75.75 0 011.085 1.036l-5.25 5.5a.75.75 0 01-1.085 0l-5.25-5.5a.75.75 0 01.025-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Button>
+          </AuthGuard>
+        )}
+        <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_EDIT]}>
           <Button
             rounded="rounded-md"
             size="h-5"
@@ -95,7 +134,8 @@ const AdminPages = () => {
             variant="warning"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              router.push(`/admin/pages/edit/${id}`);
+              setMenuItemToEdit(menuItem);
+              setEditMenuItemModalShow(true);
             }}
           >
             <svg
@@ -109,7 +149,7 @@ const AdminPages = () => {
             </svg>
           </Button>
         </AuthGuard>
-        <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}>
+        <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}>
           <Button
             rounded="rounded-md"
             size="h-5"
@@ -117,7 +157,7 @@ const AdminPages = () => {
             variant="danger"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              setItemToDelete(id);
+              setItemToDelete(menuItem.id);
               setRemoveConfirm(true);
             }}
           >
@@ -137,58 +177,34 @@ const AdminPages = () => {
         </AuthGuard>
       </div>
     ),
-    [router]
+    []
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (category: ITaxonomyEntity): IDataType => {
       return {
-        id: post.id,
-        title: (
-          <div className="flex flex-col space-y-1">
-            <div className="flex justify-start items-center">
-              {post.visibility === PostVisibilityEnum.PRIVATE && (
-                <div className="w-4 h-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-3.5 h-3.5 mr-1 text-primary mb-0.5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-              {post.title}
-            </div>
-            <div className="flex justify-start items-center text-xs space-x-1">
-              <div className="bg-primary-light rounded text-light px-1">
-                Status: {post.status}
-              </div>
-            </div>
-          </div>
-        ),
-        slug: post.slug,
-        viewCount: post.viewCount,
-        actions: actionsColumn(post.id, post.slug),
+        id: category.id,
+        name: category.term,
+        description: category.description ?? '',
+        children:
+          category.children && category.children.length > 0
+            ? category.children.map((ch) => formatData(ch))
+            : [],
+        actions: actionsColumn(category, category.childLevel),
       };
     },
     [actionsColumn]
   );
 
   const data: IDataType[] = useMemo(
-    () => (pagesData ? pagesData.items.map((p) => formatData(p)) : []),
-    [formatData, pagesData]
+    () => (menuItemsData ? menuItemsData.map((c) => formatData(c)) : []),
+    [menuItemsData, formatData]
   );
 
   return (
     <>
       <AuthGuard
-        claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
+        claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
         redirect={false}
       >
         <ConfirmModal
@@ -200,10 +216,13 @@ const AdminPages = () => {
             try {
               setRemoveLoading(true);
               if (itemsToBulkDelete && itemsToBulkDelete.length > 0) {
-                await AdminPostAgent.softDeleteAll(session, itemsToBulkDelete);
+                await AdminTaxonomyAgent.permanentDeleteAll(
+                  session,
+                  itemsToBulkDelete
+                );
                 setItemsToBulkDelete(null);
                 await mutate();
-                toast.success('The selected items moved to trash.', {
+                toast.success('The selected items deleted successfully.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -223,11 +242,11 @@ const AdminPages = () => {
           }}
           show={bulkRemoveConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the selected items?"
+          text="Are you sure you want to delete the selected items permanently?"
         />
       </AuthGuard>
       <AuthGuard
-        claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE]}
+        claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_DELETE]}
         redirect={false}
       >
         <ConfirmModal
@@ -239,9 +258,9 @@ const AdminPages = () => {
             try {
               setRemoveLoading(true);
               if (itemToDelete) {
-                await AdminPostAgent.softDelete(session, itemToDelete);
+                await AdminTaxonomyAgent.softDelete(session, itemToDelete);
                 await mutate();
-                toast.success('The page moved to trash.', {
+                toast.success('The menu item deleted successfully.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -261,94 +280,79 @@ const AdminPages = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the page?"
+          text="Are you sure you want to delete the menu item permanently?"
         />
       </AuthGuard>
+      <MenuItemDetails
+        menuItem={detailsModal.menuItem}
+        show={detailsModal.show}
+        onClose={() => setDetailsModal({ show: false, menuItem: undefined })}
+      />
+      <AddMenuItemForm
+        addMenuItemModalShow={addMenuItemModalShow}
+        newMenuItemParentId={menuItemParentId ?? menuId}
+        parent={parent}
+        onSuccess={async () => {
+          await mutate();
+          setMenuItemParentId(undefined);
+          setAddMenuItemModalShow(false);
+        }}
+        onClose={() => {
+          setAddMenuItemModalShow(false);
+          setMenuItemParentId(undefined);
+        }}
+      />
+      <EditMenuItemForm
+        initialValues={
+          new TaxonomyEditFormValues(
+            menuItemToEdit! as TaxonomyCreateFormValues
+          )
+        }
+        menuItemIdToEdit={menuItemToEdit?.id!}
+        menuItemParentId={menuItemParentId ?? menuId}
+        editMenuItemModalShow={editMenuItemModalShow}
+        parent={parent}
+        onSuccess={async () => {
+          await mutate();
+          setMenuItemToEdit(undefined);
+          setEditMenuItemModalShow(false);
+        }}
+        onClose={() => {
+          setMenuItemToEdit(undefined);
+          setEditMenuItemModalShow(false);
+        }}
+      />
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
         <AdminTable
           menu={{
             items: [
               {
                 value: 'Add',
-                onClick: () => router.push('/admin/pages/add-new'),
-                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE],
-              },
-              {
-                value: 'Trash',
-                onClick: () => router.push('/admin/pages/trash'),
-                claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE],
+                onClick: () => setAddMenuItemModalShow(true),
+                claims: [ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_CREATE],
               },
             ],
           }}
           columns={[
             {
-              title: 'Title',
-              search: {
-                initialValue: router.query['searchBy.title'] as string,
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.title'];
-                  else router.query['searchBy.title'] = s;
-                  router.push(router);
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.title'] as 'ASC' | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.title'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.title'];
-                  router.push(router);
-                },
-              },
+              title: 'Label',
             },
             {
-              title: 'Slug',
-              search: {
-                initialValue: router.query['searchBy.slug'] as string,
-                onSubmit: (s) => {
-                  if (!s?.length) delete router.query['searchBy.slug'];
-                  else router.query['searchBy.slug'] = s;
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: <MiniEye />,
-              sort: {
-                initialValue: router.query['orderBy.viewCount'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.viewCount'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.viewCount'];
-                  router.push(router);
-                },
-              },
+              title: 'Description',
             },
             {
               title: 'Actions',
             },
           ]}
           data={data}
-          loading={!pagesData}
+          showChildren
+          loading={!menuItemsData}
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
-          pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/pages`,
-            currentPage: router.query.page
-              ? +router.query.page
-              : pagesData?.meta.currentPage,
-            totalPages: pagesData?.meta.totalPages,
-          }}
         />
       </div>
     </>
   );
 };
 
-export default AdminPages;
+export default AdminMenuItems;

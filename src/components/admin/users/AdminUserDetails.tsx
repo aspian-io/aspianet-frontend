@@ -8,7 +8,6 @@ import { AdminUserKeys } from '../../../lib/swr/keys';
 import { INestError } from '../../../models/common/error';
 import { IUserEntity } from '../../../models/users/admin/user';
 import Loading from '../../common/Loading';
-import SocialNetworkInfoCard from '../profile/sub-components/SocialNetworkInfoCard';
 import UserDetailsAvatar from './sub-components/details/UserDetailsAvatar';
 import UserDetailsContactInfo from './sub-components/details/UserDetailsContactInfo';
 import UserDetailsPersonalInfo from './sub-components/details/UserDetailsPersonlaInfo';

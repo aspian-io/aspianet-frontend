@@ -38,7 +38,7 @@ import DropdownMenu from '../../../common/DropdownMenu';
 interface IProps {
   columns: IColumn[];
   data: ITableDataType[];
-  pagination: IAdminPaginationProps;
+  pagination?: IAdminPaginationProps;
   onSelectColumns?: (selectedIds: string[]) => any;
   loading?: boolean;
   selectable?: boolean;

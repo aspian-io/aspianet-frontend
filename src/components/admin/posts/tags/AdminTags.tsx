@@ -37,7 +37,7 @@ const AdminTags = () => {
   }>({ show: false, tag: undefined });
   const [addTagModalShow, setAddTagModalShow] = useState(false);
   const [editTagModalShow, setEditTagModalShow] = useState(false);
-  const [tagIdToEdit, setTagIdToEdit] = useState<string | undefined>(undefined);
+  const [tagToEdit, setTagToEdit] = useState<ITaxonomyEntity | undefined>(undefined);
   const [removeLoading, setRemoveLoading] = useState(false);
 
   const [removeConfirm, setRemoveConfirm] = useState(false);
@@ -72,15 +72,8 @@ const AdminTags = () => {
 
   if (error) router.push('/500');
 
-  const getTagById = useCallback(
-    (id?: string) => {
-      return tagsData?.items.filter((t) => t.id === id)[0];
-    },
-    [tagsData?.items]
-  );
-
   const actionsColumn = useCallback(
-    (id: string) => (
+    (tag: ITaxonomyEntity) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
         <Button
           rounded="rounded-md"
@@ -89,7 +82,6 @@ const AdminTags = () => {
           variant="primary"
           extraCSSClasses="px-1.5 text-xs"
           onClick={() => {
-            const tag = getTagById(id);
             setDetailsModal({ show: true, tag });
           }}
         >
@@ -116,7 +108,7 @@ const AdminTags = () => {
             variant="warning"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              setTagIdToEdit(id);
+              setTagToEdit(tag);
               setEditTagModalShow(true);
             }}
           >
@@ -139,7 +131,7 @@ const AdminTags = () => {
             variant="danger"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
-              setItemToDelete(id);
+              setItemToDelete(tag.id);
               setRemoveConfirm(true);
             }}
           >
@@ -159,7 +151,7 @@ const AdminTags = () => {
         </AuthGuard>
       </div>
     ),
-    [getTagById]
+    []
   );
 
   const formatData = useCallback(
@@ -169,7 +161,7 @@ const AdminTags = () => {
         name: tag.term,
         description: tag.description ?? '',
         slug: tag.slug,
-        actions: actionsColumn(tag.id),
+        actions: actionsColumn(tag),
       };
     },
     [actionsColumn]
@@ -283,18 +275,18 @@ const AdminTags = () => {
       <EditTagForm
         initialValues={
           new TaxonomyEditFormValues(
-            getTagById(tagIdToEdit) as TaxonomyCreateFormValues
+            tagToEdit as TaxonomyCreateFormValues
           )
         }
-        tagIdToEdit={tagIdToEdit!}
+        tagIdToEdit={tagToEdit?.id!}
         editTagModalShow={editTagModalShow}
         onSuccess={async () => {
           await mutate();
-          setTagIdToEdit(undefined);
+          setTagToEdit(undefined);
           setEditTagModalShow(false);
         }}
         onClose={() => {
-          setTagIdToEdit(undefined);
+          setTagToEdit(undefined);
           setEditTagModalShow(false);
         }}
       />

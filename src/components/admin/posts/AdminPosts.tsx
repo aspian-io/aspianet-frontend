@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -74,15 +75,12 @@ const AdminPosts = () => {
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
-    (id: string) => (
+    (id: string, slug: string) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
-        <Button
-          rounded="rounded-md"
-          size="h-5"
-          type="button"
-          variant="primary"
-          extraCSSClasses="px-1.5 text-xs"
-          onClick={() => {}}
+        <Link
+          href={`/blog/${slug}`}
+          className="bg-primary text-light py-1 px-1.5 rounded-md"
+          target="_blank"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +95,7 @@ const AdminPosts = () => {
               clipRule="evenodd"
             />
           </svg>
-        </Button>
+        </Link>
         <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_EDIT]}>
           <Button
             rounded="rounded-md"
@@ -211,7 +209,7 @@ const AdminPosts = () => {
         commentsNum: post.commentsNum,
         likesNum: post.likesNum,
         bookmarksNum: post.bookmarksNum,
-        actions: actionsColumn(post.id),
+        actions: actionsColumn(post.id, post.slug),
       };
     },
     [actionsColumn]

@@ -26,6 +26,8 @@ export const AdminUserKeys = {
 // TAXONOMY KEYS
 export const AdminTaxonomyKeys = {
   GET_ALL_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/categories`,
+  GET_ALL_MENUS: `${ BaseURLs.API }/admin/taxonomies/menus`,
+  GET_ALL_MENU_ITEMS: `${ BaseURLs.API }/admin/taxonomies/menu-items`,
   GET_SOFT_DELETED_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/categories-trash`,
   GET_SOFT_DELETED_TAGS: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/tags-trash`,
 } as const;
