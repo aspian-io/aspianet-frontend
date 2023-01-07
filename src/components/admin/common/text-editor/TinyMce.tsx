@@ -61,14 +61,47 @@ const TinyMce = forwardRef<Editor, IProps>(
           menubar,
           plugins: mini ? miniPlugins : fullPlugins,
           toolbar: mini ? miniToolbar : fullToolbar,
-          content_style:
-            'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          content_css: '/assets/libs/tinymce/custom-content.css',
           quickbars_selection_toolbar:
             'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+          image_class_list: [
+            { title: 'None', value: '' },
+            {
+              title: 'Border Radius',
+              menu: [
+                { title: 'None', value: 'tinymce-rounded-none' },
+                { title: 'Sm Rounded', value: 'tinymce-rounded-sm' },
+                { title: 'Rounded', value: 'tinymce-rounded' },
+                { title: 'Md Rounded', value: 'tinymce-rounded-md' },
+                { title: 'Lg Rounded', value: 'tinymce-rounded-lg' },
+                { title: 'XL Rounded', value: 'tinymce-rounded-xl' },
+                { title: '2XL Rounded', value: 'tinymce-rounded-2xl' },
+                { title: '3XL Rounded', value: 'tinymce-rounded-3xl' },
+                { title: 'Full', value: 'tinymce-rounded-full' },
+              ],
+            },
+          ],
           image_advtab: true,
           image_caption: true,
           toolbar_mode: 'sliding',
           contextmenu: 'link image table',
+          table_class_list: [
+            { title: 'None', value: '' },
+            {
+              title: 'Border Radius',
+              menu: [
+                { title: 'None', value: 'tinymce-rounded-none' },
+                { title: 'Sm Rounded', value: 'tinymce-rounded-sm' },
+                { title: 'Rounded', value: 'tinymce-rounded' },
+                { title: 'Md Rounded', value: 'tinymce-rounded-md' },
+                { title: 'Lg Rounded', value: 'tinymce-rounded-lg' },
+                { title: 'XL Rounded', value: 'tinymce-rounded-xl' },
+                { title: '2XL Rounded', value: 'tinymce-rounded-2xl' },
+                { title: '3XL Rounded', value: 'tinymce-rounded-3xl' },
+                { title: 'Full', value: 'tinymce-rounded-full' },
+              ],
+            },
+          ],
         }}
         onEditorChange={onEditorChange}
         onChange={onChange}

@@ -4,10 +4,18 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminTaxonomyAgent } from '../../../../lib/axios/agent';
+import {
+  AdminSettingsAgent,
+  AdminTaxonomyAgent,
+} from '../../../../lib/axios/agent';
+import { AdminSettingsKeys } from '../../../../lib/swr/keys';
 import { ClaimsEnum } from '../../../../models/auth/common';
 import { INestError } from '../../../../models/common/error';
 import { IPaginated } from '../../../../models/common/paginated-result';
+import {
+  ISettingsEntity,
+  SettingsServiceEnum,
+} from '../../../../models/settings/settings';
 import {
   ITaxonomyEntity,
   TaxonomyCreateFormValues,
@@ -17,6 +25,7 @@ import { AuthGuard } from '../../../common/AuthGuard';
 import Button from '../../../common/Button';
 import ConfirmModal from '../../../common/ConfirmModal';
 import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
+import { swrMenuSettingsKey } from './constants';
 import AddMenuForm from './sub-components/AddMenuForm';
 import EditMenuForm from './sub-components/EditMenuForm';
 import MenuDetails from './sub-components/MenuDetails';
@@ -74,6 +83,17 @@ const AdminMenus = () => {
     fetcher
   );
 
+  const settingFetcher = () =>
+    AdminSettingsAgent.settingsList(session, SettingsServiceEnum.MENU);
+
+  const { data: menuSettingsData, error: settingError } = useSWR<
+    ISettingsEntity[],
+    AxiosError<INestError>
+  >(
+    swrMenuSettingsKey,
+    settingFetcher
+  );
+
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
@@ -125,6 +145,14 @@ const AdminMenus = () => {
             variant="warning"
             extraCSSClasses="px-1.5 text-xs"
             onClick={() => {
+              if (settingError) {
+                return toast.error(
+                  'Something went wrong loading menu settings. Please try again later.',
+                  {
+                    className: 'bg-danger text-light',
+                  }
+                );
+              }
               setMenuToEdit(menu);
               setEditMenuModalShow(true);
             }}
@@ -168,7 +196,7 @@ const AdminMenus = () => {
         </AuthGuard>
       </div>
     ),
-    []
+    [router, settingError]
   );
 
   const formatData = useCallback(
@@ -294,6 +322,10 @@ const AdminMenus = () => {
           new TaxonomyEditFormValues(menuToEdit! as TaxonomyCreateFormValues)
         }
         menuIdToEdit={menuToEdit?.id!}
+        settingData={useMemo(
+          () => (menuSettingsData ? menuSettingsData : []),
+          [menuSettingsData]
+        )}
         editMenuModalShow={editMenuModalShow}
         onSuccess={async () => {
           await mutate();

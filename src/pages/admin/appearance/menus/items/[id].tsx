@@ -25,7 +25,6 @@ const AppearanceMenuItemsPage: NextPage = () => {
             { label: 'Menus', href: '/admin/appearance/menus' },
             { label: 'Items' },
           ]}
-          topBarBackArrow={false}
         >
           <AdminMenuItems menuId={id} />
         </AdminLayout>

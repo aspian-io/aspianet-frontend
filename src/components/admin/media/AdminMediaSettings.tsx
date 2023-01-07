@@ -34,7 +34,7 @@ const AdminMediaSettings = () => {
     error,
     mutate,
   } = useSWR<ISettingsEntity[], AxiosError<INestError>>(
-    AdminSettingsKeys.GET_ALL_SETTINGS,
+    `${AdminSettingsKeys.GET_ALL_SETTINGS}?settingService=${SettingsServiceEnum.FILES}`,
     fetcher
   );
 

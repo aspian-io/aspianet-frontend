@@ -28,6 +28,10 @@ const nextConfig = {
             from: path.join(__dirname, 'node_modules/tinymce'),
             to: path.join(__dirname, 'public/assets/libs/tinymce'),
           },
+          {
+            from: path.join(__dirname, 'src/styles/tinymce/custom-content.css'),
+            to: path.join(__dirname, 'public/assets/libs/tinymce'),
+          },
         ],
       })
     );

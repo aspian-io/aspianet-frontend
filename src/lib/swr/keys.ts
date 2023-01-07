@@ -12,7 +12,7 @@ const BaseURLs = {
 
 // SETTINGS KEYS
 export const AdminSettingsKeys = {
-  GET_ALL_SETTINGS: `${ BaseURLs.API }/admin/settings?settingService=${ SettingsServiceEnum.USERS }`,
+  GET_ALL_SETTINGS: `${ BaseURLs.API }/admin/settings`,
   GET_SETTING_DETAILS: `${ BaseURLs.API }/admin/settings`
 } as const;
 

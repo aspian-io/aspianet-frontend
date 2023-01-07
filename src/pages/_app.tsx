@@ -2,6 +2,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'nprogress/nprogress.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/globals.css';
+import '../styles/tinymce/custom-content.css';
 import 'reflect-metadata';
 import type { AppProps } from 'next/app';
 import { store } from '../store/store';
