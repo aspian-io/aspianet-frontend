@@ -15,8 +15,8 @@ import { useSession } from 'next-auth/react';
 
 // Site Navigation Menu Component
 const SiteNav: ISiteNav<ISiteNavProps> = ({
-  logoSrc,
-  overlayLogoSrc,
+  logo,
+  overlayLogo,
   loginRegisterLabel,
   loginRegisterHref,
   children,
@@ -31,8 +31,8 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
       <div className="container mx-auto flex flex-row justify-between items-center relative">
         <SiteNavLogo
           isOpen={isOpen}
-          logoSrc={logoSrc}
-          overlayLogoSrc={overlayLogoSrc}
+          logo={logo}
+          overlayLogo={overlayLogo}
         />
         <SiteNavItemsWrapper isOpen={isOpen}>{children}</SiteNavItemsWrapper>
         <div
@@ -84,15 +84,21 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
 const Item: FC<PropsWithChildren<INavItemProps>> = ({
   href,
   isActive,
+  onClick = () => {},
   children,
 }) => {
   const css = isActive
-    ? 'lg:flex lg:relative lg:text-primary lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary'
-    : 'lg:hoverable:hover:text-primary';
+    ? 'lg:relative lg:text-primary lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary lg:before:visible lg:before:opacity-100 lg:transition-all lg:duration-300'
+    : 'lg:hoverable:hover:text-primary lg:relative lg:text-zinc-700 lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary lg:before:invisible lg:before:opacity-0 lg:transition-all lg:duration-300';
   return (
     <Link
       href={href}
-      className={`block w-full py-3 text-center lg:w-auto lg:py-0 hoverable:hover:text-dark ${css}`}
+      className={`block w-full py-3 text-center lg:w-auto lg:py-0 hoverable:hover:text-dark lg:relative lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary ${
+        isActive
+          ? 'lg:text-primary lg:before:visible lg:before:opacity-100'
+          : 'lg:hoverable:hover:text-primary lg:text-zinc-700 lg:before:invisible lg:before:opacity-0'
+      } lg:transition-all lg:duration-300`}
+      onClick={(e) => onClick(e)}
       passHref
     >
       {children}

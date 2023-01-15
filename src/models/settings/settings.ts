@@ -2,6 +2,8 @@ import { Expose, plainToClassFromExist } from "class-transformer";
 import { IBaseMinimalEntity } from "../common/base-entities";
 
 export enum SettingsKeyEnum {
+  SITE_LOGO_ID = "SITE_LOGO_ID",
+  SITE_OVERLAY_LOGO_ID = "SITE_OVERLAY_LOGO_ID",
   SITE_NAME = "SITE_NAME",
   SITE_DESCRIPTION = "SITE_DESCRIPTION",
   SITE_URL = "SITE_URL",

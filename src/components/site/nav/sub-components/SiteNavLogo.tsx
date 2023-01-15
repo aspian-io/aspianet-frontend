@@ -2,49 +2,65 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
 import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
+import { ILogoFile } from '../../../../models/files/logo-file';
 
 export interface ISiteNavLogoProps {
   isOpen: boolean;
-  logoSrc: string;
-  overlayLogoSrc: string;
+  logo?: ILogoFile;
+  overlayLogo?: ILogoFile;
 }
 
-const SiteNavLogo: FC<ISiteNavLogoProps> = ({
-  isOpen,
-  logoSrc,
-  overlayLogoSrc,
-}) => {
+const SiteNavLogo: FC<ISiteNavLogoProps> = ({ isOpen, logo, overlayLogo }) => {
+  const getSiteLogoSrc = () => {
+    if (logo) {
+      return `${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${logo.key}`;
+    }
+    return '';
+  };
+
+  const getSiteOverlayLogoSrc = () => {
+    if (overlayLogo) {
+      return `${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${overlayLogo.key}`;
+    }
+    return null;
+  };
+
   return (
     <>
-      <div
-        className={`${
-          isOpen ? 'hidden' : ''
-        } w-1/2 h-10 lg:flex lg:w-52 lg:h-24 relative`}
-      >
-        <Link href={process.env.NEXT_PUBLIC_APP_BASE_URL!}>
+      {logo && (
+        <Link
+          href={process.env.NEXT_PUBLIC_APP_BASE_URL!}
+          className={`${
+            isOpen ? 'hidden' : ''
+          } w-36 h-10 lg:flex lg:w-52 lg:h-24 relative`}
+        >
           <Image
-            className="mx-auto z-20"
-            src={logoSrc}
+            className="z-20"
+            src={getSiteLogoSrc()}
             fill
+            sizes="(max-width: 210px) 25vw"
             placeholder="blur"
             blurDataURL={imgPlaceholderDataURL}
             priority
-            alt="Site Logo"
+            alt={logo?.imageAlt ?? 'Site Logo'}
           />
         </Link>
-      </div>
+      )}
       <div
-        className={`${isOpen ? '' : 'hidden'} w-1/2 h-10 lg:hidden relative`}
+        className={`${isOpen ? '' : 'hidden'} w-36 h-10 lg:hidden relative`}
       >
-        <Image
-          className="mx-auto z-30"
-          src={overlayLogoSrc}
-          fill
-          placeholder="blur"
-          blurDataURL={imgPlaceholderDataURL}
-          priority
-          alt="Site Logo"
-        />
+        {logo && (
+          <Image
+            className="z-30"
+            src={getSiteOverlayLogoSrc() ?? getSiteLogoSrc()}
+            fill
+            sizes="(max-width: 210px) 25vw"
+            placeholder="blur"
+            blurDataURL={imgPlaceholderDataURL}
+            priority
+            alt={overlayLogo?.imageAlt ?? 'Site Logo'}
+          />
+        )}
       </div>
     </>
   );

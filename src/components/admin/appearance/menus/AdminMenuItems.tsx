@@ -97,7 +97,7 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
             />
           </svg>
         </Button>
-        {childLevel < +process.env.NEXT_PUBLIC_CATEGORY_CHILD_LEVEL! && (
+        {childLevel < +process.env.NEXT_PUBLIC_CATEGORY_CHILD_LEVEL! - 1 && (
           <AuthGuard claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_CREATE]}>
             <Button
               rounded="rounded-md"

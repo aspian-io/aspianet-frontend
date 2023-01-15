@@ -24,6 +24,8 @@ export interface IFile extends IBaseMinimalEntity {
   type: string;
   size: number;
   imageSizeCategory?: ImageSizeCategories;
-  originalImage?: IFile;
-  videoThumbnail?: IFile;
+  originalImage: IFile;
+  generatedImageChildren: IFile[];
+  thumbnail: string | null;
+  imageAlt: string | null;
 }

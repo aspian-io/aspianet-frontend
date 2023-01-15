@@ -18,6 +18,8 @@ import { CommentCreateFormValues, CommentEditFormValues, ICommentEntity } from "
 import { AdminSubscriberCreateFormValues, AdminSubscriberUpdateFormValues, ISubscriberEntity } from "../../models/newsletter/subscribers/admin/subscriber";
 import { ICampaignEntity, NewsletterCampaignCreateFormValues, NewsletterCampaignUpdateFormValues } from "../../models/newsletter/admin/campaign";
 import { EmailSendFormValues, IEmailEntity } from "../../models/emails/email";
+import { ITaxonomy } from "../../models/taxonomies/taxonomy";
+import { IFileSiteLogo } from "../../models/files/logo-file";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -267,6 +269,17 @@ export const UserAgent = {
   isUpdateAvatarAllowed: ( session: Session | null ): Promise<boolean> => apiRequests.get( '/users/profile/update-avatar-setting', { headers: authHeader( session ) } ),
   changePassword: ( body: IChangePassword, session: Session | null ): Promise<IUserProfile> => apiRequests.patch( '/users/change-password', body, { headers: authHeader( session ) } ),
   getBookmarks: ( page: number, session: Session | null ): Promise<IPaginated<IBookmarkPost>> => apiRequests.get( `/users/profile/bookmarks?page=${ page }&limit=6`, { headers: authHeader( session ) } ),
+};
+
+// File Agent
+export const FileAgent = {
+  getSiteLogos: (): Promise<IFileSiteLogo[]> => apiRequests.get( '/files/get-site-logos' ),
+};
+
+// Taxonomy Agent
+export const TaxonomyAgent = {
+  getPrimaryMenu: (): Promise<ITaxonomy[]> => apiRequests.get( '/taxonomies/menus/primary-menu' ),
+  getSecondaryMenu: (): Promise<ITaxonomy[]> => apiRequests.get( '/taxonomies/menus/secondary-menu' ),
 };
 
 // Comment Agent

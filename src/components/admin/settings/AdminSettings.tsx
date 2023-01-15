@@ -55,6 +55,9 @@ const AdminSettings = () => {
   );
 
   const initialValues = {
+    SITE_LOGO_ID: getSetting(SettingsKeyEnum.SITE_LOGO_ID)?.value ?? undefined,
+    SITE_OVERLAY_LOGO_ID:
+      getSetting(SettingsKeyEnum.SITE_OVERLAY_LOGO_ID)?.value ?? undefined,
     SITE_NAME: getSetting(SettingsKeyEnum.SITE_NAME)?.value ?? undefined,
     SITE_DESCRIPTION:
       getSetting(SettingsKeyEnum.SITE_DESCRIPTION)?.value ?? undefined,
@@ -73,6 +76,10 @@ const AdminSettings = () => {
   };
 
   const validationSchema = Yup.object({
+    SITE_LOGO_ID: Yup.string().uuid('Please enter a standard logo id (UUID)'),
+    SITE_OVERLAY_LOGO_ID: Yup.string().uuid(
+      'Please enter a standard overlay logo id (UUID)'
+    ),
     SITE_NAME: Yup.string().max(
       150,
       'Site name cannot be more than 150 characters'
@@ -196,6 +203,22 @@ const AdminSettings = () => {
                     )}
                   </Button>
                 </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name={SettingsKeyEnum.SITE_LOGO_ID}
+                  placeholder="Site Logo Id"
+                  className="h-9 rounded-lg w-72 text-zinc-700 text-xs sm:text-sm"
+                  labelClassName="text-zinc-700"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name={SettingsKeyEnum.SITE_OVERLAY_LOGO_ID}
+                  placeholder="Site Overlay Logo Id"
+                  className="h-9 rounded-lg w-72 text-zinc-700 text-xs sm:text-sm"
+                  labelClassName="text-zinc-700"
+                  component={FormikInput}
+                />
                 <Field
                   type={InputTypeEnum.text}
                   name={SettingsKeyEnum.SITE_NAME}

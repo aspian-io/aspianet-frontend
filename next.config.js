@@ -9,7 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.arvanstorage.com',
+        hostname: '**.arvanstorage.ir',
       },
       {
         protocol: 'https',

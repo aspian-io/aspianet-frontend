@@ -45,6 +45,7 @@ const SiteNavAuthUser: FC<IProps> = ({ user, responsive }) => {
             <Image
               src={getUserAvatarSrc()}
               fill
+              sizes="(max-width: 44px) 10vw"
               placeholder="blur"
               blurDataURL={imgPlaceholderDataURL}
               alt="Profile Photo"

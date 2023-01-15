@@ -45,6 +45,12 @@ module.exports = {
       transitionDelay: {
         0: '0ms',
       },
+      lineClamp: {
+        7: '7',
+        8: '8',
+        9: '9',
+        10: '10',
+      },
     },
   },
   plugins: [
