@@ -71,6 +71,16 @@ const UserDetailsSocialInfo: FC<IProps> = ({ userData }) => {
               {userData.pinterest}
             </span>
           </div>
+          <div className="text-dark font-bold">
+            <span className="mr-2">GitHub:</span>
+            <span className="text-zinc-500 font-normal">{userData.github}</span>
+          </div>
+          <div className="text-dark font-bold">
+            <span className="mr-2">Stack Overflow:</span>
+            <span className="text-zinc-500 font-normal">
+              {userData.stackoverflow}
+            </span>
+          </div>
         </div>
       </AdminCard>
     </>

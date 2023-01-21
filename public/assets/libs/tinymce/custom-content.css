@@ -38,3 +38,11 @@ body {
 .tinymce-rounded-full {
   border-radius: 9999px;
 }
+
+.tinymce-link-not-underlined,
+.tinymce-link-not-underlined:link,
+.tinymce-link-not-underlined:visited,
+.tinymce-link-not-underlined:hover,
+.tinymce-link-not-underlined:active {
+  text-decoration: none;
+}

@@ -3,6 +3,7 @@ import {
   AdminFileAgent,
   AdminPostAgent,
   AdminTaxonomyAgent,
+  AdminUserAgent,
 } from '../../../lib/axios/agent';
 import { matchRule } from '../../../lib/helpers/match-wildcards';
 import AdminSelectMediaOptions from '../common/react-select/AdminSelectMediaOptions';
@@ -23,6 +24,25 @@ export const parentOptionsLoader = async (
         value: i.id,
         label: `${i.title} ${i.child ? '(TAKEN)' : ''}`,
         isDisabled: !!i.child,
+      }));
+    } catch (error) {}
+  }
+};
+
+// Select Project Owner Options Loader
+export const projectOwnerOptionsLoader = async (
+  inputValue: string,
+  session: Session | null
+) => {
+  if (inputValue?.length && inputValue.length > 2) {
+    try {
+      const { items } = await AdminUserAgent.list(
+        session,
+        `/admin/users?searchBy.email=${inputValue}&orderBy.createdAt=DESC`
+      );
+      return items.map((i) => ({
+        value: i.id,
+        label: i.email,
       }));
     } catch (error) {}
   }

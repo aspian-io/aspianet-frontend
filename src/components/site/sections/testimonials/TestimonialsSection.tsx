@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const TestimonialsSection = () => {
   return (
-    <div className="border-b-2 border-primary border-dashed">
+    <section>
       <div className="container mx-auto flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
         <div className="flex flex-col justify-center items-center space-y-6">
           <h3 className="text-primary text-sm">Testimonials</h3>
@@ -111,7 +111,7 @@ const TestimonialsSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

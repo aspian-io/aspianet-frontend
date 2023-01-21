@@ -11,6 +11,7 @@ export interface ICommentEntity extends IBaseEntity {
   dislikes: IUserEntity[];
   dislikesNum: number;
   isApproved: boolean;
+  isSpecial: boolean;
   seen: boolean;
   ancestor?: ICommentEntity;
   ancestorChildren?: ICommentEntity[];

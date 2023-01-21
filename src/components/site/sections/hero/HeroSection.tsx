@@ -14,7 +14,7 @@ import TypeScriptLogo from '../../../common/vectors/TypeScriptLogo';
 
 const HeroSection = () => {
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center lg:items-start py-10 sm:py-20 px-4 transition-all duration-300">
+    <section className="container mx-auto flex flex-col lg:flex-row justify-between items-center lg:items-start py-10 sm:py-20 px-4 transition-all duration-300">
       <div className="flex flex-col justify-center items-start w-full lg:w-1/2 relative order-2 lg:order-1">
         <p className="md:text-lg">{"Hi, we're"}</p>
         <p className="text-2xl md:text-5xl py-6 md:py-12">
@@ -93,7 +93,7 @@ const HeroSection = () => {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

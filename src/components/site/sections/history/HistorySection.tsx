@@ -4,7 +4,7 @@ import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 
 const HistorySection = () => {
   return (
-    <div className="bg-primary-light/20 py-20">
+    <section className="bg-primary-light/20 py-20">
       <div className="container mx-auto flex justify-start items-center w-full h-96 px-4">
         <div className="hidden sm:flex justify-start items-center w-full sm:w-1/2 sm:pr-8 h-96">
           <div className="relative w-full h-full rounded-3xl overflow-hidden">
@@ -58,7 +58,7 @@ const HistorySection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

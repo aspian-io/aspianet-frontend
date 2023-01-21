@@ -24,6 +24,7 @@ import {
   categoriesOptionsLoader,
   featuredImageOptionsLoader,
   parentOptionsLoader,
+  projectOwnerOptionsLoader,
   tagsOptionsLoader,
 } from './post-react-select-loaders';
 import slugify from 'slugify';
@@ -502,104 +503,143 @@ const AdminPostForm: FC<IProps> = ({
                       </label>
                     </div>
                   </Accordion>
+                  {postType === PostTypeEnum.PROJECT && (
+                    <Accordion
+                      title="Project Owner"
+                      expandInitialState={!!editPostData?.projectOwner}
+                    >
+                      <AsyncSelect
+                        styles={reactSelectStyle}
+                        placeholder="Project Owner"
+                        defaultValue={
+                          editPostData?.projectOwner
+                            ? ({
+                                value: editPostData?.projectOwner?.id,
+                                label: editPostData?.projectOwner?.email,
+                              } as any)
+                            : undefined
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        name="projectOwnerId"
+                        onChange={(newValue: any, actionMeta) => {
+                          if (actionMeta.action === 'clear')
+                            setFieldValue('status', PostStatusEnum.PUBLISH);
+                          handleChange({
+                            target: {
+                              name: 'projectOwnerId',
+                              value: newValue?.value ?? null,
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          projectOwnerOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
+                  )}
                   {postType === PostTypeEnum.BLOG && (
-                    <>
-                      <Accordion
-                        title="Parent"
-                        expandInitialState={!!editPostData?.parent}
-                      >
-                        <AsyncSelect
-                          styles={reactSelectStyle}
-                          placeholder="Parent"
-                          defaultValue={
-                            editPostData?.parent
-                              ? ({
-                                  value: editPostData?.parent?.id,
-                                  label: editPostData?.parent?.title,
-                                } as any)
-                              : undefined
-                          }
-                          isClearable
-                          isSearchable
-                          cacheOptions
-                          defaultOptions
-                          name="parentId"
-                          onChange={(newValue: any, actionMeta) => {
-                            if (actionMeta.action === 'clear')
-                              setFieldValue('status', PostStatusEnum.PUBLISH);
-                            handleChange({
-                              target: {
-                                name: 'parentId',
-                                value: newValue?.value ?? null,
-                              },
-                            });
-                          }}
-                          loadOptions={(inputValue) =>
-                            parentOptionsLoader(inputValue, session) as any
-                          }
-                        />
-                      </Accordion>
-
-                      <Accordion title="Categories" expandInitialState>
-                        <AsyncSelect
-                          components={animatedComponents}
-                          styles={reactSelectStyle}
-                          placeholder="Categories"
-                          defaultValue={
-                            getSelectFormattedTaxonomiesByType(
-                              TaxonomyTypeEnum.CATEGORY
-                            ) as any
-                          }
-                          isClearable
-                          isSearchable
-                          cacheOptions
-                          defaultOptions
-                          isMulti={true as any}
-                          name="categoryIds"
-                          onChange={(newValue: any, actionMeta) => {
-                            handleChange({
-                              target: {
-                                name: 'categoryIds',
-                                value: newValue?.map((i: any) => i.value),
-                              },
-                            });
-                          }}
-                          loadOptions={(inputValue) =>
-                            categoriesOptionsLoader(inputValue, session) as any
-                          }
-                        />
-                      </Accordion>
-                      <Accordion title="Tags" expandInitialState>
-                        <AsyncSelect
-                          components={animatedComponents}
-                          styles={reactSelectStyle}
-                          placeholder="Tags"
-                          defaultValue={
-                            getSelectFormattedTaxonomiesByType(
-                              TaxonomyTypeEnum.TAG
-                            ) as any
-                          }
-                          isClearable
-                          isSearchable
-                          cacheOptions
-                          defaultOptions
-                          isMulti={true as any}
-                          name="tagIds"
-                          onChange={(newValue: any, actionMeta) => {
-                            console.log('after change: ', newValue);
-                            handleChange({
-                              target: {
-                                name: 'tagIds',
-                                value: newValue?.map((i: any) => i.value),
-                              },
-                            });
-                          }}
-                          loadOptions={(inputValue) =>
-                            tagsOptionsLoader(inputValue, session) as any
-                          }
-                        />
-                      </Accordion>
-                    </>
+                    <Accordion
+                      title="Parent"
+                      expandInitialState={!!editPostData?.parent}
+                    >
+                      <AsyncSelect
+                        styles={reactSelectStyle}
+                        placeholder="Parent"
+                        defaultValue={
+                          editPostData?.parent
+                            ? ({
+                                value: editPostData?.parent?.id,
+                                label: editPostData?.parent?.title,
+                              } as any)
+                            : undefined
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        name="parentId"
+                        onChange={(newValue: any, actionMeta) => {
+                          if (actionMeta.action === 'clear')
+                            setFieldValue('status', PostStatusEnum.PUBLISH);
+                          handleChange({
+                            target: {
+                              name: 'parentId',
+                              value: newValue?.value ?? null,
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          parentOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
+                  )}
+                  {(postType === PostTypeEnum.BLOG ||
+                    postType === PostTypeEnum.PROJECT) && (
+                    <Accordion title="Categories" expandInitialState>
+                      <AsyncSelect
+                        components={animatedComponents}
+                        styles={reactSelectStyle}
+                        placeholder="Categories"
+                        defaultValue={
+                          getSelectFormattedTaxonomiesByType(
+                            TaxonomyTypeEnum.CATEGORY
+                          ) as any
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        isMulti={true as any}
+                        name="categoryIds"
+                        onChange={(newValue: any, actionMeta) => {
+                          handleChange({
+                            target: {
+                              name: 'categoryIds',
+                              value: newValue?.map((i: any) => i.value),
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          categoriesOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
+                  )}
+                  {postType === PostTypeEnum.BLOG && (
+                    <Accordion title="Tags" expandInitialState>
+                      <AsyncSelect
+                        components={animatedComponents}
+                        styles={reactSelectStyle}
+                        placeholder="Tags"
+                        defaultValue={
+                          getSelectFormattedTaxonomiesByType(
+                            TaxonomyTypeEnum.TAG
+                          ) as any
+                        }
+                        isClearable
+                        isSearchable
+                        cacheOptions
+                        defaultOptions
+                        isMulti={true as any}
+                        name="tagIds"
+                        onChange={(newValue: any, actionMeta) => {
+                          console.log('after change: ', newValue);
+                          handleChange({
+                            target: {
+                              name: 'tagIds',
+                              value: newValue?.map((i: any) => i.value),
+                            },
+                          });
+                        }}
+                        loadOptions={(inputValue) =>
+                          tagsOptionsLoader(inputValue, session) as any
+                        }
+                      />
+                    </Accordion>
                   )}
                   <>
                     <Accordion

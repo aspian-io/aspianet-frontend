@@ -1,6 +1,3 @@
-import { PostTypeEnum } from "../../models/posts/admin/post";
-import { SettingsServiceEnum } from "../../models/settings/settings";
-
 // BASE URLS
 const BaseURLs = {
   APP: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -37,13 +34,16 @@ export const AdminPostKeys = {
   GET_BLOGS_LIST: `${ BaseURLs.API }/admin/posts/blogs`,
   GET_NEWS_LIST: `${ BaseURLs.API }/admin/posts/news`,
   GET_BANNERS_LIST: `${ BaseURLs.API }/admin/posts/banners`,
+  GET_PROJECTS_LIST: `${ BaseURLs.API }/admin/posts/projects`,
   GET_PAGES_LIST: `${ BaseURLs.API }/admin/posts/banners`,
   GET_EMAIL_TEMPLATES_LIST: `${ BaseURLs.API }/admin/posts/email-templates`,
   GET_NEWSLETTER_TEMPLATES_LIST: `${ BaseURLs.API }/admin/posts/newsletter-templates`,
+  GET_WIDGETS_LIST: `${ BaseURLs.API }/admin/posts/widgets`,
   GET_POST_DETAILS: `${ BaseURLs.API }/admin/posts`,
   GET_SOFT_DELETED_BLOGS: `${ BaseURLs.API }/admin/posts/soft-deleted/blogs-trash`,
   GET_SOFT_DELETED_NEWS: `${ BaseURLs.API }/admin/posts/soft-deleted/news-trash`,
   GET_SOFT_DELETED_BANNERS: `${ BaseURLs.API }/admin/posts/soft-deleted/banners-trash`,
+  GET_SOFT_DELETED_PROJECTS: `${ BaseURLs.API }/admin/posts/soft-deleted/projects-trash`,
   GET_SOFT_DELETED_PAGES: `${ BaseURLs.API }/admin/posts/soft-deleted/pages-trash`,
   GET_SOFT_DELETED_EMAIL_TEMPLATES: `${ BaseURLs.API }/admin/posts/soft-deleted/email-templates-trash`,
   GET_SOFT_DELETED_NEWSLETTER_TEMPLATES: `${ BaseURLs.API }/admin/posts/soft-deleted/newsletter-templates-trash`,

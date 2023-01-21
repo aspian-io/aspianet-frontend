@@ -324,7 +324,7 @@ const AdminBanners = () => {
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/news`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/banners`,
             currentPage: router.query.page
               ? +router.query.page
               : bannersData?.meta.currentPage,

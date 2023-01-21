@@ -65,6 +65,16 @@ const UserDetailsSocialInfoForm: FC<IProps> = ({
       .matches(webAddressRegex, 'Please enter a standard URL')
       .min(5, 'Pinterest address should be more than 5 characters')
       .max(50, 'Pinterest address should be less than 50 characters'),
+    github: Yup.string()
+      .nullable()
+      .matches(webAddressRegex, 'Please enter a standard URL')
+      .min(5, 'GitHub address should be more than 5 characters')
+      .max(50, 'GitHub address should be less than 50 characters'),
+    stackoverflow: Yup.string()
+      .nullable()
+      .matches(webAddressRegex, 'Please enter a standard URL')
+      .min(5, 'StackOverflow address should be more than 5 characters')
+      .max(50, 'StackOverflow address should be less than 50 characters'),
   });
 
   return (
@@ -106,16 +116,7 @@ const UserDetailsSocialInfoForm: FC<IProps> = ({
           }
         }}
       >
-        {({
-          isSubmitting,
-          errors,
-          touched,
-          values,
-          handleBlur,
-          handleChange,
-          isValid,
-          dirty,
-        }) => (
+        {({ isSubmitting, isValid, dirty }) => (
           <Form>
             <fieldset disabled={isSubmitting}>
               <div className="flex flex-col sm:flex-row justify-between items-start w-full space-y-3 sm:space-x-6 sm:space-y-0">
@@ -173,6 +174,26 @@ const UserDetailsSocialInfoForm: FC<IProps> = ({
                     type={InputTypeEnum.text}
                     name="pinterest"
                     placeholder="Pinterest"
+                    className="text-xs sm:text-sm h-10 rounded-xl"
+                    component={FormikInput}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-between items-start w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-3 sm:mt-4">
+                <div className="flex flex-col w-full sm:w-1/2">
+                  <Field
+                    type={InputTypeEnum.text}
+                    name="github"
+                    placeholder="GitHub"
+                    className="text-xs sm:text-sm h-10 rounded-xl"
+                    component={FormikInput}
+                  />
+                </div>
+                <div className="flex flex-col w-full sm:w-1/2">
+                  <Field
+                    type={InputTypeEnum.text}
+                    name="stackoverflow"
+                    placeholder="Stack Overflow"
                     className="text-xs sm:text-sm h-10 rounded-xl"
                     component={FormikInput}
                   />

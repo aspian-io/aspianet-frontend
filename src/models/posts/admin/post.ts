@@ -19,10 +19,20 @@ export enum PostStatusEnum {
   ARCHIVE = "ARCHIVE"
 }
 
+export enum WidgetTypeEnum {
+  // TEMPLATE BASED POST TYPE
+  HERO_WIDGET = "HERO_WIDGET",
+  SERVICE_WIDGET = "SERVICE_WIDGET",
+  CONTACT_WIDGET = "CONTACT_WIDGET",
+  LINKS_WIDGET = "LINKS_WIDGET",
+  NEWSLETTER_WIDGET = "NEWSLETTER_WIDGET"
+}
+
 export enum PostTypeEnum {
   BLOG = "BLOG",
   PAGE = "PAGE",
   NEWS = "NEWS",
+  PROJECT = "PROJECT",
   BANNER = "BANNER",
   EMAIL_TEMPLATE = "EMAIL_TEMPLATE",
   NEWSLETTER_TEMPLATE = "NEWSLETTER_TEMPLATE",
@@ -63,7 +73,7 @@ export interface IPostEntity extends IBaseEntity {
   scheduledToArchive: Date | null;
   commentAllowed?: boolean;
   viewCount?: number;
-  type: PostTypeEnum;
+  type: PostTypeEnum | WidgetTypeEnum;
   isPinned?: boolean;
   order?: number;
   ancestor?: IPostEntity;
@@ -78,6 +88,7 @@ export interface IPostEntity extends IBaseEntity {
   bookmarksNum: number;
   slugsHistory: IPostSlugsHistoryEntity[];
   storeOldSlugToRedirect?: boolean;
+  projectOwner?: IUserEntity;
 }
 
 export interface IPostSlugsHistoryEntity extends IBaseMinimalEntity {
@@ -98,12 +109,13 @@ export class PostFormValues implements Partial<IPostEntity> {
   @Expose() scheduledToPublish?: Date = undefined;
   @Expose() scheduledToArchive?: Date = undefined;
   @Expose() commentAllowed?: boolean | undefined = true;
-  @Expose() type: PostTypeEnum = PostTypeEnum.BLOG;
+  @Expose() type: PostTypeEnum | WidgetTypeEnum = PostTypeEnum.BLOG;
   @Expose() isPinned?: boolean | undefined = false;
   @Expose() order?: number | undefined = 0;
   @Expose() parentId?: string = undefined;
   @Expose() taxonomiesIds: string[] = [];
   @Expose() attachmentsIds: string[] = [];
+  @Expose() projectOwnerId?: string = undefined;
   @Expose() slugsHistory: IPostSlugsHistoryEntity[] = [];
   @Expose() storeOldSlugToRedirect?: boolean = true;
 

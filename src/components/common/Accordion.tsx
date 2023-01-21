@@ -6,6 +6,7 @@ interface IProps {
   borderClassName?: string;
   headerClassName?: string;
   bodyClassName?: string;
+  onExpand?: Function;
 }
 
 const Accordion: FC<PropsWithChildren<IProps>> = ({
@@ -15,16 +16,22 @@ const Accordion: FC<PropsWithChildren<IProps>> = ({
   headerClassName = 'bg-zinc-100 text-sm text-zinc-500',
   bodyClassName,
   children,
+  onExpand = () => {},
 }) => {
   const [expand, setExpand] = useState(expandInitialState);
 
   return (
     <div
-      className={`flex flex-col justify-start items-start rounded-2xl border-2 ${borderClassName} w-full shadow-sm ${expand ? '' : 'overflow-hidden'}`}
+      className={`flex flex-col justify-start items-start relative rounded-2xl border-2 ${borderClassName} w-full shadow-sm ${
+        expand ? '' : 'overflow-hidden'
+      }`}
     >
       <div
-        className={`flex flex-row justify-start items-center w-full rounded-t-2xl p-3 ${headerClassName} cursor-pointer`}
-        onClick={() => setExpand((prev) => !prev)}
+        className={`flex flex-row justify-start items-center w-full rounded-t-xl p-3 ${headerClassName} cursor-pointer`}
+        onClick={async () => {
+          setExpand((prev) => !prev);
+          await onExpand();
+        }}
       >
         <span className="font-semibold">{title}</span>
         <svg
@@ -44,10 +51,12 @@ const Accordion: FC<PropsWithChildren<IProps>> = ({
       </div>
       <div
         className={`w-full ${
-          expand ? 'max-h-[700px] px-3 py-3 visible' : 'max-h-0 px-3 py-0 invisible overflow-hidden'
+          expand
+            ? 'max-h-[2600px] px-3 py-3 visible'
+            : 'max-h-0 px-3 py-0 invisible overflow-hidden'
         } transition-all duration-300 ${bodyClassName}`}
       >
-        {children}
+        {expand && children}
       </div>
     </div>
   );

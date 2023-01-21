@@ -61,6 +61,10 @@ const TinyMce = forwardRef<Editor, IProps>(
           menubar,
           plugins: mini ? miniPlugins : fullPlugins,
           toolbar: mini ? miniToolbar : fullToolbar,
+          content_style:
+            "@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&family=Rubik:wght@400;600;700&display=swap');",
+          font_family_formats:
+            'Rubik=Rubik,sans-serif; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
           content_css: '/assets/libs/tinymce/custom-content.css',
           quickbars_selection_toolbar:
             'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
@@ -101,6 +105,10 @@ const TinyMce = forwardRef<Editor, IProps>(
                 { title: 'Full', value: 'tinymce-rounded-full' },
               ],
             },
+          ],
+          link_class_list: [
+            { title: 'None', value: '' },
+            { title: 'Decoration None', value: 'tinymce-link-not-underlined' },
           ],
         }}
         onEditorChange={onEditorChange}

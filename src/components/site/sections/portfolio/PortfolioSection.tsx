@@ -5,7 +5,7 @@ import Button from '../../../common/Button';
 
 const PortfolioSection = () => {
   return (
-    <div className="bg-primary-light/20">
+    <section className="bg-primary-light/20">
       <div className="container mx-auto flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
         <div className="flex flex-col justify-center items-center space-y-6">
           <h3 className="text-primary text-sm">Portfolio</h3>
@@ -239,7 +239,7 @@ const PortfolioSection = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

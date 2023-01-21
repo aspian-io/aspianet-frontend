@@ -193,6 +193,28 @@ const AdminHeader = () => {
                 Add New Banner
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/projects"
+                onActive={() => setActivePosts(true)}
+              >
+                All Projects
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/add-project"
+                onActive={() => setActivePosts(true)}
+              >
+                Add New Project
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
           </AdminSideBar.Item>
         </AuthGuard>
 
@@ -576,10 +598,10 @@ const AdminHeader = () => {
               redirect={false}
             >
               <AdminSideBar.Item.SubItem
-                href="/admin/appearance/widgets"
+                href="/admin/appearance/template"
                 onActive={() => setActiveAppearance(true)}
               >
-                Widgets
+                Template
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>

@@ -25,6 +25,7 @@ interface IDataType extends ITableDataType {
   dislikesNum: number;
   isApproved: boolean | JSX.Element;
   seen: boolean | JSX.Element;
+  isSpecial: boolean | JSX.Element;
   actions: JSX.Element;
 }
 
@@ -187,6 +188,7 @@ const AdminComments = () => {
         dislikesNum: comment.dislikesNum,
         isApproved: boolIcons(comment.isApproved),
         seen: boolIcons(comment.seen),
+        isSpecial: boolIcons(comment.isSpecial),
         actions: actionsColumn(comment.id),
       };
     },
@@ -444,6 +446,20 @@ const AdminComments = () => {
                 },
                 onReset: () => {
                   delete router.query['orderBy.seen'];
+                  router.push(router);
+                },
+              },
+            },
+            {
+              title: 'Special',
+              sort: {
+                initialValue: router.query['orderBy.isSpecial'] as 'ASC' | 'DESC',
+                onSortChange: (sort) => {
+                  router.query['orderBy.isSpecial'] = sort;
+                  router.push(router);
+                },
+                onReset: () => {
+                  delete router.query['orderBy.isSpecial'];
                   router.push(router);
                 },
               },

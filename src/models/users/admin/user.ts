@@ -8,6 +8,7 @@ export interface IUserEntity extends IBaseMinimalEntity {
   isActivated: boolean;
   email: string;
   emailVerified: boolean;
+  organizationMember: boolean;
   emailVerificationToken: number | null;
   emailVerificationTokenExpiresAt?: Date;
   firstName: string;
@@ -33,6 +34,8 @@ export interface IUserEntity extends IBaseMinimalEntity {
   instagram: string | null;
   linkedIn: string | null;
   pinterest: string | null;
+  github: string | null;
+  stackoverflow: string | null;
   suspend: Date | null;
   avatar: string | null;
   avatarSource: AvatarSourceEnum;
@@ -83,6 +86,8 @@ export class AdminUserSocialInfo implements Partial<IUserEntity> {
   @Expose() @Transform( v => v.value ?? undefined ) instagram?: string;
   @Expose() @Transform( v => v.value ?? undefined ) linkedIn?: string;
   @Expose() @Transform( v => v.value ?? undefined ) pinterest?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) github?: string;
+  @Expose() @Transform( v => v.value ?? undefined ) stackoverflow?: string;
 
   constructor ( init?: IUserEntity ) {
     plainToClassFromExist(
@@ -119,6 +124,7 @@ export class AdminUserDetailsSecurityInfo implements Partial<IUserEntity> {
   @Expose() @Transform( v => v.value ?? undefined ) isActivated?: boolean;
   @Expose() @Transform( v => v.value ?? undefined ) emailVerified?: boolean;
   @Expose() @Transform( v => v.value ?? undefined ) mobilePhoneVerified?: boolean;
+  @Expose() @Transform( v => v.value ?? undefined ) organizationMember?: boolean;
 
   constructor ( init?: IUserEntity ) {
     plainToClassFromExist(

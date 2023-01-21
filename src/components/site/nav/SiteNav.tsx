@@ -29,11 +29,7 @@ const SiteNav: ISiteNav<ISiteNavProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-2 px-4 text-sm shadow shadow-zinc-100 bg-light sticky top-0 z-10">
       <div className="container mx-auto flex flex-row justify-between items-center relative">
-        <SiteNavLogo
-          isOpen={isOpen}
-          logo={logo}
-          overlayLogo={overlayLogo}
-        />
+        <SiteNavLogo isOpen={isOpen} logo={logo} overlayLogo={overlayLogo} />
         <SiteNavItemsWrapper isOpen={isOpen}>{children}</SiteNavItemsWrapper>
         <div
           className={`hidden lg:flex lg:flex-row justify-end items-center text-primary lg:w-auto ${

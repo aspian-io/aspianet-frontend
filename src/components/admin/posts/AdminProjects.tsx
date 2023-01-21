@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import { AdminPostAgent } from '../../../lib/axios/agent';
@@ -14,26 +14,25 @@ import {
   IPostEntity,
   PostVisibilityEnum,
 } from '../../../models/posts/admin/post';
+import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
 import { AuthGuard } from '../../common/AuthGuard';
 import Button from '../../common/Button';
 import ConfirmModal from '../../common/ConfirmModal';
-import MiniBookmark from '../../common/vectors/mini/MiniBookmark';
-import MiniComment from '../../common/vectors/mini/MiniComment';
 import MiniEye from '../../common/vectors/mini/MiniEye';
 import MiniLike from '../../common/vectors/mini/MiniLike';
 import AdminTable, { ITableDataType } from '../common/table/AdminTable';
 
 interface IDataType extends ITableDataType {
   title: string | JSX.Element;
+  categories: string | JSX.Element;
+  projectOwner?: string;
   slug: string;
   viewCount?: number;
-  commentsNum: number;
   likesNum: number;
-  bookmarksNum: number;
   actions: JSX.Element;
 }
 
-const AdminNews = () => {
+const AdminProjects = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [removeLoading, setRemoveLoading] = useState(false);
@@ -58,14 +57,14 @@ const AdminNews = () => {
   };
 
   const fetcher = () =>
-    AdminPostAgent.newsList(session, `${qs}${initialSort()}`);
+    AdminPostAgent.projectsList(session, `${qs}${initialSort()}`);
 
   const {
-    data: newsData,
+    data: projectsData,
     error,
     mutate,
   } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
-    `${AdminPostKeys.GET_NEWS_LIST}${qs}${initialSort()}`,
+    `${AdminPostKeys.GET_PROJECTS_LIST}${qs}${initialSort()}`,
     fetcher
   );
 
@@ -75,7 +74,7 @@ const AdminNews = () => {
     (id: string, slug: string) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
         <Link
-          href={`/news/${slug}`}
+          href={`/projects/${slug}`}
           className="bg-primary text-light py-1 px-1.5 rounded-md"
           target="_blank"
         >
@@ -147,13 +146,13 @@ const AdminNews = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (project: IPostEntity): IDataType => {
       return {
-        id: post.id,
+        id: project.id,
         title: (
           <div className="flex flex-col space-y-1">
             <div className="flex justify-start items-center">
-              {post.visibility === PostVisibilityEnum.PRIVATE && (
+              {project.visibility === PostVisibilityEnum.PRIVATE && (
                 <div className="w-4 h-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -169,13 +168,13 @@ const AdminNews = () => {
                   </svg>
                 </div>
               )}
-              {post.title}
+              {project.title}
             </div>
             <div className="flex justify-start items-center text-xs space-x-1">
               <div className="bg-primary-light rounded text-light px-1">
-                Status: {post.status}
+                Status: {project.status}
               </div>
-              {post.isPinned && (
+              {project.isPinned && (
                 <div className="bg-primary-light rounded text-light px-1">
                   Pinned
                 </div>
@@ -183,20 +182,36 @@ const AdminNews = () => {
             </div>
           </div>
         ),
-        slug: post.slug,
-        viewCount: post.viewCount,
-        commentsNum: post.commentsNum,
-        likesNum: post.likesNum,
-        bookmarksNum: post.bookmarksNum,
-        actions: actionsColumn(post.id, post.slug),
+        categories: (
+          <div className="flex flex-wrap justify-start items-center">
+            {project.taxonomies &&
+              project.taxonomies.length > 0 &&
+              project.taxonomies.map(
+                (t, i) =>
+                  t.type === TaxonomyTypeEnum.CATEGORY && (
+                    <div
+                      className="border-primary border-2 px-2 rounded-md text-primary mx-0.5 my-0.5"
+                      key={i}
+                    >
+                      {t.term}
+                    </div>
+                  )
+              )}
+          </div>
+        ),
+        projectOwner: project.projectOwner?.email,
+        slug: project.slug,
+        viewCount: project.viewCount,
+        likesNum: project.likesNum,
+        actions: actionsColumn(project.id, project.slug),
       };
     },
     [actionsColumn]
   );
 
   const data: IDataType[] = useMemo(
-    () => (newsData ? newsData.items.map((p) => formatData(p)) : []),
-    [formatData, newsData]
+    () => (projectsData ? projectsData.items.map((p) => formatData(p)) : []),
+    [formatData, projectsData]
   );
 
   return (
@@ -255,7 +270,7 @@ const AdminNews = () => {
               if (itemToDelete) {
                 await AdminPostAgent.softDelete(session, itemToDelete);
                 await mutate();
-                toast.success('The news moved to trash.', {
+                toast.success('The project moved to trash.', {
                   className: 'bg-success text-light text-sm',
                 });
               } else {
@@ -275,7 +290,7 @@ const AdminNews = () => {
           }}
           show={removeConfirm}
           onConfirmLoading={removeLoading}
-          text="Are you sure you want to delete the news?"
+          text="Are you sure you want to delete the project?"
         />
       </AuthGuard>
       <div className="flex flex-col justify-center items-center pb-4 space-y-4">
@@ -284,12 +299,12 @@ const AdminNews = () => {
             items: [
               {
                 value: 'Add',
-                onClick: () => router.push('/admin/posts/add-news'),
+                onClick: () => router.push('/admin/posts/add-project'),
                 claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_CREATE],
               },
               {
                 value: 'Trash',
-                onClick: () => router.push('/admin/posts/news-trash'),
+                onClick: () => router.push('/admin/posts/projects-trash'),
                 claims: [ClaimsEnum.ADMIN, ClaimsEnum.POST_DELETE],
               },
             ],
@@ -318,6 +333,28 @@ const AdminNews = () => {
               },
             },
             {
+              title: 'Categories',
+              search: {
+                initialValue: router.query['searchBy.category'] as string,
+                onSubmit: (s) => {
+                  if (!s?.length) delete router.query['searchBy.category'];
+                  else router.query['searchBy.category'] = s;
+                  router.push(router);
+                },
+              },
+            },
+            {
+              title: 'Owner',
+              search: {
+                initialValue: router.query['searchBy.projectOwner'] as string,
+                onSubmit: (s) => {
+                  if (!s?.length) delete router.query['searchBy.projectOwner'];
+                  else router.query['searchBy.projectOwner'] = s;
+                  router.push(router);
+                },
+              },
+            },
+            {
               title: 'Slug',
               search: {
                 initialValue: router.query['searchBy.slug'] as string,
@@ -331,45 +368,15 @@ const AdminNews = () => {
             {
               title: <MiniEye />,
               sort: {
-                initialValue: router.query['orderBy.viewCount'] as
+                initialValue: router.query['orderBy.likesNum'] as
                   | 'ASC'
                   | 'DESC',
                 onSortChange: (sort) => {
-                  router.query['orderBy.viewCount'] = sort;
+                  router.query['orderBy.likesNum'] = sort;
                   router.push(router);
                 },
                 onReset: () => {
-                  delete router.query['orderBy.viewCount'];
-                  router.push(router);
-                },
-              },
-            },
-            {
-              title: <MiniComment />,
-              filter: {
-                textInput: {
-                  placeholder: '>=',
-                  onFilter: (value) => {
-                    if (!value) delete router.query['filterBy.commentsNumGte'];
-                    else router.query['filterBy.commentsNumGte'] = value;
-                    router.push(router);
-                  },
-                  onReset: () => {
-                    delete router.query['filterBy.commentsNumGte'];
-                    router.push(router);
-                  },
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.commentsNum'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.commentsNum'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.commentsNum'];
+                  delete router.query['orderBy.likesNum'];
                   router.push(router);
                 },
               },
@@ -405,49 +412,19 @@ const AdminNews = () => {
               },
             },
             {
-              title: <MiniBookmark />,
-              filter: {
-                textInput: {
-                  placeholder: '>=',
-                  onFilter: (value) => {
-                    if (!value) delete router.query['filterBy.bookmarksNumGte'];
-                    else router.query['filterBy.bookmarksNumGte'] = value;
-                    router.push(router);
-                  },
-                  onReset: () => {
-                    delete router.query['filterBy.bookmarksNumGte'];
-                    router.push(router);
-                  },
-                },
-              },
-              sort: {
-                initialValue: router.query['orderBy.bookmarksNum'] as
-                  | 'ASC'
-                  | 'DESC',
-                onSortChange: (sort) => {
-                  router.query['orderBy.bookmarksNum'] = sort;
-                  router.push(router);
-                },
-                onReset: () => {
-                  delete router.query['orderBy.bookmarksNum'];
-                  router.push(router);
-                },
-              },
-            },
-            {
               title: 'Actions',
             },
           ]}
           data={data}
-          loading={!newsData}
+          loading={!projectsData}
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/news`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/projects`,
             currentPage: router.query.page
               ? +router.query.page
-              : newsData?.meta.currentPage,
-            totalPages: newsData?.meta.totalPages,
+              : projectsData?.meta.currentPage,
+            totalPages: projectsData?.meta.totalPages,
           }}
         />
       </div>
@@ -455,4 +432,4 @@ const AdminNews = () => {
   );
 };
 
-export default AdminNews;
+export default AdminProjects;

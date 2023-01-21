@@ -38,9 +38,9 @@ const SiteHeader: FC<ISiteLayoutProps> = ({
       >
         {menuItems?.map((item, i) => (
           <Item
-            href={item.href ?? '#'}
+            href={item.href ?? '/'}
             isActive={activeItem === item.href}
-            onClick={() => setActiveItem(item.href!)}
+            onClick={(e) => setActiveItem(item.href!)}
             key={i}
           >
             {item.term}

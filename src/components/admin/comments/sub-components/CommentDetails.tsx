@@ -43,6 +43,8 @@ const CommentDetails = () => {
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
+  const [specialLoading, setSpecialLoading] = useState(false);
+
   const fetcher = () => AdminCommentAgent.details(session, id);
 
   const {
@@ -228,6 +230,54 @@ const CommentDetails = () => {
             ) : (
               <span className="text-danger">Not Approved</span>
             )}
+          </div>
+
+          <div className="flex justify-start items-center text-xs text-zinc-500 mt-2">
+            <span className="mr-1">Special:</span>
+            {commentData.isSpecial ? (
+              <span className="text-success">Special</span>
+            ) : (
+              <span className="text-danger">Not Special</span>
+            )}
+            <span>
+              <Button
+                rounded="rounded"
+                size="h-5"
+                type="button"
+                variant={commentData.isSpecial ? 'danger' : 'success'}
+                extraCSSClasses="flex justify-center items-center text-xs w-12 ml-2"
+                disabled={specialLoading}
+                onClick={async () => {
+                  try {
+                    setSpecialLoading(true);
+                    await AdminCommentAgent.setUnsetSpecial(
+                      session,
+                      commentData.id
+                    );
+                    await mutate();
+                    setSpecialLoading(false);
+                  } catch (error) {
+                    setSpecialLoading(false);
+                    toast.error(
+                      'Something went wrong, please try again later.',
+                      {
+                        className: 'bg-danger text-light',
+                      }
+                    );
+                  }
+                }}
+              >
+                {specialLoading && (
+                  <LoadingSpinner
+                    className={`h-4 w-4 ${
+                      commentData.isSpecial ? 'text-danger' : 'text-success'
+                    }`}
+                  />
+                )}
+                {!specialLoading && commentData.isSpecial && 'Unset'}
+                {!specialLoading && !commentData.isSpecial && 'Set'}
+              </Button>
+            </span>
           </div>
           {commentData?.parent && (
             <div className="flex flex-col justify-center items-start bg-zinc-200 rounded-2xl w-full p-4 mt-4">

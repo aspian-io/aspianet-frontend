@@ -36,12 +36,12 @@ const HomePage: NextPage<IProps> = ({
       >
         <HeroSection />
         <ServicesSection />
-        <BlogSection />
-        <PortfolioSection />
-        <TeamSection />
-        <HistorySection />
+        {/* <BlogSection />
+        <PortfolioSection /> */}
+        {/* <TeamSection />
+        <HistorySection /> */}
         <TestimonialsSection />
-        <ContactSection />
+        {/* <ContactSection /> */}
       </SiteLayout>
     </>
   );

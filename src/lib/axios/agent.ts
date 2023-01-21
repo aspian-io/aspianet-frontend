@@ -11,7 +11,7 @@ import { IBookmarkPost } from "../../models/users/bookmark";
 import { ICreateUser, IUserEntity } from "../../models/users/admin/user";
 import { IClaimEntity } from "../../models/auth/common";
 import { ISettingsEntity, SettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
-import { IPostEntity, IPostsDelayedJobs, PostFormValues, PostTypeEnum } from "../../models/posts/admin/post";
+import { IPostEntity, IPostsDelayedJobs, PostFormValues, PostTypeEnum, WidgetTypeEnum } from "../../models/posts/admin/post";
 import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
 import { ITaxonomyEntity, ITaxonomySlugsHistoryEntity, TaxonomyCreateFormValues, TaxonomyEditFormValues } from "../../models/taxonomies/admin/taxonomy";
 import { CommentCreateFormValues, CommentEditFormValues, ICommentEntity } from "../../models/comments/admin/comment";
@@ -20,6 +20,7 @@ import { ICampaignEntity, NewsletterCampaignCreateFormValues, NewsletterCampaign
 import { EmailSendFormValues, IEmailEntity } from "../../models/emails/email";
 import { ITaxonomy } from "../../models/taxonomies/taxonomy";
 import { IFileSiteLogo } from "../../models/files/logo-file";
+import { IPost } from "../../models/posts/post";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -139,9 +140,11 @@ export const AdminTaxonomyAgent = {
 export const AdminPostAgent = {
   create: ( session: Session | null, post: PostFormValues ): Promise<IPostEntity> => apiRequests.post( `/admin/posts`, post, { headers: authHeader( session ) } ),
   edit: ( session: Session | null, postId: string, post: PostFormValues | IPostEntity ): Promise<IPostEntity> => apiRequests.patch( `/admin/posts/${ postId }`, post, { headers: authHeader( session ) } ),
+  getWidgetsByType: ( session: Session | null, type: WidgetTypeEnum ): Promise<IPostEntity[]> => apiRequests.get( `/admin/posts/widgets?type=${ type }`, { headers: authHeader( session ) } ),
   blogsList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/blogs${ qs }`, { headers: authHeader( session ) } ),
   newsList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/news${ qs }`, { headers: authHeader( session ) } ),
   bannersList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/banners${ qs }`, { headers: authHeader( session ) } ),
+  projectsList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/projects${ qs }`, { headers: authHeader( session ) } ),
   pagesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/pages${ qs }`, { headers: authHeader( session ) } ),
   emailTemplatesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/email-templates${ qs }`, { headers: authHeader( session ) } ),
   newsletterTemplatesList: ( session: Session | null, qs: string ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/newsletter-templates${ qs }`, { headers: authHeader( session ) } ),
@@ -156,6 +159,7 @@ export const AdminPostAgent = {
   softDeletedNewsletterHeadersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-headers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedNewsletterBodiesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-bodies-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedNewsletterFootersList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/newsletter-footers-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
+  softDeletedProjectsList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/projects-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   softDeletedPagesList: ( session: Session | null, page: number, limit: number ): Promise<IPaginated<IPostEntity>> => apiRequests.get( `/admin/posts/soft-deleted/pages-trash?page=${ page }&limit=${ limit }`, { headers: authHeader( session ) } ),
   recoverPost: ( session: Session | null, postId: string ): Promise<ITaxonomyEntity> => apiRequests.patch( `/admin/posts/recover/${ postId }`, {}, { headers: authHeader( session ) } ),
   deletePermanently: ( session: Session | null, postId: string ): Promise<IUserEntity> => apiRequests.del( `/admin/posts/permanent-delete/${ postId }`, { headers: authHeader( session ) } ),
@@ -167,6 +171,7 @@ export const AdminPostAgent = {
   emptyNewsletterHeadersTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-headers-trash`, { headers: authHeader( session ) } ),
   emptyNewsletterBodiesTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-bodies-trash`, { headers: authHeader( session ) } ),
   emptyNewsletterFootersTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-newsletter-footers-trash`, { headers: authHeader( session ) } ),
+  emptyProjectsTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-projects-trash`, { headers: authHeader( session ) } ),
   emptyPagesTrash: ( session: Session | null ): Promise<void> => apiRequests.del( `/admin/posts/empty-pages-trash`, { headers: authHeader( session ) } ),
 };
 
@@ -185,6 +190,7 @@ export const AdminCommentAgent = {
   create: ( session: Session | null, comment: CommentCreateFormValues ): Promise<ICommentEntity> => apiRequests.post( `/admin/comments`, comment, { headers: authHeader( session ) } ),
   edit: ( session: Session | null, commentId: string, comment: CommentEditFormValues ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/${ commentId }`, comment, { headers: authHeader( session ) } ),
   approve: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/approve/${ commentId }`, {}, { headers: authHeader( session ) } ),
+  setUnsetSpecial: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/set-unset-special/${ commentId }`, {}, { headers: authHeader( session ) } ),
   reject: ( session: Session | null, commentId: string ): Promise<ICommentEntity> => apiRequests.patch( `/admin/comments/reject/${ commentId }`, {}, { headers: authHeader( session ) } ),
   list: ( session: Session | null, qs?: string ): Promise<IPaginated<ICommentEntity>> => apiRequests.get( `/admin/comments${ qs }`, { headers: authHeader( session ) } ),
   commentRepliesByParentId: ( session: Session | null, parentId: string ): Promise<ICommentEntity[]> => apiRequests.get( `/admin/comments/replies/${ parentId }`, { headers: authHeader( session ) } ),
@@ -280,6 +286,11 @@ export const FileAgent = {
 export const TaxonomyAgent = {
   getPrimaryMenu: (): Promise<ITaxonomy[]> => apiRequests.get( '/taxonomies/menus/primary-menu' ),
   getSecondaryMenu: (): Promise<ITaxonomy[]> => apiRequests.get( '/taxonomies/menus/secondary-menu' ),
+};
+
+// Post Agent
+export const PostAgent = {
+  getWidgetsByType: ( type: WidgetTypeEnum ): Promise<IPost[]> => apiRequests.get( `/posts/widgets?type=${ type }` ),
 };
 
 // Comment Agent

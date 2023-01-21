@@ -111,7 +111,7 @@ const MediaFileCard: FC<IProps> = ({
           <div className="flex justify-start items-center text-sm text-zinc-700 w-full text-left">
             <span className="text-dark font-semibold mr-6">ID: </span>
             <div className="relative bg-zinc-100 pl-4 pr-12 py-1 rounded-lg">
-              <div className='w-72'>{id}</div>
+              <div className="w-72">{id}</div>
               <Button
                 rounded="rounded-r-lg"
                 size="h-7"
@@ -404,7 +404,8 @@ const MediaFileCard: FC<IProps> = ({
                 <Image
                   className="hoverable:hover:scale-110 hoverable:hover:rotate-2 transition-transform duration-700"
                   src={`${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${
-                    getGeneratedImgChildBySize(ImageSizeCategories.SIZE_320).key
+                    getGeneratedImgChildBySize(ImageSizeCategories.SIZE_320)
+                      ?.key
                   }`}
                   fill
                   placeholder="blur"

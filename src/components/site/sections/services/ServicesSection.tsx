@@ -4,7 +4,7 @@ import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
 
 const ServicesSection = () => {
   return (
-    <div className="bg-primary-light/20">
+    <section className="bg-primary-light/20">
       <div className="container mx-auto flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
         <div className="flex flex-col justify-center items-center space-y-6">
           <h3 className="text-primary text-sm">Services</h3>
@@ -91,7 +91,7 @@ const ServicesSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
