@@ -5,6 +5,7 @@ import React, { FC, useId } from 'react';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 import {
+  AdminPostAgent,
   AdminSettingsAgent,
   AdminTaxonomyAgent,
 } from '../../../../../lib/axios/agent';
@@ -91,6 +92,11 @@ const AddMenuForm: FC<IProps> = ({ addMenuModalShow, onClose, onSuccess }) => {
                   session,
                   settingsValues
                 );
+              }
+
+              if (settingsValues.length > 0) {
+                // Revalidate Home Page
+                await AdminPostAgent.revalidateHomePage(session);
               }
 
               await mutate(swrMenuSettingsKey);

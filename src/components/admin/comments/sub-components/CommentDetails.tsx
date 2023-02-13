@@ -5,7 +5,11 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import { AdminCommentAgent, CommentAgent } from '../../../../lib/axios/agent';
+import {
+  AdminCommentAgent,
+  AdminPostAgent,
+  CommentAgent,
+} from '../../../../lib/axios/agent';
 import { AdminCommentKeys } from '../../../../lib/swr/keys';
 import {
   CommentEditFormValues,
@@ -20,11 +24,11 @@ import LoadingSpinner from '../../../common/LoadingSpinner';
 import Button from '../../../common/Button';
 import CommentReplies from './CommentReplies';
 import { Form, Formik } from 'formik';
-import TinyMce from '../../common/text-editor/TinyMce';
 import { CommentCreateFormValues } from '../../../../models/comments/admin/comment';
 import { AuthGuard } from '../../../common/AuthGuard';
 import { ClaimsEnum } from '../../../../models/auth/common';
 import ConfirmModal from '../../../common/ConfirmModal';
+import { PostTypeEnum } from '../../../../models/posts/admin/post';
 
 const CommentDetails = () => {
   const router = useRouter();
@@ -116,6 +120,13 @@ const CommentDetails = () => {
                 try {
                   setApproveLoading(true);
                   await AdminCommentAgent.approve(session, commentData.id);
+                  if (
+                    commentData.post.type === PostTypeEnum.PROJECT &&
+                    commentData.isSpecial
+                  ) {
+                    // Revalidate Home Page
+                    await AdminPostAgent.revalidateHomePage(session);
+                  }
                   await mutate();
                   setApproveLoading(false);
                   toast.success('The comment approved successfully.', {
@@ -167,6 +178,13 @@ const CommentDetails = () => {
                 try {
                   setRejectLoading(true);
                   await AdminCommentAgent.reject(session, commentData.id);
+                  if (
+                    commentData.post.type === PostTypeEnum.PROJECT &&
+                    commentData.isSpecial
+                  ) {
+                    // Revalidate Home Page
+                    await AdminPostAgent.revalidateHomePage(session);
+                  }
                   await mutate();
                   setRejectLoading(false);
                   toast.success('The comment rejected successfully.', {
@@ -254,6 +272,11 @@ const CommentDetails = () => {
                       session,
                       commentData.id
                     );
+                    if (commentData.post.type === PostTypeEnum.PROJECT) {
+                      // Revalidate Home Page
+                      await AdminPostAgent.revalidateHomePage(session);
+                    }
+
                     await mutate();
                     setSpecialLoading(false);
                   } catch (error) {

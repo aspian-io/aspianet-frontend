@@ -4,10 +4,19 @@ import { useRouter } from 'next/router';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminTaxonomyAgent } from '../../../../lib/axios/agent';
+import {
+  AdminPostAgent,
+  AdminSettingsAgent,
+  AdminTaxonomyAgent,
+} from '../../../../lib/axios/agent';
 import { AdminTaxonomyKeys } from '../../../../lib/swr/keys';
 import { ClaimsEnum } from '../../../../models/auth/common';
 import { INestError } from '../../../../models/common/error';
+import {
+  ISettingsEntity,
+  SettingsKeyEnum,
+  SettingsServiceEnum,
+} from '../../../../models/settings/settings';
 import {
   ITaxonomyEntity,
   TaxonomyCreateFormValues,
@@ -17,6 +26,7 @@ import { AuthGuard } from '../../../common/AuthGuard';
 import Button from '../../../common/Button';
 import ConfirmModal from '../../../common/ConfirmModal';
 import AdminTable, { ITableDataType } from '../../common/table/AdminTable';
+import { swrMenuSettingsKey } from './constants';
 import AddMenuItemForm from './sub-components/AddMenuItemForm';
 import EditMenuItemForm from './sub-components/EditMenuItemForm';
 import MenuItemDetails from './sub-components/MenuItemDetails';
@@ -69,6 +79,49 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
   );
 
   if (error) router.push('/500');
+
+  const settingFetcher = () =>
+    AdminSettingsAgent.settingsList(session, SettingsServiceEnum.MENU);
+
+  const { data: menuSettingsData, error: settingError } = useSWR<
+    ISettingsEntity[],
+    AxiosError<INestError>
+  >(swrMenuSettingsKey, settingFetcher);
+
+  if (error) router.push('/500');
+
+  const primaryMenuSetting = useMemo(
+    () =>
+      menuSettingsData?.filter(
+        (s) => s.key === SettingsKeyEnum.MENU_PRIMARY
+      )[0],
+    [menuSettingsData]
+  );
+  const secondaryMenuSetting = useMemo(
+    () =>
+      menuSettingsData?.filter(
+        (s) => s.key === SettingsKeyEnum.MENU_SECONDARY
+      )[0],
+    [menuSettingsData]
+  );
+
+  function isActiveMenu(menuId: string) {
+    const activeMenuIds: string[] = [];
+    if (
+      primaryMenuSetting?.value &&
+      !activeMenuIds.includes(primaryMenuSetting.value)
+    ) {
+      activeMenuIds.push(primaryMenuSetting.value);
+    }
+    if (
+      secondaryMenuSetting?.value &&
+      !activeMenuIds.includes(secondaryMenuSetting.value)
+    ) {
+      activeMenuIds.push(secondaryMenuSetting.value);
+    }
+
+    return activeMenuIds.includes(menuId);
+  }
 
   const actionsColumn = useCallback(
     (menuItem: ITaxonomyEntity, childLevel: number = 0) => (
@@ -220,6 +273,10 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
                   session,
                   itemsToBulkDelete
                 );
+                if (itemsToBulkDelete.some((i) => isActiveMenu(i))) {
+                  // Revalidate Home Page
+                  await AdminPostAgent.revalidateHomePage(session);
+                }
                 setItemsToBulkDelete(null);
                 await mutate();
                 toast.success('The selected items deleted successfully.', {
@@ -258,7 +315,15 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
             try {
               setRemoveLoading(true);
               if (itemToDelete) {
-                await AdminTaxonomyAgent.softDelete(session, itemToDelete);
+                await AdminTaxonomyAgent.deletePermanently(
+                  session,
+                  itemToDelete
+                );
+                
+                if (isActiveMenu(itemToDelete)) {
+                  // Revalidate Home Page
+                  await AdminPostAgent.revalidateHomePage(session);
+                }
                 await mutate();
                 toast.success('The menu item deleted successfully.', {
                   className: 'bg-success text-light text-sm',
@@ -292,6 +357,7 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
         addMenuItemModalShow={addMenuItemModalShow}
         newMenuItemParentId={menuItemParentId ?? menuId}
         parent={parent}
+        isActiveMenu={isActiveMenu(menuId)}
         onSuccess={async () => {
           await mutate();
           setMenuItemParentId(undefined);
@@ -312,6 +378,7 @@ const AdminMenuItems: FC<IProps> = ({ menuId }) => {
         menuItemParentId={menuItemParentId ?? menuId}
         editMenuItemModalShow={editMenuItemModalShow}
         parent={parent}
+        isActiveMenu={isActiveMenu(menuId)}
         onSuccess={async () => {
           await mutate();
           setMenuItemToEdit(undefined);

@@ -23,9 +23,11 @@ export const AdminUserKeys = {
 // TAXONOMY KEYS
 export const AdminTaxonomyKeys = {
   GET_ALL_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/categories`,
+  GET_ALL_PROJECT_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/project-categories`,
   GET_ALL_MENUS: `${ BaseURLs.API }/admin/taxonomies/menus`,
   GET_ALL_MENU_ITEMS: `${ BaseURLs.API }/admin/taxonomies/menu-items`,
   GET_SOFT_DELETED_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/categories-trash`,
+  GET_SOFT_DELETED_PROJECT_CATEGORIES: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/project-categories-trash`,
   GET_SOFT_DELETED_TAGS: `${ BaseURLs.API }/admin/taxonomies/soft-deleted/tags-trash`,
 } as const;
 
@@ -90,6 +92,26 @@ export const AdminNewsletterKeys = {
 export const UserKeys = {
   GET_CURRENT_USER_PROFILE: `${ BaseURLs.API }/users/profile`,
   GET_BOOKMARKS: `${ BaseURLs.API }/users/profile/bookmarks`
+} as const;
+
+// TAXONOMY KEYS
+export const TaxonomyKeys = {
+  GET_ALL_PROJECTS_CATEGORIES: `${ BaseURLs.API }/taxonomies/project-categories`,
+} as const;
+
+// POST KEYS
+export const PostKeys = {
+  GET_BLOGS_LIST: `${ BaseURLs.API }/posts/blogs`,
+  GET_BLOG_STAT: `${ BaseURLs.API }/posts/blogs/statistics`,
+  GET_NEWS_LIST: `${ BaseURLs.API }/posts/news`,
+  GET_NEWS_STAT: `${ BaseURLs.API }/posts/news/statistics`,
+  GET_PROJECTS_LIST: `${ BaseURLs.API }/posts/projects`,
+} as const;
+
+// COMMENT KEYS
+export const CommentKeys = {
+  GET_POST_COMMENTS_LIST: `${ BaseURLs.API }/comments`,
+  GET_POST_REPLIES_LIST: `${ BaseURLs.API }/comments/replies`,
 } as const;
 
 /*********** CLIENT REGION START **************/

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React, { FC, PropsWithChildren } from 'react';
 import { ILogoFile } from '../../../models/files/logo-file';
 import { ITaxonomy } from '../../../models/taxonomies/taxonomy';
-import SiteFooter from './sub-components/SiteFooter';
+import SiteFooter, { ISiteFooterProps } from './sub-components/SiteFooter';
 import SiteHeader from './sub-components/SiteHeader';
 
 export interface ISiteLayoutProps {
@@ -10,6 +10,8 @@ export interface ISiteLayoutProps {
   headerMenuItems: ITaxonomy[];
   siteLogo?: ILogoFile;
   siteOverlayLogo?: ILogoFile;
+  siteFooterProps?: ISiteFooterProps;
+  container?: boolean;
 }
 
 const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
@@ -17,6 +19,8 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
   headerMenuItems,
   siteLogo,
   siteOverlayLogo,
+  siteFooterProps,
+  container = true,
   children,
 }) => {
   return (
@@ -30,8 +34,10 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
         siteLogo={siteLogo}
         siteOverlayLogo={siteOverlayLogo}
       />
-      <div className="font-sans">{children}</div>
-      <SiteFooter />
+      <div className={`${container ? 'container mx-auto' : ''} font-sans`}>
+        {children}
+      </div>
+      <SiteFooter {...siteFooterProps} />
     </>
   );
 };

@@ -3,7 +3,10 @@ import { Field, Form, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { FC, useId } from 'react';
 import { toast } from 'react-toastify';
-import { AdminTaxonomyAgent } from '../../../../../lib/axios/agent';
+import {
+  AdminPostAgent,
+  AdminTaxonomyAgent,
+} from '../../../../../lib/axios/agent';
 import { ClaimsEnum } from '../../../../../models/auth/common';
 import { INestError } from '../../../../../models/common/error';
 import {
@@ -25,6 +28,7 @@ interface IProps {
   menuItemIdToEdit: string;
   menuItemParentId?: string;
   parent?: ITaxonomyEntity;
+  isActiveMenu: boolean;
   onClose: Function;
   onSuccess: Function;
 }
@@ -35,6 +39,7 @@ const EditMenuItemForm: FC<IProps> = ({
   menuItemIdToEdit,
   menuItemParentId,
   parent,
+  isActiveMenu,
   onSuccess,
   onClose,
 }) => {
@@ -66,6 +71,11 @@ const EditMenuItemForm: FC<IProps> = ({
                 menuItemIdToEdit!,
                 menuItem
               );
+
+              if (isActiveMenu) {
+                // Revalidate Home Page
+                await AdminPostAgent.revalidateHomePage(session);
+              }
 
               toast.success(`${menuItem.term} item has been modified`, {
                 className: 'bg-success text-light',

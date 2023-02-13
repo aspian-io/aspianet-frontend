@@ -38,7 +38,7 @@ const UserBookmarks = () => {
       <div className="flex flex-wrap justify-center items-center w-full gap-6 transition-all duration-500">
         {profileData.items.map((p, i) => (
           <div
-            className="min-w-[16rem] lg:max-w-[18rem] xl:max-w-sm 2xl:max-w-xs transition-all duration-500"
+            className="max-w-[19rem] transition-all duration-500"
             key={i}
           >
             <BlogCard
@@ -48,9 +48,9 @@ const UserBookmarks = () => {
                   : undefined
               }
               authorName={`${p.createdBy.firstName}`}
-              commentsNum={p.comments}
-              likesNum={p.likes}
-              bookmarksNum={p.bookmarks}
+              commentsNum={p.commentsNum}
+              likesNum={p.likesNum}
+              bookmarksNum={p.bookmarksNum}
               title={p.title}
               excerpt={p.excerpt ? p.excerpt : ''}
               postUrl={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/blog/${p.slug}`}

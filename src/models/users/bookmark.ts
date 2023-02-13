@@ -9,9 +9,11 @@ export interface IBookmarkPost {
   content?: string;
   slug: string;
   viewCount: number;
-  comments: number;
-  likes: number;
-  bookmarks: number;
+  commentsNum: number;
+  likes: string[];
+  likesNum: number;
+  bookmarks: string[];
+  bookmarksNum: number;
   featuredImage?: IFile;
   createdBy: IMinimalUser;
   taxonomies: ITaxonomy[];

@@ -11,7 +11,7 @@ import Button from '../../../common/Button';
 
 const BlogSection = () => {
   return (
-    <section className="container mx-auto flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
+    <section className="flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
       <div className="flex flex-col justify-center items-center space-y-6">
         <h3 className="text-primary text-sm">Blog</h3>
         <h3 className="flex relative font-bold text-2xl sm:text-3xl text-dark ml-3 before:absolute before:w-10 before:h-10 sm:before:w-12 sm:before:h-12 before:bg-primary-light/30 before:rounded-xl before:-z-10 before:-top-2 sm:before:-top-3 before:-left-5 sm:before:-left-6">

@@ -188,7 +188,7 @@ const AdminProjects = () => {
               project.taxonomies.length > 0 &&
               project.taxonomies.map(
                 (t, i) =>
-                  t.type === TaxonomyTypeEnum.CATEGORY && (
+                  t.type === TaxonomyTypeEnum.PROJECT_CATEGORY && (
                     <div
                       className="border-primary border-2 px-2 rounded-md text-primary mx-0.5 my-0.5"
                       key={i}

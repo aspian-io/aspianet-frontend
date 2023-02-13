@@ -30,7 +30,8 @@ const CommentReplies = () => {
   const [removeConfirm, setRemoveConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
-  const fetcher = () => AdminCommentAgent.commentRepliesByParentId(session, id);
+  const fetcher = () =>
+    AdminCommentAgent.commentUserRepliesByParentId(session, id);
 
   const {
     data: repliesData,
@@ -93,6 +94,7 @@ const CommentReplies = () => {
         <div className="text-zinc-500 text-center w-full">-- No Replies --</div>
       )}
       {repliesData &&
+        repliesData.length !== 0 &&
         repliesData.map((r, i) => (
           <div
             className="flex flex-col justify-center items-start rounded-2xl w-full p-4 mt-4 bg-zinc-100"

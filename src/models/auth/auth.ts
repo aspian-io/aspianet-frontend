@@ -9,4 +9,6 @@ export interface IUserAuth {
   refreshToken: string;
   avatarSource: AvatarSourceEnum;
   avatar?: string;
+  role?: string;
+  bio?: string;
 }

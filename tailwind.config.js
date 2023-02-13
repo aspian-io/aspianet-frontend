@@ -7,6 +7,15 @@ module.exports = {
     './src/store/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    container: {
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+        lg: '5rem',
+        xl: '7rem',
+        '2xl': '10rem',
+      },
+    },
     extend: {
       colors: {
         primary: {

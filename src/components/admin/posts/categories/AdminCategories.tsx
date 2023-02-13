@@ -420,7 +420,7 @@ const AdminCategories = () => {
           onBulkDeleteButtonClick={() => setBulkRemoveConfirm(true)}
           onSelectColumns={(selectedIds) => setItemsToBulkDelete(selectedIds)}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/categories`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/categories`,
             currentPage: router.query.page
               ? +router.query.page
               : categoriesData?.meta.currentPage,

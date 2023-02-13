@@ -5,12 +5,13 @@ import { useRouter } from 'next/router';
 import React, { useState, useMemo, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { AdminCommentAgent } from '../../../lib/axios/agent';
+import { AdminCommentAgent, AdminPostAgent } from '../../../lib/axios/agent';
 import { AdminCommentKeys } from '../../../lib/swr/keys';
 import { ClaimsEnum } from '../../../models/auth/common';
 import { ICommentEntity } from '../../../models/comments/admin/comment';
 import { INestError } from '../../../models/common/error';
 import { IPaginated } from '../../../models/common/paginated-result';
+import { PostTypeEnum } from '../../../models/posts/admin/post';
 import { AuthGuard } from '../../common/AuthGuard';
 import Button from '../../common/Button';
 import ConfirmModal from '../../common/ConfirmModal';
@@ -65,7 +66,7 @@ const AdminCommentsTrash = () => {
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
-    (id: string) => (
+    (comment: ICommentEntity) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
         <Button
           rounded="rounded-md"
@@ -75,10 +76,19 @@ const AdminCommentsTrash = () => {
           extraCSSClasses="px-1.5 text-xs"
           disabled={recoverLoading}
           onClick={async () => {
-            setBtnId(id);
+            setBtnId(comment.id);
             setRecoverLoading(true);
             try {
-              await AdminCommentAgent.recover(session, id);
+              await AdminCommentAgent.recover(session, comment.id);
+              if (
+                comment.post.type === PostTypeEnum.PROJECT &&
+                comment.isApproved &&
+                comment.isSpecial
+              ) {
+                // Revalidate Home Page
+                await AdminPostAgent.revalidateHomePage(session);
+              }
+
               await mutate();
               setRecoverLoading(false);
               toast.success('The comment recovered successfully.', {
@@ -98,9 +108,9 @@ const AdminCommentsTrash = () => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            id={id}
+            id={comment.id}
             className={`w-3 h-3 ${
-              recoverLoading && btnId === id ? 'animate-spin' : ''
+              recoverLoading && btnId === comment.id ? 'animate-spin' : ''
             }`}
           >
             <path
@@ -119,7 +129,7 @@ const AdminCommentsTrash = () => {
             extraCSSClasses="px-1.5 text-xs"
             disabled={recoverLoading}
             onClick={() => {
-              setItemToDelete(id);
+              setItemToDelete(comment.id);
               setRemoveConfirm(true);
             }}
           >
@@ -170,7 +180,7 @@ const AdminCommentsTrash = () => {
         postTitle: comment?.post && <Link href="#">{comment.post.title}</Link>,
         likesNum: comment.likesNum,
         dislikesNum: comment.dislikesNum,
-        actions: actionsColumn(comment.id),
+        actions: actionsColumn(comment),
       };
     },
     [actionsColumn]

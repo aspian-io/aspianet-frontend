@@ -10,6 +10,7 @@ import {
   PostErrorsInternalCodeEnum,
   PostTypeEnum,
   IPostEntity,
+  WidgetTypeEnum,
 } from '../../../models/posts/admin/post';
 import Accordion from '../../common/Accordion';
 import Button from '../../common/Button';
@@ -24,6 +25,7 @@ import {
   categoriesOptionsLoader,
   featuredImageOptionsLoader,
   parentOptionsLoader,
+  projectCategoriesOptionsLoader,
   projectOwnerOptionsLoader,
   tagsOptionsLoader,
 } from './post-react-select-loaders';
@@ -41,7 +43,7 @@ import { UAParser } from 'ua-parser-js';
 interface IProps {
   editPostId?: string;
   editPostData?: IPostEntity;
-  postType: PostTypeEnum;
+  postType: PostTypeEnum | WidgetTypeEnum;
   onCreateSuccess?: (id: string) => any;
 }
 
@@ -155,7 +157,9 @@ const AdminPostForm: FC<IProps> = ({
       : undefined
   );
   initialValues.categoryIds = getSelectTaxonomiesIdsByType(
-    TaxonomyTypeEnum.CATEGORY
+    postType === PostTypeEnum.PROJECT
+      ? TaxonomyTypeEnum.PROJECT_CATEGORY
+      : TaxonomyTypeEnum.CATEGORY
   );
   initialValues.tagIds = getSelectTaxonomiesIdsByType(TaxonomyTypeEnum.TAG);
   const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -169,8 +173,8 @@ const AdminPostForm: FC<IProps> = ({
       'The post subtitle must be less than 100 characters'
     ),
     excerpt: Yup.string().max(
-      100,
-      'The post subtitle must be less than 100 characters'
+      400,
+      'The post excerpt must be less than 400 characters'
     ),
     content: Yup.string(),
     slug: Yup.string()
@@ -212,6 +216,7 @@ const AdminPostForm: FC<IProps> = ({
             taxonomiesIds.push(...values.tagIds);
 
           post.taxonomiesIds = taxonomiesIds;
+
           if (editPostId) {
             const editResult = await AdminPostAgent.edit(
               session,
@@ -586,7 +591,9 @@ const AdminPostForm: FC<IProps> = ({
                         placeholder="Categories"
                         defaultValue={
                           getSelectFormattedTaxonomiesByType(
-                            TaxonomyTypeEnum.CATEGORY
+                            postType === PostTypeEnum.PROJECT
+                              ? TaxonomyTypeEnum.PROJECT_CATEGORY
+                              : TaxonomyTypeEnum.CATEGORY
                           ) as any
                         }
                         isClearable
@@ -603,9 +610,19 @@ const AdminPostForm: FC<IProps> = ({
                             },
                           });
                         }}
-                        loadOptions={(inputValue) =>
-                          categoriesOptionsLoader(inputValue, session) as any
-                        }
+                        loadOptions={(inputValue) => {
+                          if (postType === PostTypeEnum.PROJECT) {
+                            return projectCategoriesOptionsLoader(
+                              inputValue,
+                              session
+                            ) as any;
+                          }
+
+                          return categoriesOptionsLoader(
+                            inputValue,
+                            session
+                          ) as any;
+                        }}
                       />
                     </Accordion>
                   )}
@@ -642,45 +659,50 @@ const AdminPostForm: FC<IProps> = ({
                     </Accordion>
                   )}
                   <>
-                    <Accordion
-                      title="Featured Image"
-                      expandInitialState={!!editPostData?.featuredImage}
-                    >
-                      <AsyncSelect
-                        components={animatedComponents}
-                        styles={reactSelectStyle}
-                        placeholder="Featured Image"
-                        defaultValue={
-                          editPostData?.featuredImage
-                            ? ({
-                                value: editPostData?.featuredImage?.id,
-                                label: (
-                                  <AdminSelectMediaOptions
-                                    {...editPostData.featuredImage}
-                                    fileKey={editPostData.featuredImage.key}
-                                  />
-                                ),
-                              } as any)
-                            : undefined
-                        }
-                        isClearable
-                        isSearchable
-                        cacheOptions
-                        defaultOptions
-                        name="featuredImageId"
-                        onChange={(newValue: any, actionMeta) => {
-                          handleChange({
-                            target: {
-                              name: 'featuredImageId',
-                              value: newValue?.value ?? null,
-                            },
-                          });
-                        }}
-                        loadOptions={(inputValue) =>
-                          featuredImageOptionsLoader(inputValue, session) as any
-                        }
-                      />
-                    </Accordion>
+                    {postType !== PostTypeEnum.PAGE && (
+                      <Accordion
+                        title="Featured Image"
+                        expandInitialState={!!editPostData?.featuredImage}
+                      >
+                        <AsyncSelect
+                          components={animatedComponents}
+                          styles={reactSelectStyle}
+                          placeholder="Featured Image"
+                          defaultValue={
+                            editPostData?.featuredImage
+                              ? ({
+                                  value: editPostData?.featuredImage?.id,
+                                  label: (
+                                    <AdminSelectMediaOptions
+                                      {...editPostData.featuredImage}
+                                      fileKey={editPostData.featuredImage.key}
+                                    />
+                                  ),
+                                } as any)
+                              : undefined
+                          }
+                          isClearable
+                          isSearchable
+                          cacheOptions
+                          defaultOptions
+                          name="featuredImageId"
+                          onChange={(newValue: any, actionMeta) => {
+                            handleChange({
+                              target: {
+                                name: 'featuredImageId',
+                                value: newValue?.value ?? null,
+                              },
+                            });
+                          }}
+                          loadOptions={(inputValue) =>
+                            featuredImageOptionsLoader(
+                              inputValue,
+                              session
+                            ) as any
+                          }
+                        />
+                      </Accordion>
+                    )}
                     <Accordion
                       title="Attachments"
                       expandInitialState={!!editPostData?.attachments?.length}

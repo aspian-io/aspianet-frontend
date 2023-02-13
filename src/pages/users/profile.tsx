@@ -4,17 +4,15 @@ import { AuthGuard } from '../../components/common/AuthGuard';
 import SiteLayout from '../../components/site/layout/SiteLayout';
 import Profile from '../../components/site/users/profile/Profile';
 import { FileAgent, TaxonomyAgent, UserAgent } from '../../lib/axios/agent';
+import { getSiteLayout } from '../../lib/helpers/get-layout';
+import { ISiteLayout } from '../../models/common/layout';
 import { ILogoFile } from '../../models/files/logo-file';
 import { SettingsKeyEnum } from '../../models/settings/settings';
 import { ITaxonomy } from '../../models/taxonomies/taxonomy';
 import { authOptions } from '../api/auth/[...nextauth]';
 
-interface IProps {
+interface IProps extends ISiteLayout {
   isUpdateAvatarAllowed: boolean;
-  primaryMenuItems: ITaxonomy[];
-  secondaryMenuItems: ITaxonomy[];
-  siteLogo?: ILogoFile;
-  siteOverlayLogo?: ILogoFile;
 }
 
 const ProfilePage: NextPage<IProps> = ({
@@ -23,6 +21,9 @@ const ProfilePage: NextPage<IProps> = ({
   secondaryMenuItems,
   siteLogo,
   siteOverlayLogo,
+  contactWidgetData,
+  linksWidgetData,
+  newsletterWidgetData,
 }) => {
   return (
     <AuthGuard claims={[]}>
@@ -31,6 +32,11 @@ const ProfilePage: NextPage<IProps> = ({
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}
         siteOverlayLogo={siteOverlayLogo}
+        siteFooterProps={{
+          contactWidgetData,
+          linksWidgetData,
+          newsletterWidgetData,
+        }}
       >
         <Profile isUpdateAvatarAllowed={isUpdateAvatarAllowed} />
       </SiteLayout>
@@ -49,18 +55,8 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     authOptions
   );
   if (session) {
-    const primaryMenuItems = await TaxonomyAgent.getPrimaryMenu();
-    const secondaryMenuItems = await TaxonomyAgent.getSecondaryMenu();
-    const siteLogos = await FileAgent.getSiteLogos();
-    const siteLogo =
-      siteLogos?.filter((l) => l.type === SettingsKeyEnum.SITE_LOGO_ID)[0]
-        ?.file ?? undefined;
-    const siteOverlayLogo =
-      siteLogos?.filter(
-        (l) => l.type === SettingsKeyEnum.SITE_OVERLAY_LOGO_ID
-      )[0]?.file ?? undefined;
-
     try {
+      const siteLayout = await getSiteLayout();
       const isUpdateAvatarAllowed = await UserAgent.isUpdateAvatarAllowed(
         session
       );
@@ -68,20 +64,14 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
       return {
         props: {
           isUpdateAvatarAllowed,
-          primaryMenuItems,
-          secondaryMenuItems,
-          siteLogo,
-          siteOverlayLogo,
+          ...siteLayout,
         },
       };
     } catch (error) {
       return {
-        props: {
-          isUpdateAvatarAllowed: false,
-          primaryMenuItems,
-          secondaryMenuItems,
-          siteLogo,
-          siteOverlayLogo,
+        redirect: {
+          destination: '/500',
+          permanent: false,
         },
       };
     }

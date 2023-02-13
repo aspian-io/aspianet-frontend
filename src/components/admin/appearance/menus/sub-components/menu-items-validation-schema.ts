@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
 const allowedUrlsToUse = process.env.NEXT_PUBLIC_ALLOWED_URL_TO_USE!.split( ',' );
-const linkRegexp = new RegExp( /\B([a-zA-Z\u0400-\u04ff][a-zA-Z\d\u0400-\u04ff]*)/ );
 const allowedUrlsToUseRegex = allowedUrlsToUse.length > 1
   ? new RegExp( allowedUrlsToUse.join( '|' ), 'gi' )
   : new RegExp( allowedUrlsToUse[ 0 ], 'gi' );
@@ -11,8 +10,7 @@ export const menuItemsValidationSchema = Yup.object( {
     .max( 50, 'Label must be less than 50 characters' )
     .required( 'Please enter label name' ),
   href: Yup.string()
-    .nullable()
-    .matches( linkRegexp, 'Please enter a correct href' ),
+    .nullable(),
   order: Yup.number().min( 0, 'Order must be more than or equal to zero' ),
   description: Yup.string()
     .nullable()

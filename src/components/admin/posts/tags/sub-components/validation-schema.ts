@@ -1,9 +1,14 @@
 import * as Yup from 'yup';
 
+const tagRegex = /^[a-zA-Z0-9_-]*$/;
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const tagValidationSchema = Yup.object( {
   term: Yup.string()
+    .matches(
+      tagRegex,
+      'Only alphanumeric characters, dash and underscore are allowed'
+    )
     .max( 50, 'Name must be less than 50 characters' )
     .required( 'Please enter tag name' ),
   slug: Yup.string()

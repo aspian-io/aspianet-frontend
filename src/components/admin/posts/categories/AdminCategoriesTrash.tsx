@@ -255,7 +255,7 @@ const AdminCategoriesTrash = () => {
           showChildren
           loading={!categoriesData}
           pagination={{
-            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/posts/categories`,
+            baseUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/admin/posts/categories/trash`,
             currentPage: router.query.page
               ? +router.query.page
               : categoriesData?.meta.currentPage,

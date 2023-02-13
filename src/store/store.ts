@@ -10,7 +10,7 @@ export const store = configureStore( {
     adminLayout: adminLayoutReducer,
     adminMedia: adminMediaReducer,
     layout: layoutReducer,
-    user: userReducer
+    user: userReducer,
   }
 } );
 

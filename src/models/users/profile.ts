@@ -1,4 +1,5 @@
 import { GenderEnum } from "../auth/common";
+import { IPost } from "../posts/post";
 
 export interface IUserProfile {
   firstName: string;
@@ -15,6 +16,7 @@ export interface IUserProfile {
   mobilePhone?: string;
   postalCode?: string;
   bookmarkIds: string[];
+  projects: IPost[];
   website?: string;
   facebook?: string;
   twitter?: string;
@@ -42,6 +44,8 @@ export class UserProfileFormValues implements Partial<IUserProfile> {
   instagram?: string = '';
   linkedIn?: string = '';
   pinterest?: string = '';
+  github?: string = '';
+  stackoverflow?: string = '';
 
   constructor ( init?: UserProfileFormValues ) {
     if ( init ) {

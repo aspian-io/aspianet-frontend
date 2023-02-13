@@ -35,46 +35,16 @@ const UserDetailsSocialInfoForm: FC<IProps> = ({
   const webAddressRegex =
     /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
   const validationSchema = Yup.object({
-    website: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Website address should be more than 5 characters')
-      .max(50, 'Website address should be less than 50 characters'),
-    facebook: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Facebook address should be more than 5 characters')
-      .max(50, 'Facebook address should be less than 50 characters'),
-    twitter: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Twitter address should be more than 5 characters')
-      .max(50, 'Twitter address should be less than 50 characters'),
-    instagram: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Instagram address should be more than 5 characters')
-      .max(50, 'Instagram address should be less than 50 characters'),
-    linkedIn: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'LinkedIn address should be more than 5 characters')
-      .max(50, 'LinkedIn address should be less than 50 characters'),
-    pinterest: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Pinterest address should be more than 5 characters')
-      .max(50, 'Pinterest address should be less than 50 characters'),
-    github: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'GitHub address should be more than 5 characters')
-      .max(50, 'GitHub address should be less than 50 characters'),
+    website: Yup.string().nullable().url('Please enter a full standard URL'),
+    facebook: Yup.string().nullable().url('Please enter a full standard URL'),
+    twitter: Yup.string().nullable().url('Please enter a full standard URL'),
+    instagram: Yup.string().nullable().url('Please enter a full standard URL'),
+    linkedIn: Yup.string().nullable().url('Please enter a full standard URL'),
+    pinterest: Yup.string().nullable().url('Please enter a full standard URL'),
+    github: Yup.string().nullable().url('Please enter a full standard URL'),
     stackoverflow: Yup.string()
       .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'StackOverflow address should be more than 5 characters')
-      .max(50, 'StackOverflow address should be less than 50 characters'),
+      .url('Please enter a full standard URL'),
   });
 
   return (

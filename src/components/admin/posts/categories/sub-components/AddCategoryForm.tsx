@@ -24,6 +24,7 @@ interface IProps {
   parent?: ITaxonomyEntity;
   onClose: Function;
   onSuccess: Function;
+  taxonomyType?: TaxonomyTypeEnum;
 }
 
 const AddCategoryForm: FC<IProps> = ({
@@ -31,6 +32,7 @@ const AddCategoryForm: FC<IProps> = ({
   parent,
   onClose,
   newCategoryParentId,
+  taxonomyType = TaxonomyTypeEnum.CATEGORY,
   onSuccess,
 }) => {
   const cancelBtnId = useId();
@@ -58,7 +60,7 @@ const AddCategoryForm: FC<IProps> = ({
             try {
               await AdminTaxonomyAgent.create(session, {
                 ...category,
-                type: TaxonomyTypeEnum.CATEGORY,
+                type: taxonomyType,
                 parentId: newCategoryParentId,
               });
 

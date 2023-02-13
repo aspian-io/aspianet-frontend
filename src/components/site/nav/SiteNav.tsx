@@ -83,9 +83,6 @@ const Item: FC<PropsWithChildren<INavItemProps>> = ({
   onClick = () => {},
   children,
 }) => {
-  const css = isActive
-    ? 'lg:relative lg:text-primary lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary lg:before:visible lg:before:opacity-100 lg:transition-all lg:duration-300'
-    : 'lg:hoverable:hover:text-primary lg:relative lg:text-zinc-700 lg:before:absolute lg:before:left-0.5 lg:before:-bottom-1 lg:before:w-10/12 lg:before:h-0.5 lg:before:bg-primary lg:before:invisible lg:before:opacity-0 lg:transition-all lg:duration-300';
   return (
     <Link
       href={href}

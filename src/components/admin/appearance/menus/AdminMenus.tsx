@@ -1,19 +1,20 @@
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import {
+  AdminPostAgent,
   AdminSettingsAgent,
   AdminTaxonomyAgent,
 } from '../../../../lib/axios/agent';
-import { AdminSettingsKeys } from '../../../../lib/swr/keys';
 import { ClaimsEnum } from '../../../../models/auth/common';
 import { INestError } from '../../../../models/common/error';
 import { IPaginated } from '../../../../models/common/paginated-result';
 import {
   ISettingsEntity,
+  SettingsKeyEnum,
   SettingsServiceEnum,
 } from '../../../../models/settings/settings';
 import {
@@ -89,12 +90,42 @@ const AdminMenus = () => {
   const { data: menuSettingsData, error: settingError } = useSWR<
     ISettingsEntity[],
     AxiosError<INestError>
-  >(
-    swrMenuSettingsKey,
-    settingFetcher
-  );
+  >(swrMenuSettingsKey, settingFetcher);
 
   if (error) router.push('/500');
+
+  const primaryMenuSetting = useMemo(
+    () =>
+      menuSettingsData?.filter(
+        (s) => s.key === SettingsKeyEnum.MENU_PRIMARY
+      )[0],
+    [menuSettingsData]
+  );
+  const secondaryMenuSetting = useMemo(
+    () =>
+      menuSettingsData?.filter(
+        (s) => s.key === SettingsKeyEnum.MENU_SECONDARY
+      )[0],
+    [menuSettingsData]
+  );
+
+  function isActiveMenu(menuId: string) {
+    const activeMenuIds: string[] = [];
+    if (
+      primaryMenuSetting?.value &&
+      !activeMenuIds.includes(primaryMenuSetting.value)
+    ) {
+      activeMenuIds.push(primaryMenuSetting.value);
+    }
+    if (
+      secondaryMenuSetting?.value &&
+      !activeMenuIds.includes(secondaryMenuSetting.value)
+    ) {
+      activeMenuIds.push(secondaryMenuSetting.value);
+    }
+
+    return activeMenuIds.includes(menuId);
+  }
 
   const actionsColumn = useCallback(
     (menu: ITaxonomyEntity, childLevel: number = 0) => (
@@ -236,6 +267,10 @@ const AdminMenus = () => {
                   session,
                   itemsToBulkDelete
                 );
+                if (itemsToBulkDelete.some((i) => isActiveMenu(i))) {
+                  // Revalidate Home Page
+                  await AdminPostAgent.revalidateHomePage(session);
+                }
                 setItemsToBulkDelete(null);
                 await mutate();
                 toast.success('The selected items deleted successfully.', {
@@ -278,6 +313,10 @@ const AdminMenus = () => {
                   session,
                   itemToDelete
                 );
+                if (isActiveMenu(itemToDelete)) {
+                  // Revalidate Home Page
+                  await AdminPostAgent.revalidateHomePage(session);
+                }
                 await mutate();
                 toast.success('The menu deleted successfully.', {
                   className: 'bg-success text-light text-sm',
@@ -428,4 +467,4 @@ const AdminMenus = () => {
   );
 };
 
-export default AdminMenus;
+export default memo(AdminMenus);

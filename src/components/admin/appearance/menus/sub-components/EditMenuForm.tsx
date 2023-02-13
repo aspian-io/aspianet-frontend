@@ -5,6 +5,7 @@ import React, { FC, useId, useMemo, memo } from 'react';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 import {
+  AdminPostAgent,
   AdminSettingsAgent,
   AdminTaxonomyAgent,
 } from '../../../../../lib/axios/agent';
@@ -131,6 +132,8 @@ const EditMenuForm: FC<IProps> = ({
                 );
               }
 
+              // Revalidate Home Page
+              await AdminPostAgent.revalidateHomePage(session);
               await mutate(swrMenuSettingsKey);
 
               toast.success(`${menu.term} menu has been modified`, {

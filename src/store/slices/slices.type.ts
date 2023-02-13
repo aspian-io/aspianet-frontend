@@ -1,4 +1,5 @@
 export enum SlicesEnum {
   LAYOUT = "LAYOUT",
-  USER = 'USER'
+  USER = 'USER',
+  COMMENT = 'COMMENT'
 }

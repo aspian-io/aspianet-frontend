@@ -27,6 +27,10 @@ interface IContent {
   part_1?: string;
   part_2?: string;
   part_3?: string;
+  btn1_title?: string;
+  btn1_href?: string;
+  btn2_title?: string;
+  btn2_href?: string;
 }
 
 const HeroSectionForm = () => {
@@ -129,6 +133,10 @@ const HeroSectionForm = () => {
         part_1: content.part_1,
         part_2: content.part_2,
         part_3: content.part_3,
+        btn1_title: content.btn1_title,
+        btn1_href: content.btn1_href,
+        btn2_title: content.btn2_title,
+        btn2_href: content.btn2_href,
       };
     }
 
@@ -136,6 +144,10 @@ const HeroSectionForm = () => {
       part_1: '',
       part_2: '',
       part_3: '',
+      btn1_title: '',
+      btn1_href: '',
+      btn2_title: '',
+      btn2_href: '',
     };
   }
 
@@ -154,11 +166,17 @@ const HeroSectionForm = () => {
           part_1: values.part_1,
           part_2: values.part_2,
           part_3: values.part_3,
+          btn1_title: values.btn1_title,
+          btn1_href: values.btn1_href,
+          btn2_title: values.btn2_title,
+          btn2_href: values.btn2_href,
         });
 
         try {
           if (heroWidgetsData[0]) {
             await AdminPostAgent.edit(session, heroWidgetsData[0].id, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
             toast.success(
               `The modification operation was completed successfully`,
               {
@@ -167,6 +185,8 @@ const HeroSectionForm = () => {
             );
           } else {
             await AdminPostAgent.create(session, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
 
             toast.success(`The creation operation was completed successfully`, {
               className: 'bg-success text-light',
@@ -189,18 +209,6 @@ const HeroSectionForm = () => {
         values,
       }) => (
         <Form className="w-full">
-          {/* <div>
-            <TinyMce
-              style="border-radius: 12px"
-              height={500}
-              content={initialValues.content ?? ''}
-              onEditorChange={(content) =>
-                handleChange({
-                  target: { name: 'content', value: content },
-                })
-              }
-            />
-          </div> */}
           <div className="mb-4">
             <Field
               type={InputTypeEnum.text}
@@ -244,7 +252,43 @@ const HeroSectionForm = () => {
           {touched.part_3 && errors.part_3 && (
             <div className="mt-2 text-danger text-xs">{errors.part_3}</div>
           )}
-          <div className='mb-20'>
+          <div className="mb-4">
+            <Field
+              type={InputTypeEnum.text}
+              name="btn1_title"
+              placeholder="First Button Title"
+              className="text-xs sm:text-sm h-10 rounded-xl"
+              component={FormikInput}
+            />
+          </div>
+          <div className="mb-4">
+            <Field
+              type={InputTypeEnum.text}
+              name="btn1_href"
+              placeholder="First Button Link"
+              className="text-xs sm:text-sm h-10 rounded-xl"
+              component={FormikInput}
+            />
+          </div>
+          <div className="mb-4">
+            <Field
+              type={InputTypeEnum.text}
+              name="btn2_title"
+              placeholder="Second Button Title"
+              className="text-xs sm:text-sm h-10 rounded-xl"
+              component={FormikInput}
+            />
+          </div>
+          <div className="mb-4">
+            <Field
+              type={InputTypeEnum.text}
+              name="btn2_href"
+              placeholder="Second Button Link"
+              className="text-xs sm:text-sm h-10 rounded-xl"
+              component={FormikInput}
+            />
+          </div>
+          <div className="mb-20">
             <AsyncSelect
               components={animatedComponents}
               styles={reactSelectStyle}

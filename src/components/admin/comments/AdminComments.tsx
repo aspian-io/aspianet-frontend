@@ -42,17 +42,6 @@ const AdminComments = () => {
     null
   );
 
-  const qs = router.asPath.split('?', 2)[1]
-    ? `?${router.asPath.split('?', 2)[1]}`
-    : '';
-
-  const initialSort = () => {
-    if (!router.query['orderBy.createdAt']) {
-      return qs ? '&orderBy.createdAt=DESC' : '?orderBy.createdAt=DESC';
-    }
-    return '';
-  };
-
   const boolIcons = (state: boolean) => (
     <>
       {state && (
@@ -85,6 +74,17 @@ const AdminComments = () => {
       )}
     </>
   );
+
+  const qs = router.asPath.split('?', 2)[1]
+    ? `?${router.asPath.split('?', 2)[1]}`
+    : '';
+
+  const initialSort = () => {
+    if (!router.query['orderBy.createdAt']) {
+      return qs ? '&orderBy.createdAt=DESC' : '?orderBy.createdAt=DESC';
+    }
+    return '';
+  };
 
   const fetcher = () =>
     AdminCommentAgent.list(session, `${qs}${initialSort()}`);
@@ -219,6 +219,8 @@ const AdminComments = () => {
                   session,
                   itemsToBulkDelete
                 );
+                // Revalidate Home Page
+                await AdminPostAgent.revalidateHomePage(session);
                 setItemsToBulkDelete(null);
                 await mutate();
                 toast.success('The selected items moved to trash.', {
@@ -453,7 +455,9 @@ const AdminComments = () => {
             {
               title: 'Special',
               sort: {
-                initialValue: router.query['orderBy.isSpecial'] as 'ASC' | 'DESC',
+                initialValue: router.query['orderBy.isSpecial'] as
+                  | 'ASC'
+                  | 'DESC',
                 onSortChange: (sort) => {
                   router.query['orderBy.isSpecial'] = sort;
                   router.push(router);

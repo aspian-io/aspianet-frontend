@@ -15,6 +15,7 @@ import ProfileForm from './sub-components/ProfileForm';
 import { UserKeys } from '../../../../lib/swr/keys';
 import SecurityForm from './sub-components/SecurityForm';
 import UserBookmarks from './sub-components/UserBookmarks';
+import UserProjects from './sub-components/UserProjects';
 
 interface IProps {
   isUpdateAvatarAllowed: boolean;
@@ -30,7 +31,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
   >(UserKeys.GET_CURRENT_USER_PROFILE, fetcher);
   const [bioSummary, setBioSummary] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    'profile' | 'privacy' | 'bookmark'
+    'profile' | 'privacy' | 'bookmark' | 'projects'
   >('profile');
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
   if (!profileData) return <Loading />;
 
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start px-2 sm:px-8 lg:px-0 py-6 sm:py-8 bg-zinc-100 rounded-3xl my-4 lg:my-8">
+    <div className="flex flex-col lg:flex-row justify-between items-start px-2 sm:px-8 lg:px-0 py-6 sm:py-8 bg-zinc-100 rounded-3xl my-4 lg:my-8">
       {/* Responsive menu starts */}
       <div className="flex flex-col sm:flex-row lg:hidden justify-between items-center w-full mb-1 sm:mb-4 px-6 sm:divide-x-2">
         <div className="flex flex-col sm:flex-row justify-center items-center w-full sm:max-w-[25%] space-x-3 group">
@@ -324,6 +325,39 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               </div>
             </Link>
           </div>
+          <div className="flex items-center group h-14">
+            <Link
+              href="?tab=projects"
+              onClick={() => setActiveTab('projects')}
+              className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'projects' ? 'bg-primary' : ''
+              } transition-all duration-300`}
+            >
+              <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`pl-4 text-md hoverable:group-hover:text-light ${
+                  activeTab === 'projects' ? 'text-light' : 'text-zinc-600'
+                } transition-all duration-300`}
+              >
+                Projects
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
       {/* lg menu ends */}
@@ -363,6 +397,18 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
         <UserBookmarks />
       </div>
       {/* Bookmarks tab ends */}
+
+      {/* Projects tab starts */}
+      <div
+        className={`${
+          activeTab === 'projects'
+            ? 'flex w-full lg:w-3/4 h-full p-8 lg:mx-8'
+            : 'w-0 h-0 scale-0 opacity-0 p-0 mx-0'
+        } flex-col items-start bg-light rounded-3xl z-0 transition-all duration-300`}
+      >
+        <UserProjects profileData={profileData} />
+      </div>
+      {/* Projects tab ends */}
     </div>
   );
 };

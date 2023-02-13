@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { FC, useEffect, useState, useMemo, memo } from 'react';
+import React, { FC, useEffect, useState, memo } from 'react';
 import { SiteNav } from '../../nav/SiteNav';
 import { ISiteLayoutProps } from '../SiteLayout';
 const { Item } = SiteNav;
@@ -12,21 +12,22 @@ const SiteHeader: FC<ISiteLayoutProps> = ({
 }) => {
   const router = useRouter();
   const [activeItem, setActiveItem] = useState(
-    menuItems[defaultMenuItemIndex].href
+    menuItems[defaultMenuItemIndex]?.href
   );
-  const itemsHrefs = useMemo(() => menuItems?.map((i) => i.href), [menuItems]);
 
   useEffect(() => {
-    if (router.asPath !== '/') {
+    if (router.pathname === '/') {
       setActiveItem(menuItems[defaultMenuItemIndex].href);
+    } else {
+      setActiveItem(router.asPath.replace(router.query as any, ' '));
     }
-    if (router.asPath !== '/' && itemsHrefs.includes(router.asPath)) {
-      setActiveItem(router.asPath);
-    }
-    if (router.asPath !== '/' && !itemsHrefs.includes(router.asPath)) {
-      setActiveItem(undefined);
-    }
-  }, [defaultMenuItemIndex, itemsHrefs, menuItems, router.asPath]);
+  }, [
+    defaultMenuItemIndex,
+    menuItems,
+    router.asPath,
+    router.pathname,
+    router.query,
+  ]);
 
   return (
     <>
@@ -39,7 +40,13 @@ const SiteHeader: FC<ISiteLayoutProps> = ({
         {menuItems?.map((item, i) => (
           <Item
             href={item.href ?? '/'}
-            isActive={activeItem === item.href}
+            isActive={
+              item.href && activeItem && item.href !== '/'
+                ? activeItem.startsWith(item.href)
+                : item.href === activeItem
+                ? true
+                : false
+            }
             onClick={(e) => setActiveItem(item.href!)}
             key={i}
           >

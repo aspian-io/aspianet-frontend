@@ -4,7 +4,10 @@ import { useSession } from 'next-auth/react';
 import React, { FC, useId } from 'react';
 import { toast } from 'react-toastify';
 import slugify from 'slugify';
-import { AdminTaxonomyAgent } from '../../../../../lib/axios/agent';
+import {
+  AdminPostAgent,
+  AdminTaxonomyAgent,
+} from '../../../../../lib/axios/agent';
 import { ClaimsEnum } from '../../../../../models/auth/common';
 import { INestError } from '../../../../../models/common/error';
 import {
@@ -23,6 +26,7 @@ interface IProps {
   addMenuItemModalShow: boolean;
   newMenuItemParentId?: string;
   parent?: ITaxonomyEntity;
+  isActiveMenu: boolean;
   onClose: Function;
   onSuccess: Function;
 }
@@ -32,6 +36,7 @@ const AddMenuItemForm: FC<IProps> = ({
   parent,
   onClose,
   newMenuItemParentId,
+  isActiveMenu,
   onSuccess,
 }) => {
   const cancelBtnId = useId();
@@ -63,6 +68,11 @@ const AddMenuItemForm: FC<IProps> = ({
                 type: TaxonomyTypeEnum.MENU_ITEM,
                 parentId: newMenuItemParentId,
               });
+
+              if (isActiveMenu) {
+                // Revalidate Home Page
+                await AdminPostAgent.revalidateHomePage(session);
+              }
 
               toast.success(`${menuItem.term} item has been added`, {
                 className: 'bg-success text-light',

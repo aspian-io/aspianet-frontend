@@ -28,8 +28,6 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
   const initialValues = new UserProfileFormValues(initialFormValues);
   const phoneRegex =
     /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g;
-  const webAddressRegex =
-    /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
   const validationSchema = Yup.object({
     firstName: Yup.string()
       .max(30, 'First name should be less than 30 characters')
@@ -69,36 +67,16 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
       .nullable()
       .min(5, 'Postal code should be more than 5 characters')
       .max(10, 'Postal code should be less than 10 characters'),
-    website: Yup.string()
+    website: Yup.string().nullable().url('Please enter a full standard URL'),
+    facebook: Yup.string().nullable().url('Please enter a full standard URL'),
+    twitter: Yup.string().nullable().url('Please enter a full standard URL'),
+    instagram: Yup.string().nullable().url('Please enter a full standard URL'),
+    linkedIn: Yup.string().nullable().url('Please enter a full standard URL'),
+    pinterest: Yup.string().nullable().url('Please enter a full standard URL'),
+    github: Yup.string().nullable().url('Please enter a full standard URL'),
+    stackoverflow: Yup.string()
       .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Website address should be more than 5 characters')
-      .max(50, 'Website address should be less than 50 characters'),
-    facebook: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Facebook address should be more than 5 characters')
-      .max(50, 'Facebook address should be less than 50 characters'),
-    twitter: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Twitter address should be more than 5 characters')
-      .max(50, 'Twitter address should be less than 50 characters'),
-    instagram: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Instagram address should be more than 5 characters')
-      .max(50, 'Instagram address should be less than 50 characters'),
-    linkedIn: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'LinkedIn address should be more than 5 characters')
-      .max(50, 'LinkedIn address should be less than 50 characters'),
-    pinterest: Yup.string()
-      .nullable()
-      .matches(webAddressRegex, 'Please enter a standard URL')
-      .min(5, 'Pinterest address should be more than 5 characters')
-      .max(50, 'Pinterest address should be less than 50 characters'),
+      .url('Please enter a full standard URL'),
   });
 
   return (
@@ -401,6 +379,26 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                     type={InputTypeEnum.text}
                     name="pinterest"
                     placeholder="Pinterest"
+                    className="text-xs sm:text-sm h-10 rounded-xl"
+                    component={FormikInput}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-4">
+                <div className="flex flex-col w-full sm:w-1/2">
+                  <Field
+                    type={InputTypeEnum.text}
+                    name="github"
+                    placeholder="GitHub"
+                    className="text-xs sm:text-sm h-10 rounded-xl"
+                    component={FormikInput}
+                  />
+                </div>
+                <div className="flex flex-col w-full sm:w-1/2">
+                  <Field
+                    type={InputTypeEnum.text}
+                    name="stackoverflow"
+                    placeholder="Stack Overflow"
                     className="text-xs sm:text-sm h-10 rounded-xl"
                     component={FormikInput}
                   />

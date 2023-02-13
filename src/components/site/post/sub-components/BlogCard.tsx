@@ -26,9 +26,9 @@ const BlogCard: FC<IBlogCardProps> = ({
   postUrl,
 }) => {
   return (
-    <div className="flex flex-col w-full h-[28rem]">
+    <div className="flex flex-col w-full h-[26rem] sm:h-[28rem]">
       <div
-        className={`relative flex justify-center w-full h-1/2 items-center rounded-t-xl overflow-hidden`}
+        className={`relative flex justify-center w-full h-1/2 items-center rounded-t-3xl overflow-hidden`}
       >
         {featuredImageUrl ? (
           <Image
@@ -46,7 +46,7 @@ const BlogCard: FC<IBlogCardProps> = ({
         )}
       </div>
       <div
-        className={`flex flex-col justify-start items-start w-full rounded-b-xl overflow-hidden p-0 m-0 border-x-2 border-b-2 border-primary border-dashed pt-3 pb-4 px-6`}
+        className={`flex flex-col justify-start items-start w-full h-1/2 rounded-b-3xl overflow-hidden p-0 m-0 border-x-2 border-b-2 border-primary border-dashed pt-3 pb-4 px-6`}
       >
         <div className="flex justify-between items-center w-full text-zinc-500 text-xs">
           <div className="flex justify-between items-center">
@@ -67,7 +67,7 @@ const BlogCard: FC<IBlogCardProps> = ({
                   />
                 </svg>
               </span>
-              <span>By {authorName}</span>
+              <span className="mx-0.5 w-14 truncate">By {authorName}</span>
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -88,7 +88,7 @@ const BlogCard: FC<IBlogCardProps> = ({
                   />
                 </svg>
               </span>
-              <span>{commentsNum}</span>
+              <span className="ml-0.5">{commentsNum}</span>
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -109,7 +109,7 @@ const BlogCard: FC<IBlogCardProps> = ({
                   />
                 </svg>
               </span>
-              <span>{likesNum}</span>
+              <span className="ml-0.5">{likesNum}</span>
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -130,12 +130,12 @@ const BlogCard: FC<IBlogCardProps> = ({
                   />
                 </svg>
               </span>
-              <span>{bookmarksNum}</span>
+              <span className="ml-0.5">{bookmarksNum}</span>
             </div>
           </div>
         </div>
 
-        <h5 className="mt-4 text-dark font-bold line-clamp-2 text-sm sm:text-lg">
+        <h5 className="mt-4 text-dark font-bold line-clamp-2 text-sm sm:text-lg w-full">
           {title}
         </h5>
         <p className="mt-2 mb-4 line-clamp-3 text-zinc-600 text-xs sm:text-sm">

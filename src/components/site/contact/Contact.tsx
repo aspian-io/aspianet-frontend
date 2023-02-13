@@ -1,10 +1,17 @@
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import Button from '../../../common/Button';
-import FormikInput, { InputTypeEnum } from '../../../common/FormikInput';
+import { CommonAgent } from '../../../lib/axios/agent';
+import Button from '../../common/Button';
+import FormikInput, { InputTypeEnum } from '../../common/FormikInput';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import ContactTemplate from './ContactTemplate';
 
-const ContactSection = () => {
+const Contact = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const phoneRegex =
     /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g;
 
@@ -25,7 +32,7 @@ const ContactSection = () => {
   });
 
   return (
-    <section className="container mx-auto flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
+    <div className="flex flex-col justify-center items-center py-10 sm:py-20 px-4 transition-all duration-300">
       <div className="flex flex-col justify-center items-center space-y-6">
         <h3 className="text-primary text-sm">Contact</h3>
         <h3 className="flex relative font-bold text-2xl sm:text-3xl text-dark ml-3 before:absolute before:w-10 before:h-10 sm:before:w-12 sm:before:h-12 before:bg-primary-light/30 before:rounded-xl before:-z-10 before:-top-2 sm:before:-top-3 before:-left-5 sm:before:-left-6">
@@ -43,13 +50,47 @@ const ContactSection = () => {
           html: '',
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {}}
+        onSubmit={async ({ name, phone, from, subject, html }) => {
+          if (!executeRecaptcha) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          const reCaptchaToken = await executeRecaptcha('contact');
+          const htmlTemplate = ContactTemplate({
+            name,
+            phone,
+            from,
+            subject,
+            html,
+          });
+
+          try {
+            await CommonAgent.contact(
+              from,
+              subject,
+              htmlTemplate,
+              reCaptchaToken
+            );
+
+            toast.success('Your message has been sent successfully', {
+              className: 'bg-success text-light',
+            });
+          } catch (error) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+          }
+        }}
       >
         {({
           isSubmitting,
           touched,
           errors,
           values,
+          isValid,
+          dirty,
           handleBlur,
           handleChange,
         }) => (
@@ -117,20 +158,32 @@ const ContactSection = () => {
               <Button
                 rounded="rounded-xl"
                 size="h-10 sm:h-12"
-                type="button"
+                type="submit"
                 variant="primary"
-                onClick={() => {}}
+                disabled={!(isValid && dirty) || isSubmitting}
                 block
-                extraCSSClasses="px-12 sm:text-lg"
+                extraCSSClasses="flex justify-center items-center px-12 sm:text-lg"
               >
-                Send Message
+                {isSubmitting ? (
+                  <LoadingSpinner className="w-6 h-6" />
+                ) : (
+                  'Send Message'
+                )}
               </Button>
             </div>
           </Form>
         )}
       </Formik>
-    </section>
+      <div className="w-full mt-7 text-xs text-primary text-center">
+        <span className="mr-1 text-zinc-400">
+          This site is protected by reCAPTCHA and the Google
+        </span>
+        <a href="https://policies.google.com/privacy">Privacy Policy</a>
+        <span className="mx-1 text-zinc-400">and</span>
+        <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+      </div>
+    </div>
   );
 };
 
-export default ContactSection;
+export default Contact;

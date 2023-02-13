@@ -14,7 +14,7 @@ export const parentOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items } = await AdminPostAgent.blogsList(
         session,
@@ -34,7 +34,7 @@ export const projectOwnerOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items } = await AdminUserAgent.list(
         session,
@@ -53,7 +53,7 @@ export const categoriesOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items: categories } = await AdminTaxonomyAgent.categoriesList(
         session,
@@ -68,12 +68,33 @@ export const categoriesOptionsLoader = async (
   }
 };
 
+// Select Project Categories Options Loader
+export const projectCategoriesOptionsLoader = async (
+  inputValue: string,
+  session: Session | null
+) => {
+  if (inputValue?.length && inputValue.length > 1) {
+    try {
+      const { items: categories } =
+        await AdminTaxonomyAgent.projectCategoriesList(
+          session,
+          `?searchBy.term=${inputValue}&orderBy.createdAt=DESC`
+        );
+
+      return categories.map((c) => ({
+        value: c.id,
+        label: c.term,
+      }));
+    } catch (error) {}
+  }
+};
+
 // Select Tags Options Loader
 export const tagsOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items: tags } = await AdminTaxonomyAgent.tagsList(
         session,
@@ -93,7 +114,7 @@ export const featuredImageOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items: files } = await AdminFileAgent.list(
         session,
@@ -115,7 +136,7 @@ export const attachmentsOptionsLoader = async (
   inputValue: string,
   session: Session | null
 ) => {
-  if (inputValue?.length && inputValue.length > 2) {
+  if (inputValue?.length && inputValue.length > 1) {
     try {
       const { items: files } = await AdminFileAgent.list(
         session,

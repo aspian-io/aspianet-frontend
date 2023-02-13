@@ -1,64 +1,50 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
-import { imgPlaceholderDataURL } from '../../../../lib/helpers/img-placeholder';
+import React, { FC } from 'react';
+import { IPost } from '../../../../models/posts/post';
 import Button from '../../../common/Button';
 
-const SiteFooter = () => {
+export interface ISiteFooterProps {
+  contactWidgetData?: IPost;
+  linksWidgetData?: IPost;
+  newsletterWidgetData?: IPost;
+}
+
+const SiteFooter: FC<ISiteFooterProps> = ({
+  contactWidgetData,
+  linksWidgetData,
+  newsletterWidgetData,
+}) => {
   return (
     <div className="bg-zinc-100 w-full">
       <div className="container mx-auto flex flex-col justify-center items-center">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start w-full py-20 px-4 space-y-14 md:space-y-0">
-          <div className="flex flex-col justify-center items-start w-full md:w-1/3">
-            <div className="relative w-44 h-12 rounded-t-3xl overflow-hidden">
-              <Image
-                src="/nav-logo.svg"
-                fill
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                }}
-                sizes="(max-width: 24rem) 100vw"
-                placeholder="blur"
-                blurDataURL={imgPlaceholderDataURL}
-                alt={'Site Logo'}
-              />
-            </div>
-            <div className="text-zinc-500 text-sm mt-4">
-              <span className="font-bold mr-2">Address: </span>
-              <span>Vakilabad Blv, Mashhad, Razavi Khorasan, Iran</span>
-            </div>
-
-            <div className="text-zinc-500 text-sm mt-4">
-              <span className="font-bold mr-2">Phone: </span>
-              <span>+985138883344</span>
-            </div>
-            <div className="text-zinc-500 text-sm">
-              <span className="font-bold mr-2">Fax: </span>
-              <span>+985138883333</span>
-            </div>
-          </div>
-          <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3">
+          {contactWidgetData?.content && (
+            <div
+              className="flex flex-col justify-center items-start w-full md:w-1/3 max-w-xs"
+              dangerouslySetInnerHTML={{ __html: contactWidgetData?.content }}
+            />
+          )}
+          <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3 max-w-xs">
             <h5 className="text-dark font-bold text-base h-12 mb-4">
               Important Links
             </h5>
-            <Link href="#" className="text-zinc-500 text-sm">
-              Terms & conditions
-            </Link>
-            <Link href="#" className="text-zinc-500 text-sm">
-              FAQ
-            </Link>
-            <Link href="#" className="text-zinc-500 text-sm">
-              Partnership
-            </Link>
+            {linksWidgetData?.content && (
+              <div
+                dangerouslySetInnerHTML={{ __html: linksWidgetData.content }}
+              />
+            )}
           </div>
-          <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3">
+          <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3 max-w-xs">
             <h5 className="text-dark font-bold text-base h-12 mb-4">
               Newsletter
             </h5>
-            <div className="text-zinc-500 text-sm mb-10">
-              You can subscribe to our newsletter to get our latest articles.
-            </div>
+            {newsletterWidgetData?.content && (
+              <div
+                className="text-zinc-500 text-sm mb-10"
+                dangerouslySetInnerHTML={{
+                  __html: newsletterWidgetData.content,
+                }}
+              />
+            )}
             <Button
               rounded="rounded-lg"
               size="h-8"

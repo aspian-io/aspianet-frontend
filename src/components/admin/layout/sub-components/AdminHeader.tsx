@@ -140,13 +140,13 @@ const AdminHeader = () => {
                 href="/admin/posts/categories"
                 onActive={() => setActivePosts(true)}
               >
-                Categories
+                Post Categories
               </AdminSideBar.Item.SubItem>
               <AdminSideBar.Item.SubItem
                 href="/admin/posts/tags"
                 onActive={() => setActivePosts(true)}
               >
-                Tags
+                Post Tags
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
             <AuthGuard
@@ -213,6 +213,17 @@ const AdminHeader = () => {
                 onActive={() => setActivePosts(true)}
               >
                 Add New Project
+              </AdminSideBar.Item.SubItem>
+            </AuthGuard>
+            <AuthGuard
+              claims={[ClaimsEnum.ADMIN, ClaimsEnum.TAXONOMY_READ]}
+              redirect={false}
+            >
+              <AdminSideBar.Item.SubItem
+                href="/admin/posts/project-categories"
+                onActive={() => setActivePosts(true)}
+              >
+                Project Categories
               </AdminSideBar.Item.SubItem>
             </AuthGuard>
           </AdminSideBar.Item>

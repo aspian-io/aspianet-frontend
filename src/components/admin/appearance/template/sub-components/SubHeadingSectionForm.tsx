@@ -207,6 +207,8 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({
         try {
           if (postData) {
             await AdminPostAgent.edit(session, postData.id, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
             toast.success(
               `The modification operation was completed successfully`,
               {
@@ -215,6 +217,8 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({
             );
           } else {
             await AdminPostAgent.create(session, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
 
             toast.success(`The creation operation was completed successfully`, {
               className: 'bg-success text-light',

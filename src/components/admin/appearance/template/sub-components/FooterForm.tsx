@@ -1,9 +1,6 @@
 import { Form, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { FC } from 'react';
-import { GroupBase, StylesConfig } from 'react-select';
-import AsyncSelect from 'react-select/async';
-import makeAnimated from 'react-select/animated';
 import { toast } from 'react-toastify';
 import { AdminPostAgent } from '../../../../../lib/axios/agent';
 import {
@@ -13,12 +10,9 @@ import {
 } from '../../../../../models/posts/admin/post';
 import Accordion from '../../../../common/Accordion';
 import TinyMce from '../../../common/text-editor/TinyMce';
-import AdminSelectMediaOptions from '../../../common/react-select/AdminSelectMediaOptions';
-import { featuredImageOptionsLoader } from '../../../posts/post-react-select-loaders';
 import Button from '../../../../common/Button';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
 import { useRouter } from 'next/router';
-import { Session } from 'next-auth';
 import useSWR from 'swr';
 import { AxiosError } from 'axios';
 import { INestError } from '../../../../../models/common/error';
@@ -82,69 +76,6 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({ type }) => {
     return <LoadingSpinner className="text-primary w-9 h-9 my-20" />;
   if (error) router.push('/500');
 
-  const animatedComponents = makeAnimated();
-  const reactSelectStyle:
-    | StylesConfig<string, false, GroupBase<string>>
-    | undefined = {
-    control: (baseStyles, state) => ({
-      ...baseStyles,
-      borderRadius: '0.5rem',
-      fontSize: '0.875rem',
-      borderColor: !state.isFocused ? '#f4f4f5' : '#8479E1',
-      borderWidth: '2px',
-      boxShadow: 'none',
-      ':hover': {
-        ...baseStyles[':hover'],
-        borderColor: '#8479E1',
-      },
-    }),
-    input: (baseStyles, state) => ({
-      ...baseStyles,
-      border: 'none',
-      boxShadow: 'none',
-      outline: 'none',
-      ':focus': {
-        ...baseStyles[':focus'],
-        border: '0px',
-        boxShadow: 'none',
-        outline: 'none',
-      },
-    }),
-    menu: (baseStyles, state) => ({
-      ...baseStyles,
-      borderRadius: '0.5rem',
-      fontSize: '0.875rem',
-      maxHeight: '120px',
-      overflowY: 'scroll',
-    }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
-      ...styles,
-      backgroundColor: isDisabled
-        ? undefined
-        : isSelected
-        ? '#8479E1'
-        : isFocused
-        ? '#d1cdf3'
-        : undefined,
-      color: isDisabled
-        ? '#ccc'
-        : isSelected
-        ? '#fff'
-          ? 'white'
-          : 'black'
-        : '#3f3f46',
-      cursor: isDisabled ? 'not-allowed' : 'default',
-      ':active': {
-        ...styles[':active'],
-        backgroundColor: !isDisabled
-          ? isSelected
-            ? '#8479E1'
-            : '#8479E1'
-          : undefined,
-      },
-    }),
-  };
-
   return (
     <Formik
       initialValues={new PostFormValues(footerWidgetData[0])}
@@ -157,6 +88,8 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({ type }) => {
         try {
           if (footerWidgetData[0]) {
             await AdminPostAgent.edit(session, footerWidgetData[0].id, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
             toast.success(
               `The modification operation was completed successfully`,
               {
@@ -165,6 +98,8 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({ type }) => {
             );
           } else {
             await AdminPostAgent.create(session, post);
+            // Revalidate Home Page
+            await AdminPostAgent.revalidateHomePage(session);
 
             toast.success(`The creation operation was completed successfully`, {
               className: 'bg-success text-light',

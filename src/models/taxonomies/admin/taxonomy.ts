@@ -5,6 +5,7 @@ export enum TaxonomyTypeEnum {
   MENU = "MENU",
   MENU_ITEM = "MENU_ITEM",
   CATEGORY = "CATEGORY",
+  PROJECT_CATEGORY = "PROJECT_CATEGORY",
   TAG = "TAG"
 }
 

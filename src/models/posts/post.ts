@@ -1,15 +1,16 @@
-import { IUserAuth } from "../auth/auth";
 import { IFile } from "../files/file";
 import { ITaxonomy } from "../taxonomies/taxonomy";
+import { IMinimalUser } from "../users/minimal-user";
 
 export interface IPost {
+  id: string;
   title: string;
   subtitle: string | null;
   excerpt: string | null;
   content: string | null;
   slug: string;
   featuredImage?: IFile;
-  commentAllowed?: boolean;
+  commentAllowed: boolean;
   viewCount?: number;
   isPinned?: boolean;
   order?: number;
@@ -19,7 +20,46 @@ export interface IPost {
   taxonomies: ITaxonomy[];
   attachments: IFile[];
   commentsNum: number;
+  likes: string[];
+  likesNum: number;
+  bookmarks: string[];
+  bookmarksNum: number;
+  createdBy: IMinimalUser;
+  projectOwner?: IMinimalUser;
+}
+
+export interface IMiniPost {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  excerpt: string | null;
+  slug: string;
+  featuredImage?: IFile;
+  commentAllowed?: boolean;
+  viewCount?: number;
+  isPinned?: boolean;
+  order?: number;
+  ancestor?: IMiniPost;
+  child?: IMiniPost;
+  parent?: IMiniPost;
+  taxonomies: ITaxonomy[];
+  attachments: IFile[];
+  commentsNum: number;
   likes: number;
+  likesNum: number;
   bookmarks: number;
-  createdBy: IUserAuth;
+  bookmarksNum: number;
+  createdBy: IMinimalUser;
+}
+
+export interface IPostStat {
+  id: string;
+  title: string;
+  slug: string;
+  viewCount?: number;
+  commentsNum: number;
+  likesNum: number;
+  bookmarksNum: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
