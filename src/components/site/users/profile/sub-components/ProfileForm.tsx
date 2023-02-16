@@ -121,7 +121,7 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
         dirty,
         isValid,
       }) => (
-        <Form className="w-full">
+        <Form className="w-full relative">
           <fieldset disabled={isSubmitting}>
             <div className="flex justify-between items-center w-full">
               <h3 className="flex relative text-sm font-bold sm:text-lg text-dark ml-3 before:absolute before:w-6 before:h-6 sm:before:w-7 sm:before:h-7 before:bg-primary-light/30 before:rounded-lg before:-z-10 before:-top-1.5 sm:before:-top-1 before:-left-3 w-">
@@ -252,33 +252,27 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                 <hr className="border-zinc-200" />
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0">
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="country"
-                    placeholder="Country"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="state"
-                    placeholder="State"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="city"
-                    placeholder="City"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name="country"
+                  placeholder="Country"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="state"
+                  placeholder="State"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="city"
+                  placeholder="City"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
               </div>
               <div className="mt-4 w-full">
                 <Field
@@ -290,33 +284,27 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                 />
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full  space-y-3 sm:space-x-6 sm:space-y-0 mt-4">
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="postalCode"
-                    placeholder="Postal Code"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="phone"
-                    placeholder="Phone"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="mobilePhone"
-                    placeholder="Mobile Phone"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name="postalCode"
+                  placeholder="Postal Code"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="phone"
+                  placeholder="Phone"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="mobilePhone"
+                  placeholder="Mobile Phone"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
               </div>
               <div className="flex justify-between items-center w-full mt-10">
                 <h3 className="flex relative text-sm font-bold sm:text-lg text-dark ml-3 before:absolute before:w-6 before:h-6 sm:before:w-7 sm:before:h-7 before:bg-primary-light/30 before:rounded-lg before:-z-10 before:-top-1.5 sm:before:-top-1 before:-left-3">
@@ -327,82 +315,66 @@ const ProfileForm: FC<IProps> = ({ initialFormValues }) => {
                 <hr className="border-zinc-200" />
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0">
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="website"
-                    placeholder="Website"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="facebook"
-                    placeholder="Facebook"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="instagram"
-                    placeholder="Instagram"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name="website"
+                  placeholder="Website"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="facebook"
+                  placeholder="Facebook"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="instagram"
+                  placeholder="Instagram"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-4">
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="twitter"
-                    placeholder="Twitter"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="linkedIn"
-                    placeholder="LinkedIn"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/3">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="pinterest"
-                    placeholder="Pinterest"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name="twitter"
+                  placeholder="Twitter"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="linkedIn"
+                  placeholder="LinkedIn"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="pinterest"
+                  placeholder="Pinterest"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
               </div>
               <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-3 sm:space-x-6 sm:space-y-0 mt-4">
-                <div className="flex flex-col w-full sm:w-1/2">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="github"
-                    placeholder="GitHub"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
-                <div className="flex flex-col w-full sm:w-1/2">
-                  <Field
-                    type={InputTypeEnum.text}
-                    name="stackoverflow"
-                    placeholder="Stack Overflow"
-                    className="text-xs sm:text-sm h-10 rounded-xl"
-                    component={FormikInput}
-                  />
-                </div>
+                <Field
+                  type={InputTypeEnum.text}
+                  name="github"
+                  placeholder="GitHub"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
+                <Field
+                  type={InputTypeEnum.text}
+                  name="stackoverflow"
+                  placeholder="Stack Overflow"
+                  className="w-full text-xs sm:text-sm h-10 rounded-xl"
+                  component={FormikInput}
+                />
               </div>
             </div>
           </fieldset>

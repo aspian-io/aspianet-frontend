@@ -44,9 +44,9 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
             <span className="text-primary">&nbsp;Services</span>
           </h3>
         </div>
-        <div className="flex flex-col md:flex-row justify-center items-center mt-20 w-full space-y-6 md:space-y-0 md:space-x-6 lg:space-x-10 xl:space-x-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch items-stretch mt-20 w-full gap-6">
           {firstSegData && (
-            <div className="flex flex-col justify-start items-center w-full md:w-1/3 h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-primary/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">
@@ -72,7 +72,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
             </div>
           )}
           {secondSegData && (
-            <div className="flex flex-col justify-start items-center w-full md:w-1/3 h-96 bg-primary rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full h-96 bg-primary rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-light/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">
@@ -98,7 +98,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
             </div>
           )}
           {thirdSegData && (
-            <div className="flex flex-col justify-start items-center w-full md:w-1/3 h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-primary/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">

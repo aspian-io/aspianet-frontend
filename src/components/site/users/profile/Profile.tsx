@@ -31,7 +31,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
   >(UserKeys.GET_CURRENT_USER_PROFILE, fetcher);
   const [bioSummary, setBioSummary] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    'profile' | 'privacy' | 'bookmark' | 'projects'
+    'profile' | 'privacy' | 'bookmarks' | 'projects'
   >('profile');
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
     if (routeTab) {
       if (routeTab === 'profile') setActiveTab('profile');
       if (routeTab === 'security') setActiveTab('privacy');
-      if (routeTab === 'bookmarks') setActiveTab('bookmark');
+      if (routeTab === 'bookmarks') setActiveTab('bookmarks');
     }
   }, [router.asPath, router.query]);
 
@@ -62,15 +62,16 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
           </div>
         </div>
         {/* Tabs Wrapper starts */}
-        <div className="flex justify-center items-center w-full sm:w-3/4 space-x-2 sm:space-x-3 mt-2 sm:mt-0">
+        <div className="flex flex-wrap justify-center items-center w-full sm:w-3/4 xs:space-x-2 sm:space-x-3 mt-2 sm:mt-0">
           {/* Profile starts */}
-          <div className="flex items-center group h-14">
+          <div className="flex items-center group h-14 w-1/2 xs:w-auto">
             <Link
               href="?tab=profile"
               onClick={() => setActiveTab('profile')}
-              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+              className={`flex justify-center items-center w-full h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
                 activeTab === 'profile' ? 'bg-primary' : 'bg-light'
               } transition-all duration-300`}
+              shallow
             >
               <div
                 className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
@@ -102,13 +103,14 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
             </Link>
           </div>
           {/* Privacy starts */}
-          <div className="flex items-center group h-14">
+          <div className="flex items-center group h-14 w-1/2 xs:w-auto pl-2 xs:pl-0">
             <Link
               href="?tab=security"
               onClick={() => setActiveTab('privacy')}
-              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+              className={`flex justify-center w-full items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
                 activeTab === 'privacy' ? 'bg-primary' : 'bg-light'
               } transition-all duration-300`}
+              shallow
             >
               <div
                 className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
@@ -140,17 +142,18 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
             </Link>
           </div>
           {/* Bookmarks starts */}
-          <div className="flex items-center group h-14">
+          <div className="flex items-center group h-14 w-1/2 xs:w-auto pl-2 xs:pl-0">
             <Link
               href="?tab=bookmarks"
-              onClick={() => setActiveTab('bookmark')}
-              className={`flex items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                activeTab === 'bookmark' ? 'bg-primary' : 'bg-light'
+              onClick={() => setActiveTab('bookmarks')}
+              className={`flex justify-center w-full items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'bookmarks' ? 'bg-primary' : 'bg-light'
               } transition-all duration-300`}
+              shallow
             >
               <div
                 className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
-                  activeTab === 'bookmark' ? 'text-light' : 'text-primary'
+                  activeTab === 'bookmarks' ? 'text-light' : 'text-primary'
                 }`}
               >
                 <svg
@@ -170,10 +173,49 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               </div>
               <div
                 className={`text-xs hoverable:group-hover:text-light ${
-                  activeTab === 'bookmark' ? 'text-light' : 'text-primary'
+                  activeTab === 'bookmarks' ? 'text-light' : 'text-primary'
                 } transition-all duration-300`}
               >
                 Bookmarks
+              </div>
+            </Link>
+          </div>
+          {/* Projects starts */}
+          <div className="flex items-center group h-14 w-1/2 xs:w-auto pl-2 xs:pl-0">
+            <Link
+              href="?tab=projects"
+              onClick={() => setActiveTab('projects')}
+              className={`flex justify-center w-full items-center h-9 px-4 sm:pl-0 sm:pr-4 rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
+                activeTab === 'projects' ? 'bg-primary' : 'bg-light'
+              } transition-all duration-300`}
+              shallow
+            >
+              <div
+                className={`hidden sm:flex w-9 h-9 justify-center items-center hoverable:group-hover:text-light ${
+                  activeTab === 'projects' ? 'text-light' : 'text-primary'
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                  />
+                </svg>
+              </div>
+              <div
+                className={`text-xs hoverable:group-hover:text-light ${
+                  activeTab === 'projects' ? 'text-light' : 'text-primary'
+                } transition-all duration-300`}
+              >
+                Projects
               </div>
             </Link>
           </div>
@@ -233,6 +275,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
                 activeTab === 'profile' ? 'bg-primary' : ''
               } transition-all duration-300`}
+              shallow
             >
               <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
                 <svg
@@ -266,6 +309,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
                 activeTab === 'privacy' ? 'bg-primary' : ''
               } transition-all duration-300`}
+              shallow
             >
               <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
                 <svg
@@ -295,10 +339,11 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
           <div className="flex items-center group h-14">
             <Link
               href="?tab=bookmarks"
-              onClick={() => setActiveTab('bookmark')}
+              onClick={() => setActiveTab('bookmarks')}
               className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
-                activeTab === 'bookmark' ? 'bg-primary' : ''
+                activeTab === 'bookmarks' ? 'bg-primary' : ''
               } transition-all duration-300`}
+              shallow
             >
               <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
                 <svg
@@ -318,7 +363,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               </div>
               <div
                 className={`pl-4 text-md hoverable:group-hover:text-light ${
-                  activeTab === 'bookmark' ? 'text-light' : 'text-zinc-600'
+                  activeTab === 'bookmarks' ? 'text-light' : 'text-zinc-600'
                 } transition-all duration-300`}
               >
                 Bookmarks
@@ -332,6 +377,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
               className={`flex items-center w-full rounded-xl outline-none hoverable:group-hover:bg-primary hoverable:group-hover:scale-110 ${
                 activeTab === 'projects' ? 'bg-primary' : ''
               } transition-all duration-300`}
+              shallow
             >
               <div className="w-9 h-9 bg-primary rounded-xl text-light flex justify-center items-center">
                 <svg
@@ -389,7 +435,7 @@ const Profile: FC<IProps> = ({ isUpdateAvatarAllowed }) => {
       {/* Bookmarks tab starts */}
       <div
         className={`${
-          activeTab === 'bookmark'
+          activeTab === 'bookmarks'
             ? 'flex w-full lg:w-3/4 h-full p-8 lg:mx-8'
             : 'w-0 h-0 scale-0 opacity-0 p-0 mx-0'
         } flex-col items-start bg-light rounded-3xl z-0 transition-all duration-300`}

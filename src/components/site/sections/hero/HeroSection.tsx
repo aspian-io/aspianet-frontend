@@ -70,21 +70,21 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
           </p>
         )}
         {contentData.part_3 && contentData.part_3.length > 0 && (
-          <p className="text-zinc-400 text-xl md:text-3xl">
+          <p className="text-zinc-400 text-xl md:text-2xl">
             {contentData.part_3}
           </p>
         )}
-        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-36 space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-16 space-y-4 sm:space-y-0 sm:space-x-4">
           {contentData.btn1_title &&
             contentData.btn1_title.length > 0 &&
             contentData.btn1_href && (
               <Button
-                rounded="rounded-2xl"
-                size="h-12 md:h-16"
+                rounded="rounded-xl"
+                size="h-12"
                 type="button"
                 variant="primary"
                 block
-                extraCSSClasses="sm:w-56 md:text-xl"
+                extraCSSClasses="sm:w-52 md:text-lg"
                 onClick={() => {
                   router.push(contentData.btn1_href!);
                 }}
@@ -96,11 +96,11 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
             contentData.btn2_title.length > 0 &&
             contentData.btn2_href && (
               <Button
-                rounded="rounded-2xl"
-                size="h-12 md:h-16"
+                rounded="rounded-xl"
+                size="h-12"
                 type="button"
                 variant="link"
-                extraCSSClasses="flex justify-center items-center space-x-1 w-56 md:text-xl text-primary"
+                extraCSSClasses="flex justify-center items-center sm:space-x-1 w-52 md:text-xl text-primary"
                 onClick={() => {
                   router.push(contentData.btn2_href!);
                 }}
@@ -128,22 +128,22 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
               </Button>
             )}
         </div>
-        <div className="hidden sm:flex justify-start items-center space-x-4 sm:space-x-8 md:space-x-10 fill-zinc-300 mt-20">
-          <GitHubLogo className="w-9 h-9" />
-          <NodeJsLogo className="w-10 h-10" />
-          <TypeScriptLogo className="w-8 h-8" />
-          <NestJsLogo className="w-10 h-10" />
-          <MongoDbLogo className="w-10 h-10" />
-          <PostgresLogo className="w-10 h-10" />
-          <ReactLogo className="w-10 h-10" />
-          <NextJsLogo className="w-20 h-10" />
+        <div className="hidden sm:flex justify-start items-center space-x-4 sm:space-x-6 fill-zinc-300 lg:mt-16 xl:mt-24">
+          <GitHubLogo className="w-8 h-8" />
+          <NodeJsLogo className="w-9 h-9" />
+          <TypeScriptLogo className="w-7 h-7" />
+          <NestJsLogo className="w-9 h-9" />
+          <MongoDbLogo className="w-9 h-9" />
+          <PostgresLogo className="w-9 h-9" />
+          <ReactLogo className="w-9 h-9" />
+          <NextJsLogo className="w-20 h-9" />
         </div>
       </div>
-      <div className="flex justify-center items-center w-full lg:w-1/2 h-96 sm:h-[37rem] relative order-1 lg:order-2 mb-10 sm:mb-20">
-        <DotSeamlessPattern className="absolute -bottom-16 right-0 -z-10 fill-primary/10 w-72 h-72 hidden sm:inline" />
-        <div className="absolute top-0 -translate-x-6 h-96 sm:h-full w-60 sm:w-96 rounded-t-full rounded-b-lg bg-gradient-to-b from-primary/20"></div>
+      <div className="flex justify-center items-center w-full lg:w-1/2 h-96 sm:h-[32rem] relative order-1 lg:order-2 mb-10 sm:mb-20">
+        <DotSeamlessPattern className="absolute -bottom-14 right-0 -z-10 fill-primary/10 w-60 h-60 hidden sm:inline" />
+        <div className="absolute top-2 h-96 -translate-y-6 sm:translate-x-9 sm:h-full w-60 sm:w-80 rounded-t-full rounded-b-lg bg-gradient-to-b from-primary/20"></div>
         {heroSectionData?.featuredImage && (
-          <div className="relative w-60 sm:w-96 h-96 sm:h-[37rem] rounded-t-full rounded-b-[50rem] overflow-hidden mt-6 shadow-primary/10">
+          <div className="relative sm:ml-28 w-60 sm:w-80 h-96 sm:h-[33rem] rounded-t-full rounded-b-[50rem] overflow-hidden shadow-primary/10">
             <Image
               src={`${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${heroSectionData.featuredImage.key}`}
               fill
