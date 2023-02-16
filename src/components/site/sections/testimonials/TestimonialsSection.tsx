@@ -14,7 +14,7 @@ interface IProps {
 
 const TestimonialsSection: FC<IProps> = ({ projectsCommentsData }) => {
   return (
-    <section className='container mx-auto'>
+    <section className="container mx-auto">
       <div className="flex flex-col justify-center items-center py-10 sm:py-20 transition-all duration-300">
         <div className="flex flex-col justify-center items-center space-y-6">
           <h3 className="text-primary text-sm">Testimonials</h3>
@@ -55,7 +55,7 @@ const TestimonialsSection: FC<IProps> = ({ projectsCommentsData }) => {
                     {c.firstName} {c.lastName}
                   </div>
                   <Link
-                    href={`/projects/${c.post.slug}`}
+                    href={`/portfolio/${c.post.slug}`}
                     target="_blank"
                     className="pl-14 text-blue-500 underline mt-2"
                   >

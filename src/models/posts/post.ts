@@ -1,6 +1,7 @@
 import { IFile } from "../files/file";
 import { ITaxonomy } from "../taxonomies/taxonomy";
 import { IMinimalUser } from "../users/minimal-user";
+import { PostTypeEnum } from "./admin/post";
 
 export interface IPost {
   id: string;
@@ -30,6 +31,7 @@ export interface IPost {
 
 export interface IMiniPost {
   id: string;
+  type: PostTypeEnum;
   title: string;
   subtitle: string | null;
   excerpt: string | null;

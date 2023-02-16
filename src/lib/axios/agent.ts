@@ -24,6 +24,7 @@ import { IMiniPost, IPost, IPostStat } from "../../models/posts/post";
 import { CommentFormValues, IComment } from "../../models/comments/comment";
 import { ILayout } from "../../models/common/layout";
 import { IMinimalUser } from "../../models/users/minimal-user";
+import { ISubscriberDto, SubscriberCreateFormValues, SubscriptionTokenDto, UnsubscribeReqDto } from "../../models/newsletter/subscribers/subscriber-dto";
 
 const AxiosApp = axios.create( {
   baseURL: process.env.NEXT_PUBLIC_APP_BASE_URL,
@@ -307,6 +308,7 @@ export const TaxonomyAgent = {
 
 // Post Agent
 export const PostAgent = {
+  search: ( qs: string ): Promise<IPaginated<IMiniPost>> => apiRequests.get( `/posts/search${ qs }` ),
   blogsList: ( qs: string ): Promise<IPaginated<IMiniPost>> => apiRequests.get( `/posts/blogs${ qs }` ),
   blogDetails: ( slug: string ): Promise<AxiosResponse<IPost>> => AxiosAPI.get( `/posts/blogs/${ slug }` ),
   blogStatistics: ( slug: string ): Promise<IPostStat> => apiRequests.get( `/posts/blogs/statistics/${ slug }` ),
@@ -329,7 +331,16 @@ export const CommentAgent = {
   like: ( session: Session | null, commentId: string ): Promise<IComment> => apiRequests.post( `/comments/${ commentId }/like`, {}, { headers: authHeader( session ) } ),
   dislike: ( session: Session | null, commentId: string ): Promise<IComment> => apiRequests.post( `/comments/${ commentId }/dislike`, {}, { headers: authHeader( session ) } ),
   getProjectsSpecialComments: (): Promise<IComment[]> => apiRequests.get( `/comments/projects-special-comments` ),
+};
+
+// Newsletter Agent
+export const NewsletterAgent = {
+  subscribe: ( subscriber: SubscriberCreateFormValues ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/subscribe`, subscriber ),
+  confirmSubscription: ( subscriber: SubscriptionTokenDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/approve-subscription`, subscriber ),
+  unsubscribeRequest: ( subscriber: UnsubscribeReqDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/unsubscribe-request`, subscriber ),
+  unsubscribe: ( subscriber: SubscriptionTokenDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/unsubscribe`, subscriber ),
+  tokenRemainingTime: ( subscriberEmail: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( `/newsletter/subscribers/email-token-remaining-time`, { email: subscriberEmail } ),
 }
 
 
-/*********** CLIENT REGION START **************/
+/*********** CLIENT REGION END **************/

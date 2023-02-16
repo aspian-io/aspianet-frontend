@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { IPost } from '../../../../models/posts/post';
 import Button from '../../../common/Button';
@@ -13,6 +14,8 @@ const SiteFooter: FC<ISiteFooterProps> = ({
   linksWidgetData,
   newsletterWidgetData,
 }) => {
+  const router = useRouter();
+
   return (
     <div className="bg-zinc-100 w-full">
       <div className="container mx-auto flex flex-col justify-center items-center">
@@ -50,10 +53,12 @@ const SiteFooter: FC<ISiteFooterProps> = ({
               size="h-8"
               type="button"
               variant="primary"
-              onClick={() => {}}
+              onClick={() => {
+                router.push('/newsletter/subscribe');
+              }}
               extraCSSClasses="text-sm px-4"
             >
-              Subscribe
+              Subscription
             </Button>
           </div>
         </div>

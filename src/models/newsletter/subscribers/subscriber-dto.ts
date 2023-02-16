@@ -44,3 +44,17 @@ export class UnsubscribeReqDto {
     );
   }
 }
+
+export interface ISubscriberOtp {
+  email: string;
+  token: string;
+}
+
+export class SubscriberOtp implements ISubscriberOtp {
+  email: string = '';
+  token: string = '';
+
+  constructor ( init?: ISubscriberOtp ) {
+    Object.assign( this, init );
+  }
+}
