@@ -54,7 +54,7 @@ export default PageDetailsPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [{ params: { slug: 'abc' } }],
+    paths: [],
     fallback: 'blocking',
   };
 };

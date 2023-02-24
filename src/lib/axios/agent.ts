@@ -64,29 +64,27 @@ createAuthRefreshInterceptor( AxiosAPI, failedRequest =>
 
 // Axios App requests
 const appRequests = {
-  get: ( url: string, config?: AxiosRequestConfig<{}> ) => AxiosApp.get( url, config ).then( sleep( 1000 ) ).then( responseBody ),
+  get: ( url: string, config?: AxiosRequestConfig<{}> ) => AxiosApp.get( url, config ).then( responseBody ),
   post: ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
-    AxiosApp.post( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+    AxiosApp.post( url, body, config ).then( responseBody ),
   patch: ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
-    AxiosApp.put( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+    AxiosApp.put( url, body, config ).then( responseBody ),
   del: ( url: string, config?: AxiosRequestConfig<{}> ) =>
     AxiosApp
       .delete( url, config )
-      .then( sleep( 1000 ) )
       .then( responseBody ),
 };
 
 // Axios API requests
 const apiRequests = {
-  get: ( url: string, config?: AxiosRequestConfig<{}> ) => AxiosAPI.get( url, config ).then( sleep( 1000 ) ).then( responseBody ),
+  get: ( url: string, config?: AxiosRequestConfig<{}> ) => AxiosAPI.get( url, config ).then( responseBody ),
   post: ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
-    AxiosAPI.post( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+    AxiosAPI.post( url, body, config ).then( responseBody ),
   patch: ( url: string, body: {}, config?: AxiosRequestConfig<{}> ) =>
-    AxiosAPI.patch( url, body, config ).then( sleep( 1000 ) ).then( responseBody ),
+    AxiosAPI.patch( url, body, config ).then( responseBody ),
   del: ( url: string, config?: AxiosRequestConfig<{}> ) =>
     AxiosAPI
       .delete( url, config )
-      .then( sleep( 1000 ) )
       .then( responseBody ),
 };
 
