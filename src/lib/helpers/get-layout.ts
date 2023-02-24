@@ -6,6 +6,9 @@ export async function getSiteLayout (): Promise<ISiteLayout> {
   const {
     primaryMenuItems,
     secondaryMenuItems,
+    siteName,
+    siteDescription,
+    siteURL,
     siteLogos,
     heroSectionData,
     serviceSectionData,
@@ -25,6 +28,9 @@ export async function getSiteLayout (): Promise<ISiteLayout> {
   return {
     primaryMenuItems,
     secondaryMenuItems,
+    siteName,
+    siteDescription,
+    siteURL,
     siteLogo,
     siteOverlayLogo,
     heroSectionData: heroSectionData[ 0 ],

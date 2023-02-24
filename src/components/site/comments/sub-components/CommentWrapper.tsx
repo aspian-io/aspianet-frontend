@@ -15,7 +15,7 @@ interface IProps {
   postId: string;
   comment: IComment;
   postType?: PostTypeEnum;
-  allowComment: boolean;
+  allowComment?: boolean;
   onReplySuccess?: (comment: IComment) => any;
 }
 
@@ -23,7 +23,7 @@ const CommentWrapper: FC<IProps> = ({
   comment,
   postId,
   postType = PostTypeEnum.BLOG,
-  allowComment,
+  allowComment = true,
   onReplySuccess = () => {},
 }) => {
   const { data: session, status } = useSession();

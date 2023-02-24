@@ -4,7 +4,12 @@ import { SiteNav } from '../../nav/SiteNav';
 import { ISiteLayoutProps } from '../SiteLayout';
 const { Item } = SiteNav;
 
-const SiteHeader: FC<ISiteLayoutProps> = ({
+const SiteHeader: FC<
+  Omit<
+    ISiteLayoutProps,
+    'siteName' | 'pageTitle' | 'pageDescription' | 'pageKeywords' | 'og'
+  >
+> = ({
   headerMenuItems: menuItems,
   defaultMenuItemIndex = 0,
   siteLogo,

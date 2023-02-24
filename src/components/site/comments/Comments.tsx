@@ -19,7 +19,7 @@ interface IProps {
   postId: string;
   parentId?: string;
   postType?: PostTypeEnum;
-  allowComment: boolean;
+  allowComment?: boolean;
 }
 
 export interface ICommentTimeStamp {
@@ -31,7 +31,7 @@ const Comments: FC<IProps> = ({
   postId,
   parentId,
   postType = PostTypeEnum.BLOG,
-  allowComment,
+  allowComment = true,
 }) => {
   const { data: session, status } = useSession();
   const [comments, setComments] = useState<IComment[]>([]);

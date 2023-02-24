@@ -9,6 +9,9 @@ interface IProps extends ISiteLayout {}
 const ContactPage: NextPage<IProps> = ({
   primaryMenuItems,
   secondaryMenuItems,
+  siteName,
+  siteDescription,
+  siteURL,
   siteLogo,
   siteOverlayLogo,
   contactWidgetData,
@@ -18,6 +21,13 @@ const ContactPage: NextPage<IProps> = ({
   return (
     <>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={`${siteName} | Contact`}
+        pageDescription={'Contact Form'}
+        og={{
+          type: 'website',
+          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/contact`
+        }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}

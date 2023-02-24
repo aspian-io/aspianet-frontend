@@ -63,7 +63,7 @@ const AdminProjects = () => {
     data: projectsData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_PROJECTS_LIST}${qs}${initialSort()}`,
     fetcher
   );
@@ -146,7 +146,7 @@ const AdminProjects = () => {
   );
 
   const formatData = useCallback(
-    (project: IPostEntity): IDataType => {
+    (project: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: project.id,
         title: (

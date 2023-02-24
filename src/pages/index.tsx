@@ -15,6 +15,9 @@ interface IProps extends ISiteLayout {
 const HomePage: NextPage<IProps> = ({
   primaryMenuItems,
   secondaryMenuItems,
+  siteName,
+  siteDescription,
+  siteURL,
   siteLogo,
   siteOverlayLogo,
   heroSectionData,
@@ -27,6 +30,14 @@ const HomePage: NextPage<IProps> = ({
   return (
     <>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={`${siteName} | ${siteDescription}`}
+        pageDescription={siteDescription}
+        pageKeywords={['development', 'coding', 'web', 'app', 'software']}
+        og={{
+          type: 'website',
+          url: siteURL,
+        }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}
@@ -67,7 +78,6 @@ export const getStaticProps: GetStaticProps<IProps> = async () => {
       redirect: {
         destination: '/500',
         permanent: false,
-        statusCode: 500,
       },
     };
   }

@@ -28,7 +28,7 @@ import { Link as SpyLink, Element as SpyElement } from 'react-scroll';
 
 interface IProps {
   article: IPost;
-  statData: IPostStat | undefined;
+  statData?: IPostStat;
   heading?: boolean;
   author?: boolean;
   comments?: boolean;
@@ -37,7 +37,7 @@ interface IProps {
 
 const BlogArticle: FC<IProps> = ({
   article,
-  statData,
+  statData = undefined,
   heading = true,
   author = true,
   comments = true,

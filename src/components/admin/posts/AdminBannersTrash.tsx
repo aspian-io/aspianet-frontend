@@ -52,7 +52,7 @@ const AdminBannersTrash = () => {
     data: bannersData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_SOFT_DELETED_BANNERS}?page=${page}&limit=${limit}`,
     fetcher
   );
@@ -138,7 +138,7 @@ const AdminBannersTrash = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: post.title,

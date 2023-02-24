@@ -53,7 +53,7 @@ const AdminPostsTrash = () => {
     data: postsData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_SOFT_DELETED_BLOGS}?page=${page}&limit=${limit}`,
     fetcher
   );
@@ -139,7 +139,7 @@ const AdminPostsTrash = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: post.title,

@@ -7,6 +7,9 @@ import { ITaxonomy } from "../taxonomies/taxonomy";
 export interface ILayout {
   primaryMenuItems: ITaxonomy[];
   secondaryMenuItems: ITaxonomy[];
+  siteName: string;
+  siteDescription: string;
+  siteURL: string;
   siteLogos: {
     type: SettingsKeyEnum;
     file: IFile;
@@ -21,6 +24,9 @@ export interface ILayout {
 export interface ISiteLayout {
   primaryMenuItems: ITaxonomy[];
   secondaryMenuItems: ITaxonomy[];
+  siteName: string;
+  siteDescription: string;
+  siteURL: string;
   siteLogo?: ILogoFile;
   siteOverlayLogo?: ILogoFile;
   heroSectionData?: IPost;

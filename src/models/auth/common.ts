@@ -15,6 +15,7 @@ export interface IClaimEntity {
 
 export enum ClaimsEnum {
   ADMIN = 'rw_a',
+  DASHBOARD_READ = "dash_r",
   USER_READ = 'usr_r',
   USER_CREATE = 'usr_w',
   USER_EDIT = 'usr_w+',

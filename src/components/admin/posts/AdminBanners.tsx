@@ -57,7 +57,7 @@ const AdminBanners = () => {
     data: bannersData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_BANNERS_LIST}${qs}${initialSort()}`,
     fetcher
   );
@@ -121,7 +121,7 @@ const AdminBanners = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: (

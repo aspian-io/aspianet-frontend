@@ -51,7 +51,7 @@ const AdminNewsletterTemplatesTrash = () => {
     data: templatesData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_SOFT_DELETED_NEWSLETTER_TEMPLATES}?page=${page}&limit=${limit}`,
     fetcher
   );
@@ -137,7 +137,7 @@ const AdminNewsletterTemplatesTrash = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: post.title,

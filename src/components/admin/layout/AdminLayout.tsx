@@ -27,7 +27,14 @@ const AdminLayout: FC<PropsWithChildren<IProps>> = ({
   return (
     <>
       <Head>
+        <title>Admin Panel | {pageTitle}</title>
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="theme-color"
+          content="#8479E1"
+          media="(prefers-color-scheme: light)"
+        />
       </Head>
       <div className="relative py-2 md:py-4 pr-4 pl-4 md:pl-8 min-h-screen bg-zinc-100 z-0">
         <AdminHeader />

@@ -67,7 +67,7 @@ const AdminPosts = () => {
     data: postsData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_BLOGS_LIST}${qs}${initialSort()}`,
     fetcher
   );
@@ -150,7 +150,7 @@ const AdminPosts = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: (

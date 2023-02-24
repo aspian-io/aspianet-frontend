@@ -8,8 +8,8 @@ interface IProps extends ISiteLayout {}
 
 const BlogPage: NextPage<IProps> = ({
   primaryMenuItems,
-  secondaryMenuItems,
   siteLogo,
+  siteName,
   siteOverlayLogo,
   contactWidgetData,
   linksWidgetData,
@@ -18,6 +18,13 @@ const BlogPage: NextPage<IProps> = ({
   return (
     <>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={`${siteName} | News`}
+        pageDescription={'List of all news'}
+        og={{
+          type: 'website',
+          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/news`,
+        }}
         defaultMenuItemIndex={1}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}

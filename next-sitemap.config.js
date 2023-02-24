@@ -1,0 +1,40 @@
+/** @type {import('next-sitemap').IConfig} */
+module.exports = {
+  siteUrl: process.env.NEXT_PUBLIC_APP_BASE_URL,
+  generateRobotsTxt: true,
+  robotsTxtOptions: {
+    policies: [
+      { userAgent: '*', disallow: '/admin' },
+      { userAgent: '*', disallow: '/users/profile' },
+      { userAgent: '*', disallow: '/search' },
+      { userAgent: '*', disallow: '/auth/forget-password' },
+      { userAgent: '*', disallow: '/auth/reset-password' },
+      { userAgent: '*', disallow: '/auth/nextauth-error' },
+      { userAgent: '*', disallow: '/auth/verify-email' },
+      { userAgent: '*', disallow: '/newsletter/confirm-subscription' },
+      { userAgent: '*', disallow: '/newsletter/unsubscribe-confirmation' },
+      { userAgent: '*', allow: '/' },
+    ],
+    additionalSitemaps: [
+      `${process.env.NEXT_PUBLIC_APP_BASE_URL}/sitemap.xml`,
+      `${process.env.NEXT_PUBLIC_APP_BASE_URL}/sitemap-0.xml`,
+      `${process.env.NEXT_PUBLIC_APP_BASE_URL}/dynamic-sitemap.xml`,
+    ],
+  },
+  sitemapSize: 7000,
+  exclude: [
+    '/400',
+    '/403',
+    '/admin',
+    '/admin/*',
+    '/search',
+    '/auth/forget-password',
+    '/auth/reset-password',
+    '/auth/nextauth-error',
+    '/auth/verify-email',
+    '/dynamic-sitemap.xml',
+    '/newsletter/confirm-subscription',
+    '/newsletter/unsubscribe-confirmation',
+    '/users/profile',
+  ],
+};

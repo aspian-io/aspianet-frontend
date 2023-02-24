@@ -155,6 +155,27 @@ const AdminUserClaims = () => {
                     </h5>
                     <div className="flex justify-start items-center space-x-2">
                       <Field
+                        id={ClaimsEnum.DASHBOARD_READ}
+                        type={InputTypeEnum.checkbox}
+                        name="claimIds"
+                        value={getClaimIdByName(ClaimsEnum.DASHBOARD_READ)}
+                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
+                      />
+                      <label
+                        htmlFor={ClaimsEnum.DASHBOARD_READ}
+                        className="text-sm text-zinc-700"
+                      >
+                        Ability to read dashboard information.
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col justify-start items-start max-w-[230px] sm:max-w-full md:w-1/2 xl:w-1/3 mt-8 md:pr-10">
+                    <h5 className="font-bold text-primary text-sm mb-2">
+                      User Section Claims:
+                    </h5>
+                    <div className="flex justify-start items-center space-x-2">
+                      <Field
                         id={ClaimsEnum.USER_READ}
                         type={InputTypeEnum.checkbox}
                         name="claimIds"
@@ -599,6 +620,36 @@ const AdminUserClaims = () => {
                         className="text-sm text-zinc-700"
                       >
                         Ability to send emails.
+                      </label>
+                    </div>
+                    <div className="flex justify-start items-center space-x-2">
+                      <Field
+                        id={ClaimsEnum.EMAIL_READ}
+                        type={InputTypeEnum.checkbox}
+                        name="claimIds"
+                        value={getClaimIdByName(ClaimsEnum.EMAIL_READ)}
+                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
+                      />
+                      <label
+                        htmlFor={ClaimsEnum.EMAIL_READ}
+                        className="text-sm text-zinc-700"
+                      >
+                        Ability to read emails.
+                      </label>
+                    </div>
+                    <div className="flex justify-start items-center space-x-2">
+                      <Field
+                        id={ClaimsEnum.EMAIL_DELETE}
+                        type={InputTypeEnum.checkbox}
+                        name="claimIds"
+                        value={getClaimIdByName(ClaimsEnum.EMAIL_DELETE)}
+                        className="w-4 h-4 text-primary bg-light rounded border-gray-300 focus:ring-0 focus:ring-offset-0 disabled:bg-zinc-300 disabled:hoverable:hover:bg-zinc-300 disabled:checked:bg-zinc-400"
+                      />
+                      <label
+                        htmlFor={ClaimsEnum.EMAIL_DELETE}
+                        className="text-sm text-zinc-700"
+                      >
+                        Ability to delete emails.
                       </label>
                     </div>
                   </div>

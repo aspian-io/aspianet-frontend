@@ -65,3 +65,9 @@ export interface IPostStat {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IPostSitemap {
+  type: PostTypeEnum;
+  slug: string;
+  updatedAt: string;
+}

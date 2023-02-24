@@ -13,7 +13,7 @@ interface IProps extends ISiteLayout {
 
 const PageDetailsPage: NextPage<IProps> = ({
   primaryMenuItems,
-  secondaryMenuItems,
+  siteName,
   siteLogo,
   siteOverlayLogo,
   contactWidgetData,
@@ -24,6 +24,16 @@ const PageDetailsPage: NextPage<IProps> = ({
   return (
     <>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={page.title}
+        pageDescription={page.excerpt ?? ''}
+        og={{
+          type: 'article',
+          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/pages/${page.slug}`,
+          image: page.featuredImage
+            ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${page.featuredImage}`
+            : undefined,
+        }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}

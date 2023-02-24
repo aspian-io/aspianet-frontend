@@ -52,7 +52,7 @@ const AdminProjectsTrash = () => {
     data: projectsData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_SOFT_DELETED_PROJECTS}?page=${page}&limit=${limit}`,
     fetcher
   );
@@ -138,7 +138,7 @@ const AdminProjectsTrash = () => {
   );
 
   const formatData = useCallback(
-    (project: IPostEntity): IDataType => {
+    (project: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: project.id,
         title: project.title,

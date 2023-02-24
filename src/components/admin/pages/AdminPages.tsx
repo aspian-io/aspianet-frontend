@@ -58,7 +58,7 @@ const AdminPages = () => {
     data: pagesData,
     error,
     mutate,
-  } = useSWR<IPaginated<IPostEntity>, AxiosError<INestError>>(
+  } = useSWR<IPaginated<Omit<IPostEntity, 'content'>>, AxiosError<INestError>>(
     `${AdminPostKeys.GET_PAGES_LIST}${qs}${initialSort()}`,
     fetcher
   );
@@ -141,7 +141,7 @@ const AdminPages = () => {
   );
 
   const formatData = useCallback(
-    (post: IPostEntity): IDataType => {
+    (post: Omit<IPostEntity, 'content'>): IDataType => {
       return {
         id: post.id,
         title: (

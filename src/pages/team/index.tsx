@@ -12,7 +12,7 @@ interface IProps extends ISiteLayout {
 
 const TeamPage: NextPage<IProps> = ({
   primaryMenuItems,
-  secondaryMenuItems,
+  siteName,
   siteLogo,
   siteOverlayLogo,
   contactWidgetData,
@@ -23,6 +23,13 @@ const TeamPage: NextPage<IProps> = ({
   return (
     <>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={`${siteName} | Our Team`}
+        pageDescription={'List of our team members'}
+        og={{
+          type: 'website',
+          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/team`,
+        }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}

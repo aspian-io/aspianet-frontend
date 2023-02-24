@@ -19,6 +19,9 @@ const ProfilePage: NextPage<IProps> = ({
   isUpdateAvatarAllowed,
   primaryMenuItems,
   secondaryMenuItems,
+  siteName,
+  siteDescription,
+  siteURL,
   siteLogo,
   siteOverlayLogo,
   contactWidgetData,
@@ -28,6 +31,9 @@ const ProfilePage: NextPage<IProps> = ({
   return (
     <AuthGuard claims={[]}>
       <SiteLayout
+        siteName={siteName}
+        pageTitle={`${siteName} | User Profile`}
+        pageDescription={"Users's profile page"}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
         siteLogo={siteLogo}
