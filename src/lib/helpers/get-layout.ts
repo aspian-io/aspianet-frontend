@@ -19,11 +19,11 @@ export async function getSiteLayout (): Promise<ISiteLayout> {
 
   const siteLogo =
     siteLogos?.filter( ( l ) => l.type === SettingsKeyEnum.SITE_LOGO_ID )[ 0 ]
-      ?.file ?? undefined;
+      ?.file ?? null;
   const siteOverlayLogo =
     siteLogos?.filter(
       ( l ) => l.type === SettingsKeyEnum.SITE_OVERLAY_LOGO_ID
-    )[ 0 ]?.file ?? undefined;
+    )[ 0 ]?.file ?? null;
 
   return {
     primaryMenuItems,
