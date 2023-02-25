@@ -33,10 +33,10 @@ export async function getSiteLayout (): Promise<ISiteLayout> {
     siteURL,
     siteLogo,
     siteOverlayLogo,
-    heroSectionData: heroSectionData[ 0 ],
+    heroSectionData: heroSectionData[ 0 ] ?? null,
     serviceSectionData,
-    contactWidgetData: contactWidgetData[ 0 ],
-    linksWidgetData: linksWidgetData[ 0 ],
-    newsletterWidgetData: newsletterWidgetData[ 0 ],
+    contactWidgetData: contactWidgetData[ 0 ] ?? null,
+    linksWidgetData: linksWidgetData[ 0 ] ?? null,
+    newsletterWidgetData: newsletterWidgetData[ 0 ] ?? null,
   };
 }
