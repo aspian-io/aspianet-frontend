@@ -22,7 +22,7 @@ const SiteHeader: FC<
 
   useEffect(() => {
     if (router.pathname === '/') {
-      setActiveItem(menuItems[defaultMenuItemIndex].href);
+      setActiveItem(menuItems[defaultMenuItemIndex]?.href);
     } else {
       setActiveItem(router.asPath.replace(router.query as any, ' '));
     }
