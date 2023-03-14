@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/auth/login</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/auth/register</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/blog</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/contact</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/news</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/newsletter/subscribe</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/newsletter/unsubscribe</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/portfolio</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://aspianet-app-frontend.us-east-1.elasticbeanstalk.com/team</loc><lastmod>2023-03-14T14:35:47.996Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+</urlset>
