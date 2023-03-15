@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import SiteLayout from '../../components/site/layout/SiteLayout';
 import Portfolio from '../../components/site/portfolio/Portfolio';
 import { getSiteLayout } from '../../lib/helpers/get-layout';
@@ -44,7 +44,7 @@ const PortfolioPage: NextPage<IProps> = ({
 
 export default PortfolioPage;
 
-export const getStaticProps: GetStaticProps<IProps> = async () => {
+export const getServerSideProps: GetServerSideProps<IProps> = async () => {
   try {
     const siteLayout = await getSiteLayout();
 

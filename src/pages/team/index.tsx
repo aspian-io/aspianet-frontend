@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import SiteLayout from '../../components/site/layout/SiteLayout';
 import Team from '../../components/site/team/Team';
 import { UserAgent } from '../../lib/axios/agent';
@@ -48,7 +48,7 @@ const TeamPage: NextPage<IProps> = ({
 
 export default TeamPage;
 
-export const getStaticProps: GetStaticProps<IProps> = async () => {
+export const getServerSideProps: GetServerSideProps<IProps> = async () => {
   try {
     const siteLayout = await getSiteLayout();
     const members = await UserAgent.membersList();

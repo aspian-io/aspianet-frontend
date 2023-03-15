@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import SiteLayout from '../components/site/layout/SiteLayout';
 import { getSiteLayout } from '../lib/helpers/get-layout';
 import { ISiteLayout } from '../models/common/layout';
@@ -26,7 +26,7 @@ const ContactPage: NextPage<IProps> = ({
         pageDescription={'Contact Form'}
         og={{
           type: 'website',
-          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/contact`
+          url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/contact`,
         }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
@@ -46,7 +46,7 @@ const ContactPage: NextPage<IProps> = ({
 
 export default ContactPage;
 
-export const getStaticProps: GetStaticProps<IProps> = async () => {
+export const getServerSideProps: GetServerSideProps<IProps> = async () => {
   try {
     const siteLayout = await getSiteLayout();
 
