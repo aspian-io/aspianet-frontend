@@ -309,7 +309,7 @@ const AdminSendMail = () => {
                   resetForm();
                   setSubmitting(false);
                   router.push('/admin/emails/sent');
-                  toast.success(`The campaign has been created successfully`, {
+                  toast.success(`The email has been sent successfully`, {
                     className: 'bg-success text-light',
                   });
                 } catch (error) {

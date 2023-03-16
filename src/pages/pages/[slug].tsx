@@ -83,7 +83,7 @@ export const getStaticProps: GetStaticProps<IProps> = async ({ params }) => {
       return {
         redirect: {
           destination: `/pages/${err.response.data.slug}`,
-          statusCode: 301,
+          permanent: true,
         },
       };
     }

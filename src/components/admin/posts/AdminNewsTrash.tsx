@@ -9,7 +9,7 @@ import { AdminPostKeys } from '../../../lib/swr/keys';
 import { ClaimsEnum } from '../../../models/auth/common';
 import { INestError } from '../../../models/common/error';
 import { IPaginated } from '../../../models/common/paginated-result';
-import { IPostEntity } from '../../../models/posts/admin/post';
+import { IPostEntity, PostTypeEnum } from '../../../models/posts/admin/post';
 import { AuthGuard } from '../../common/AuthGuard';
 import Button from '../../common/Button';
 import ConfirmModal from '../../common/ConfirmModal';
@@ -60,7 +60,7 @@ const AdminNewsTrash = () => {
   if (error) router.push('/500');
 
   const actionsColumn = useCallback(
-    (id: string) => (
+    (id: string, slug: string) => (
       <div className="flex justify-center items-center w-full space-x-2 py-1">
         <Button
           rounded="rounded-md"
@@ -74,6 +74,11 @@ const AdminNewsTrash = () => {
             setRecoverLoading(true);
             try {
               await AdminPostAgent.recoverPost(session, id);
+              await AdminPostAgent.revalidatePost(
+                session,
+                PostTypeEnum.NEWS,
+                slug
+              );
               await mutate();
               setRecoverLoading(false);
               toast.success('The news recovered successfully.', {
@@ -143,7 +148,7 @@ const AdminNewsTrash = () => {
         id: post.id,
         title: post.title,
         slug: post.slug,
-        actions: actionsColumn(post.id),
+        actions: actionsColumn(post.id, post.slug),
       };
     },
     [actionsColumn]

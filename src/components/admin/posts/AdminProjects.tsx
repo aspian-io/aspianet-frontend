@@ -12,6 +12,7 @@ import { INestError } from '../../../models/common/error';
 import { IPaginated } from '../../../models/common/paginated-result';
 import {
   IPostEntity,
+  PostTypeEnum,
   PostVisibilityEnum,
 } from '../../../models/posts/admin/post';
 import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
@@ -230,6 +231,16 @@ const AdminProjects = () => {
               setRemoveLoading(true);
               if (itemsToBulkDelete && itemsToBulkDelete.length > 0) {
                 await AdminPostAgent.softDeleteAll(session, itemsToBulkDelete);
+                const slugsToDelete: string[] = [];
+                for (let i of itemsToBulkDelete) {
+                  const itemToDel = projectsData?.items.find((p) => p.id === i);
+                  if (itemToDel) slugsToDelete.push(itemToDel.slug);
+                }
+                await AdminPostAgent.revalidateBulkPosts(
+                  session,
+                  PostTypeEnum.PROJECT,
+                  slugsToDelete
+                );
                 setItemsToBulkDelete(null);
                 await mutate();
                 toast.success('The selected items moved to trash.', {
@@ -269,6 +280,16 @@ const AdminProjects = () => {
               setRemoveLoading(true);
               if (itemToDelete) {
                 await AdminPostAgent.softDelete(session, itemToDelete);
+                const project = projectsData?.items.find(
+                  (i) => i.id === itemToDelete
+                );
+                if (project) {
+                  await AdminPostAgent.revalidatePost(
+                    session,
+                    PostTypeEnum.PROJECT,
+                    project.slug
+                  );
+                }
                 await mutate();
                 toast.success('The project moved to trash.', {
                   className: 'bg-success text-light text-sm',

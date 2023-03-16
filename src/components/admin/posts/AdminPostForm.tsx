@@ -259,6 +259,22 @@ const AdminPostForm: FC<IProps> = ({
 
             onCreateSuccess(result.id);
           }
+
+          if (
+            Object.values(PostTypeEnum).includes(post.type as any) &&
+            post.slug
+          ) {
+            const prevSlug =
+              editPostData && editPostData.slug !== post.slug
+                ? editPostData.slug
+                : undefined;
+            await AdminPostAgent.revalidatePost(
+              session,
+              post.type as any,
+              post.slug,
+              prevSlug
+            );
+          }
         } catch (error) {
           const err = error as AxiosError<INestError>;
           if (

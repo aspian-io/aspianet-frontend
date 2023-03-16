@@ -64,7 +64,7 @@ const BlogArticle: FC<IProps> = ({
   }
 
   return (
-    <div className="flex flex-col justify-center items-start my-10 transition-all duration-300">
+    <div className="flex flex-col justify-center items-start my-10 transition-all duration-300 w-full">
       {heading && (
         <Button
           rounded="rounded-xl"

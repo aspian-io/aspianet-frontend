@@ -11,7 +11,7 @@ import { IBookmarkPost } from "../../models/users/bookmark";
 import { ICreateUser, IUserEntity } from "../../models/users/admin/user";
 import { IClaimEntity } from "../../models/auth/common";
 import { ISettingsEntity, SettingsFormValues, SettingsKeyEnum, SettingsServiceEnum } from "../../models/settings/settings";
-import { IPostEntity, PostFormValues, WidgetTypeEnum } from "../../models/posts/admin/post";
+import { IPostEntity, PostFormValues, PostTypeEnum, WidgetTypeEnum } from "../../models/posts/admin/post";
 import { FileCreateFormValues, FileUpdateFormValues, IFileEntity } from "../../models/files/admin/file";
 import { ITaxonomyEntity, ITaxonomySlugsHistoryEntity, TaxonomyCreateFormValues, TaxonomyEditFormValues } from "../../models/taxonomies/admin/taxonomy";
 import { CommentCreateFormValues, CommentEditFormValues, ICommentEntity } from "../../models/comments/admin/comment";
@@ -153,6 +153,8 @@ export const AdminPostAgent = {
   create: ( session: Session | null, post: PostFormValues ): Promise<IPostEntity> => apiRequests.post( `/admin/posts`, post, { headers: authHeader( session ) } ),
   edit: ( session: Session | null, postId: string, post: PostFormValues | IPostEntity ): Promise<IPostEntity> => apiRequests.patch( `/admin/posts/${ postId }`, post, { headers: authHeader( session ) } ),
   revalidateHomePage: ( session: Session | null ): Promise<{ revalidated: boolean; }> => appRequests.post( `/api/revalidations/home/revalidate`, {}, { headers: authHeader( session ) } ),
+  revalidatePost: ( session: Session | null, postType: PostTypeEnum, slug: string, prevSlug?: string ): Promise<{ revalidated: boolean; }> => appRequests.post( `/api/revalidations/posts/revalidate`, { postType, slug, prevSlug }, { headers: authHeader( session ) } ),
+  revalidateBulkPosts: ( session: Session | null, postType: PostTypeEnum, slugs: string[] ): Promise<{ revalidated: boolean; }> => appRequests.post( `/api/revalidations/posts/bulk-revalidate`, { postType, slugs }, { headers: authHeader( session ) } ),
   getRecentPosts: ( session: Session | null, qs: string ): Promise<IPaginated<Omit<IPostEntity, 'content'>>> => apiRequests.get( `/admin/posts/recent${ qs }`, { headers: authHeader( session ) } ),
   getWidgetsByType: ( session: Session | null, type: WidgetTypeEnum ): Promise<IPostEntity[]> => apiRequests.get( `/admin/posts/widgets?type=${ type }`, { headers: authHeader( session ) } ),
   blogsList: ( session: Session | null, qs: string ): Promise<IPaginated<Omit<IPostEntity, 'content'>>> => apiRequests.get( `/admin/posts/blogs${ qs }`, { headers: authHeader( session ) } ),
