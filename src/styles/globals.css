@@ -11,6 +11,33 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  .no-tailwindcss-base h1,
+  .no-tailwindcss-base h2,
+  .no-tailwindcss-base h3,
+  .no-tailwindcss-base h4,
+  .no-tailwindcss-base h5,
+  .no-tailwindcss-base h6 {
+    font-size: revert;
+    font-weight: revert;
+    line-height: revert;
+    font-family: revert;
+    color: revert;
+    background-color: revert;
+  }
+
+  .no-tailwindcss-base ol,
+  .no-tailwindcss-base ul {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+
+  .no-tailwindcss-base p {
+    margin: revert;
+    color: revert;
+    background-color: revert;
+  }
 }
 
 /* NextJS 13 Image hack for Safari 15 not displaying a gray border while loading */
