@@ -61,6 +61,8 @@ const TinyMce = forwardRef<Editor, IProps>(
           menubar,
           plugins: mini ? miniPlugins : fullPlugins,
           toolbar: mini ? miniToolbar : fullToolbar,
+          importcss_append: true,
+          font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
           content_style:
             "@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&family=Rubik:wght@400;600;700&display=swap');",
           font_family_formats:
