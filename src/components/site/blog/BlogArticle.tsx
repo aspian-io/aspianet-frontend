@@ -64,7 +64,7 @@ const BlogArticle: FC<IProps> = ({
   }
 
   return (
-    <div className="flex flex-col justify-center items-start my-10 transition-all duration-300 w-full">
+    <div className="flex flex-col justify-center items-start mt-10 transition-all duration-300 w-full">
       {heading && (
         <Button
           rounded="rounded-xl"
@@ -387,7 +387,7 @@ const BlogArticle: FC<IProps> = ({
       )}
       {article.content && (
         <div
-          className="text-zinc-700 py-10 text-sm sm:text-base lg:text-lg no-tailwindcss-base"
+          className="text-zinc-700 pt-10 text-sm sm:text-base lg:text-lg no-tailwindcss-base"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
       )}
