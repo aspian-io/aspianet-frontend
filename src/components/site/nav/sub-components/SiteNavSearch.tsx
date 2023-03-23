@@ -78,6 +78,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
               <Field
                 type={InputTypeEnum.text}
                 name="search"
+                autoComplete="off"
                 placeholder={searchPlaceholderLabel}
                 className={`rounded-lg w-full ${
                   responsive
@@ -205,11 +206,11 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                             className="text-xs text-zinc-700"
                             onClick={() => closeSearchBtnRef.current?.click()}
                           >
-                            <div className="flex justify-start items-center hoverable:hover:bg-primary/20 p-2 w-full rounded-lg truncate">
+                            <div className="flex justify-start items-center hoverable:hover:bg-primary/20 p-2 w-full rounded-lg">
                               <div className="px-2 py-0.5 mr-1 bg-primary text-xs text-light rounded">
                                 Article
                               </div>
-                              {p.title}
+                              <div className="truncate">{p.title}</div>
                             </div>
                           </Link>
                         )}
@@ -223,7 +224,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                               <div className="px-2 py-0.5 mr-1 bg-primary text-xs text-light rounded">
                                 News
                               </div>
-                              {p.title}
+                              <div className="truncate">{p.title}</div>
                             </div>
                           </Link>
                         )}
@@ -237,7 +238,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                               <div className="px-2 py-0.5 mr-1 bg-primary text-xs text-light rounded">
                                 Portfolio
                               </div>
-                              {p.title}
+                              <div className="truncate">{p.title}</div>
                             </div>
                           </Link>
                         )}
