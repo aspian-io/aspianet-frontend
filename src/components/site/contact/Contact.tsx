@@ -50,7 +50,10 @@ const Contact = () => {
           html: '',
         }}
         validationSchema={validationSchema}
-        onSubmit={async ({ name, phone, from, subject, html }) => {
+        onSubmit={async (
+          { name, phone, from, subject, html },
+          { resetForm }
+        ) => {
           if (!executeRecaptcha) {
             toast.error('Something went wrong', {
               className: 'bg-danger text-light text-sm',
@@ -77,6 +80,7 @@ const Contact = () => {
             toast.success('Your message has been sent successfully', {
               className: 'bg-success text-light',
             });
+            resetForm();
           } catch (error) {
             toast.error('Something went wrong', {
               className: 'bg-danger text-light text-sm',
