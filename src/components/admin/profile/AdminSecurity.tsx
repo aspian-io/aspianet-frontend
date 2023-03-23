@@ -12,6 +12,8 @@ import { UserAgent } from '../../../lib/axios/agent';
 import Button from '../../common/Button';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import FormikInput, { InputTypeEnum } from '../../common/FormikInput';
+import { AxiosError } from 'axios';
+import { INestError } from '../../../models/common/error';
 
 const AdminSecurity = () => {
   const { data: session } = useSession();
@@ -54,6 +56,15 @@ const AdminSecurity = () => {
                 className: 'bg-success text-light',
               });
             } catch (error) {
+              const err = error as AxiosError<INestError>;
+              if (err.response?.data.statusCode === 400) {
+                return toast.error(err.response?.data.message, {
+                  className: 'bg-danger text-light',
+                });
+              }
+              toast.error('Something went wrong, please try again later.', {
+                className: 'bg-danger text-light',
+              });
               toast.error('Something went wrong, please try again later.', {
                 className: 'bg-danger text-light',
               });

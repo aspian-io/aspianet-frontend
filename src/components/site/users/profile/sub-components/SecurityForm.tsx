@@ -11,6 +11,8 @@ import LoadingSpinner from '../../../../common/LoadingSpinner';
 import { UserAgent } from '../../../../../lib/axios/agent';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { INestError } from '../../../../../models/common/error';
 
 const SecurityForm = () => {
   const { data: session } = useSession();
@@ -51,6 +53,12 @@ const SecurityForm = () => {
             className: 'bg-success text-light',
           });
         } catch (error) {
+          const err = error as AxiosError<INestError>;
+          if (err.response?.data.statusCode === 400) {
+            return toast.error(err.response?.data.message, {
+              className: 'bg-danger text-light',
+            });
+          }
           toast.error('Something went wrong, please try again later.', {
             className: 'bg-danger text-light',
           });
@@ -103,7 +111,10 @@ const SecurityForm = () => {
                     passwordEyeFromTopCssClass="top-6"
                     component={FormikInput}
                   />
-                  <div className="mt-2 text-zinc-400 text-xs">Password must contains uppercase letters, lowercase letters, numbers or symbols.</div>
+                  <div className="mt-2 text-zinc-400 text-xs">
+                    Password must contains uppercase letters, lowercase letters,
+                    numbers or symbols.
+                  </div>
                 </div>
               </div>
             </div>
