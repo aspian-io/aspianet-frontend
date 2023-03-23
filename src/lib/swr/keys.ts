@@ -102,6 +102,7 @@ export const TaxonomyKeys = {
 // POST KEYS
 export const PostKeys = {
   SEARCH: `${ BaseURLs.API }/posts/search`,
+  GET_BANNERS_LIST: `${ BaseURLs.API }/posts/banners?orderBy.createdAt=DESC&page=1&limit=3`,
   GET_BLOGS_LIST: `${ BaseURLs.API }/posts/blogs`,
   GET_BLOG_STAT: `${ BaseURLs.API }/posts/blogs/statistics`,
   GET_NEWS_LIST: `${ BaseURLs.API }/posts/news`,

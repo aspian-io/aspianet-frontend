@@ -1,7 +1,15 @@
+import { AxiosError } from 'axios';
 import Head from 'next/head';
 import React, { FC, PropsWithChildren } from 'react';
+import useSWR from 'swr';
+import { PostAgent } from '../../../lib/axios/agent';
+import { PostKeys } from '../../../lib/swr/keys';
+import { INestError } from '../../../models/common/error';
+import { IPaginated } from '../../../models/common/paginated-result';
 import { ILogoFile } from '../../../models/files/logo-file';
+import { IMiniBanner } from '../../../models/posts/post';
 import { ITaxonomy } from '../../../models/taxonomies/taxonomy';
+import Banner from '../banner/Banner';
 import SiteFooter, { ISiteFooterProps } from './sub-components/SiteFooter';
 import SiteHeader from './sub-components/SiteHeader';
 
@@ -37,6 +45,13 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
   og,
   children,
 }) => {
+  const fetcher = () => PostAgent.bannersList();
+
+  const { data: bannersData, error } = useSWR<
+    IPaginated<IMiniBanner>,
+    AxiosError<INestError>
+  >(PostKeys.GET_BANNERS_LIST, fetcher);
+
   return (
     <>
       <Head>
@@ -65,6 +80,9 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
           media="(prefers-color-scheme: light)"
         />
       </Head>
+      {bannersData &&
+        bannersData.items.length > 0 &&
+        bannersData.items.map((b, i) => <Banner content={b.content} key={i} />)}
       <SiteHeader
         defaultMenuItemIndex={defaultMenuItemIndex}
         headerMenuItems={headerMenuItems}

@@ -1,29 +1,13 @@
-import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FC, useState } from 'react';
-import { toast } from 'react-toastify';
-import useSWR from 'swr';
-import { PostAgent } from '../../../lib/axios/agent';
+import React, { FC } from 'react';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
-import { PostKeys } from '../../../lib/swr/keys';
-import { AvatarSourceEnum } from '../../../models/auth/common';
-import { INestError } from '../../../models/common/error';
-import { IPost, IPostStat } from '../../../models/posts/post';
+import { IPost } from '../../../models/posts/post';
 import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
 import { ITaxonomy } from '../../../models/taxonomies/taxonomy';
 import Button from '../../common/Button';
-import LoadingSpinner from '../../common/LoadingSpinner';
-import FacebookLogo from '../../common/vectors/FacebookLogo';
-import GitHubLogo from '../../common/vectors/GitHubLogo';
-import InstagramLogo from '../../common/vectors/InstagramLogo';
-import LinkedInLogo from '../../common/vectors/LinkedInLogo';
-import StackOverflowLogo from '../../common/vectors/StackOverflowLogo';
-import TwitterLogo from '../../common/vectors/TwitterLogo';
 import Comments from '../comments/Comments';
-import { Link as SpyLink, Element as SpyElement } from 'react-scroll';
 import { PostTypeEnum } from '../../../models/posts/admin/post';
 
 interface IProps {

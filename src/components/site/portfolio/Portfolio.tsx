@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import useSWR from 'swr';
 import { PostAgent } from '../../../lib/axios/agent';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
@@ -16,12 +16,6 @@ import PortfolioCategories from './sub-components/PortfolioCategories';
 
 const Portfolio = () => {
   const router = useRouter();
-  // const [order, setOrder] = useState<'latest' | 'top'>('latest');
-  // const orderQs = useCallback(
-  //   () =>
-  //     order === 'top' ? 'orderBy.likesNum=DESC' : 'orderBy.createdAt=DESC',
-  //   [order]
-  // );
 
   const qs = router.asPath.split('?', 2)[1]
     ? `?${router.asPath.split('?', 2)[1]}`

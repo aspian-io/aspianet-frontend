@@ -20,7 +20,7 @@ import { ICampaignEntity, NewsletterCampaignCreateFormValues, NewsletterCampaign
 import { EmailSendFormValues, IEmailEntity } from "../../models/emails/email";
 import { ITaxonomy } from "../../models/taxonomies/taxonomy";
 import { IFileSiteLogo } from "../../models/files/logo-file";
-import { IMiniPost, IPost, IPostStat } from "../../models/posts/post";
+import { IMiniBanner, IMiniPost, IPost, IPostStat } from "../../models/posts/post";
 import { CommentFormValues, IComment } from "../../models/comments/comment";
 import { ILayout } from "../../models/common/layout";
 import { IMinimalUser } from "../../models/users/minimal-user";
@@ -317,6 +317,7 @@ export const TaxonomyAgent = {
 // Post Agent
 export const PostAgent = {
   search: ( qs: string ): Promise<IPaginated<IMiniPost>> => apiRequests.get( `/posts/search${ qs }` ),
+  bannersList: (): Promise<IPaginated<IMiniBanner>> => apiRequests.get( `/posts/banners?orderBy.createdAt=DESC&page=1&limit=3` ),
   blogsList: ( qs: string ): Promise<IPaginated<IMiniPost>> => apiRequests.get( `/posts/blogs${ qs }` ),
   blogDetails: ( slug: string ): Promise<AxiosResponse<IPost>> => AxiosAPI.get( `/posts/blogs/${ slug }` ),
   blogStatistics: ( slug: string ): Promise<IPostStat> => apiRequests.get( `/posts/blogs/statistics/${ slug }` ),

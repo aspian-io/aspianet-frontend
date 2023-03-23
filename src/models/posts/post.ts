@@ -54,6 +54,10 @@ export interface IMiniPost {
   createdBy: IMinimalUser;
 }
 
+export interface IMiniBanner {
+  content: string;
+}
+
 export interface IPostStat {
   id: string;
   title: string;

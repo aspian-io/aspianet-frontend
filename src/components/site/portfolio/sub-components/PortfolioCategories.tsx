@@ -9,7 +9,6 @@ import { IPaginated } from '../../../../models/common/paginated-result';
 import { ITaxonomy } from '../../../../models/taxonomies/taxonomy';
 import Button from '../../../common/Button';
 import Loading from '../../../common/Loading';
-import LoadingSpinner from '../../../common/LoadingSpinner';
 
 const PortfolioCategories = () => {
   const router = useRouter();
