@@ -74,10 +74,7 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
             } catch (error) {
               resetForm();
               const err = error as AxiosError<INestError>;
-              if (
-                err.response?.data.statusCode === 400 ||
-                err.response?.headers['server'] === 'nginx'
-              ) {
+              if (err.response?.data.statusCode === 400) {
                 toast.error(
                   'File size must be less than 100KB and file type must be JPG or PNG',
                   {
@@ -99,9 +96,12 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
                 return;
               }
 
-              toast.error('Something went wrong, please try again later.', {
-                className: 'bg-danger text-light text-sm',
-              });
+              toast.error(
+                'Something went wrong. Please make sure that your file size is less than 100KB and file type is JPG or PNG and try again later.',
+                {
+                  className: 'bg-danger text-light text-sm',
+                }
+              );
             }
           }
         }}
