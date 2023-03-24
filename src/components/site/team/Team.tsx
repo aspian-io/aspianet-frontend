@@ -51,6 +51,9 @@ const Team: FC<IProps> = ({ members }) => {
                     placeholder="blur"
                     blurDataURL={imgPlaceholderDataURL}
                     priority
+                    style={{
+                      objectFit: 'cover',
+                    }}
                     alt={`${m.firstName} ${m.lastName} avatar`}
                   />
                 )}

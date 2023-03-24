@@ -151,6 +151,9 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
               placeholder="blur"
               blurDataURL={imgPlaceholderDataURL}
               priority
+              style={{
+                objectFit: 'cover',
+              }}
               alt={
                 heroSectionData.featuredImage.imageAlt ?? 'Hero Section Photo'
               }

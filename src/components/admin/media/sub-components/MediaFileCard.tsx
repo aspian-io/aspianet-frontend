@@ -35,7 +35,6 @@ import MsPowerPointOutline from '../../../common/vectors/MsPowerPointOutline';
 import MsWordOutline from '../../../common/vectors/MsWordOutline';
 import PDFOutline from '../../../common/vectors/PDFOutline';
 import TextOutline from '../../../common/vectors/TextOutline';
-import VideoOutline from '../../../common/vectors/VideoOutline';
 import AdminCard from '../../common/AdminCard';
 import * as Yup from 'yup';
 import {
@@ -268,6 +267,9 @@ const MediaFileCard: FC<IProps> = ({
                           placeholder="blur"
                           blurDataURL={imgPlaceholderDataURL}
                           alt={imageAlt ?? 'Image'}
+                          style={{
+                            objectFit: 'cover',
+                          }}
                           sizes="(max-width: 640px) 100vw,
                      (max-width: 1200px) 50vw,
                       33vw"
@@ -411,6 +413,9 @@ const MediaFileCard: FC<IProps> = ({
                   placeholder="blur"
                   blurDataURL={imgPlaceholderDataURL}
                   alt={imageAlt ?? 'Image'}
+                  style={{
+                    objectFit: 'cover',
+                  }}
                   sizes="(max-width: 640px) 100vw,
                      (max-width: 1200px) 50vw,
                       33vw"
