@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin');
 module.exports = {
@@ -49,7 +51,7 @@ module.exports = {
         xs: '480px',
       },
       fontFamily: {
-        sans: ['Rubik', 'sans-serif'],
+        sans: ['var(--font-rubik)', ...fontFamily.sans],
       },
       transitionDelay: {
         0: '0ms',
