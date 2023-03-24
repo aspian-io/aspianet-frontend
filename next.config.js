@@ -22,7 +22,7 @@ const nextConfig = {
     ],
     deviceSizes: [480, 640, 768, 1024],
     imageSizes: [48, 64, 76, 100],
-    formats: ['image/webp', 'image/jpeg', 'image/png', 'image/svg+xml'],
+    formats: ['image/webp'],
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.plugins.push(
