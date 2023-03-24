@@ -74,7 +74,11 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
             } catch (error) {
               resetForm();
               const err = error as AxiosError<INestError>;
-              if (err.response?.data.statusCode === 400) {
+              if (
+                err.response?.data.statusCode === 400 ||
+                err.response?.data.statusCode === 413
+              ) {
+                console.log('ERRRRRRRROOOOOOOOOORRRRRR RESPONSE IS: ', err);
                 toast.error(
                   'File size must be less than 100KB and file type must be JPG or PNG',
                   {
@@ -121,7 +125,7 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
               }}
             />
 
-            <AdminCard className='flex flex-col justify-start items-center min-w-max h-72'>
+            <AdminCard className="flex flex-col justify-start items-center min-w-max h-72">
               <DropdownMenu className="self-end mb-6">
                 <DropdownMenu.Item
                   onClick={() => {
