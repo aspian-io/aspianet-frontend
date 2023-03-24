@@ -103,7 +103,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                   type="button"
                   className={`${
                     !isSearchOpen ? 'hidden' : ''
-                  } absolute right-4 h-full text-center px-4 rounded-r-lg`}
+                  } absolute right-0 h-full text-center px-4 rounded-r-lg`}
                   onClick={() => {
                     setKeyword(null);
                     setSearchFocus(false);
@@ -139,7 +139,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                   {!loading && !posts && (
                     <button
                       type="button"
-                      className="absolute right-1 h-full text-center px-4 rounded-r-lg text-primary"
+                      className="absolute -right-1 h-full text-center px-4 rounded-r-lg text-primary"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                     <button
                       ref={closeSearchBtnRef}
                       type="button"
-                      className="absolute right-1 h-full text-center px-4 rounded-r-lg text-primary"
+                      className="absolute -right-1 h-full text-center px-4 rounded-r-lg text-primary"
                       onClick={() => {
                         setKeyword(null);
                         setSearchFocus(false);
@@ -187,7 +187,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                   {loading && (
                     <button
                       type="button"
-                      className="absolute right-1 h-full text-center px-4 rounded-r-lg text-primary"
+                      className="absolute -right-1 h-full text-center px-4 rounded-r-lg text-primary"
                     >
                       <LoadingSpinner className="w-4 h-4 text-primary" />
                     </button>
