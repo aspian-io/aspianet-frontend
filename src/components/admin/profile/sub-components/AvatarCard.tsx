@@ -74,10 +74,7 @@ const AvatarCard: FC<IProps> = ({ userData, session }) => {
             } catch (error) {
               resetForm();
               const err = error as AxiosError<INestError>;
-              if (
-                err.response?.data.statusCode === 400 ||
-                err.response?.status === 413
-              ) {
+              if (err.response?.data.statusCode === 400 || err.status === 413) {
                 toast.error(
                   'File size must be less than 100KB and file type must be JPG or PNG',
                   {
