@@ -9,6 +9,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: '**.aspianet.com',
+      },
+      {
+        protocol: 'https',
         hostname: '**.s3.amazonaws.com',
       },
       {
