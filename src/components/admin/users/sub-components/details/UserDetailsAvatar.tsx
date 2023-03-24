@@ -100,9 +100,12 @@ const UserDetailsAvatar: FC<IProps> = ({ userData, session }) => {
                 return;
               }
 
-              toast.error('Something went wrong, please try again later.', {
-                className: 'bg-danger text-light text-sm',
-              });
+              toast.error(
+                'Something went wrong. Please make sure that your file size is less than 100KB and file type is JPG or PNG and try again later.',
+                {
+                  className: 'bg-danger text-light text-sm',
+                }
+              );
             }
           }
         }}
