@@ -14,12 +14,14 @@ import { toast } from 'react-toastify';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const Register = () => {
   const { status } = useSession();
   const router = useRouter();
   const initialValues: IUserRegister = new UserRegister();
   const [done, setDone] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     if (status === 'authenticated') router.push('/');
@@ -52,7 +54,14 @@ const Register = () => {
       })}
       onSubmit={async (userInfo) => {
         try {
-          const user = await AuthAgent.register(userInfo);
+          if (!executeRecaptcha) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          const reCaptchaToken = await executeRecaptcha('register');
+          const user = await AuthAgent.register(userInfo, reCaptchaToken);
           setDone(true);
           router.push(`/auth/verify-email?email=${user.email}`);
         } catch (error) {
@@ -156,7 +165,24 @@ const Register = () => {
                       component={FormikInput}
                     />
                   </div>
-                  <div className="flex justify-center items-center w-full mt-10 sm:mt-10">
+                  <div className="text-zinc-400 text-xs self-start mt-6">
+                    This site is protected by reCAPTCHA and the Google&nbsp;
+                    <Link
+                      href="https://policies.google.com/privacy"
+                      className="text-blue-400"
+                    >
+                      Privacy Policy
+                    </Link>
+                    &nbsp;and&nbsp;
+                    <Link
+                      href="https://policies.google.com/terms"
+                      className="text-blue-400"
+                    >
+                      Terms of Service
+                    </Link>
+                    &nbsp;apply.
+                  </div>
+                  <div className="flex justify-center items-center w-full mt-2">
                     <Button
                       rounded="rounded-xl"
                       size="h-11"

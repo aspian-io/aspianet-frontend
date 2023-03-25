@@ -277,11 +277,11 @@ export const CommonAgent = {
 
 // Auth Agent
 export const AuthAgent = {
-  register: ( userInfo: IUserRegister ): Promise<IUserAuth> => apiRequests.post( '/users/register-by-email', userInfo ),
+  register: ( userInfo: IUserRegister, recaptcha: string ): Promise<IUserAuth> => apiRequests.post( '/users/register-by-email', userInfo, { headers: { recaptcha } } ),
   verifyEmail: ( email: string, token: number ): Promise<IUserAuth> => apiRequests.post( 'users/activate-email-registration', { email, token } ),
   remainingTime: ( email: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( '/users/email-token-remaining-time', { email } ),
   resendVerificationToken: ( email: string ): Promise<IUserAuth> => apiRequests.post( '/users/resend-verification-email', { email } ),
-  resetPasswordRequest: ( email: string ): Promise<{}> => apiRequests.post( '/users/reset-password/by-email/request', { email } ),
+  resetPasswordRequest: ( email: string, recaptcha: string ): Promise<{}> => apiRequests.post( '/users/reset-password/by-email/request', { email }, { headers: { recaptcha } } ),
   resetPassword: ( email: string, password: string, token: number ): Promise<IUserAuth> =>
     apiRequests.post( '/users/reset-password/by-email', { email, password, token } ),
   resetPasswordRemainingTime: ( email: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( '/users/reset-password-token-time', { email } ),
@@ -337,7 +337,7 @@ export const PostAgent = {
 
 // Comment Agent
 export const CommentAgent = {
-  create: ( session: Session | null, formValues: CommentFormValues ): Promise<IComment> => apiRequests.post( `/comments`, { ...formValues }, { headers: authHeader( session ) } ),
+  create: ( session: Session | null, formValues: CommentFormValues, recaptcha: string ): Promise<IComment> => apiRequests.post( `/comments`, { ...formValues }, { headers: { ...authHeader( session ), recaptcha } } ),
   postCommentsList: ( postId: string, page: number, limit: number = 10 ): Promise<IPaginated<IComment>> => apiRequests.get( `/comments/${ postId }?page=${ page }&limit=${ limit }` ),
   commentRepliesByAncestorId: ( ancestorId: string, page: number, limit: number = 10 ): Promise<IPaginated<IComment>> => apiRequests.get( `/comments/replies/${ ancestorId }?page=${ page }&limit=${ limit }` ),
   like: ( session: Session | null, commentId: string ): Promise<IComment> => apiRequests.post( `/comments/${ commentId }/like`, {}, { headers: authHeader( session ) } ),
@@ -347,9 +347,9 @@ export const CommentAgent = {
 
 // Newsletter Agent
 export const NewsletterAgent = {
-  subscribe: ( subscriber: SubscriberCreateFormValues ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/subscribe`, subscriber ),
+  subscribe: ( subscriber: SubscriberCreateFormValues, recaptcha: string ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/subscribe`, subscriber, { headers: { recaptcha } } ),
   confirmSubscription: ( subscriber: SubscriptionTokenDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/approve-subscription`, subscriber ),
-  unsubscribeRequest: ( subscriber: UnsubscribeReqDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/unsubscribe-request`, subscriber ),
+  unsubscribeRequest: ( subscriber: UnsubscribeReqDto, recaptcha: string ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/unsubscribe-request`, subscriber, { headers: { recaptcha } } ),
   unsubscribe: ( subscriber: SubscriptionTokenDto ): Promise<ISubscriberDto> => apiRequests.post( `/newsletter/subscribers/unsubscribe`, subscriber ),
   tokenRemainingTime: ( subscriberEmail: string ): Promise<{ remainingTimeInSec: number; }> => apiRequests.post( `/newsletter/subscribers/email-token-remaining-time`, { email: subscriberEmail } ),
 }

@@ -5,21 +5,20 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Button from '../../common/Button';
 import * as Yup from 'yup';
-import { AuthAgent, NewsletterAgent } from '../../../lib/axios/agent';
+import { NewsletterAgent } from '../../../lib/axios/agent';
 import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';
 import { toast } from 'react-toastify';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
-import {
-  SubscriberCreateFormValues,
-  UnsubscribeReqDto,
-} from '../../../models/newsletter/subscribers/subscriber-dto';
+import { UnsubscribeReqDto } from '../../../models/newsletter/subscribers/subscriber-dto';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const Unsubscribe = () => {
   const router = useRouter();
   const initialValues: UnsubscribeReqDto = new UnsubscribeReqDto();
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   return (
     <Formik
@@ -32,8 +31,16 @@ const Unsubscribe = () => {
       })}
       onSubmit={async (values) => {
         try {
+          if (!executeRecaptcha) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          const reCaptchaToken = await executeRecaptcha('unsubscribe');
           const subscriber = await NewsletterAgent.unsubscribeRequest(
-            new UnsubscribeReqDto({ email: values.email })
+            new UnsubscribeReqDto({ email: values.email }),
+            reCaptchaToken
           );
 
           router.push(
@@ -50,7 +57,7 @@ const Unsubscribe = () => {
       {({ isSubmitting }) => (
         <Form>
           <fieldset disabled={isSubmitting}>
-            <div className="flex justify-center items-center w-screen h-screen bg-gradient-to-bl from-primary to-light">
+            <div className="flex justify-center items-center w-full h-screen bg-gradient-to-bl from-primary to-light">
               <div className="flex flex-col sm:flex-row w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-light rounded-2xl overflow-hidden">
                 <div className="flex justify-center flex-col items-center z-0 pt-8 sm:pt-10 pb-4 sm:pb-6 px-8 sm:w-3/4">
                   <div className="flex justify-center items-center w-48 h-14 relative">
@@ -79,6 +86,23 @@ const Unsubscribe = () => {
                       type="text"
                       component={FormikInput}
                     />
+                  </div>
+                  <div className="text-zinc-400 text-xs self-start mt-2">
+                    This site is protected by reCAPTCHA and the Google&nbsp;
+                    <Link
+                      href="https://policies.google.com/privacy"
+                      className="text-blue-400"
+                    >
+                      Privacy Policy
+                    </Link>
+                    &nbsp;and&nbsp;
+                    <Link
+                      href="https://policies.google.com/terms"
+                      className="text-blue-400"
+                    >
+                      Terms of Service
+                    </Link>
+                    &nbsp;apply.
                   </div>
                   <div className="flex justify-center items-center w-full mt-10 sm:mt-10">
                     <Button

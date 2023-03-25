@@ -1,5 +1,6 @@
 import { Form, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -10,6 +11,7 @@ import {
 } from '../../../../models/comments/comment';
 import Button from '../../../common/Button';
 import LoadingSpinner from '../../../common/LoadingSpinner';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface IProps {
   postId: string;
@@ -28,6 +30,7 @@ const CommentForm: FC<IProps> = ({
 }) => {
   const { data: session } = useSession();
   const [charLeft, setCharLeft] = useState(800);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const validationSchema = Yup.object({
     content: Yup.string().max(
@@ -43,13 +46,21 @@ const CommentForm: FC<IProps> = ({
       validationSchema={validationSchema}
       onSubmit={async (values, { resetForm }) => {
         try {
+          if (!executeRecaptcha) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          const reCaptchaToken = await executeRecaptcha('comment');
           const comment = await CommentAgent.create(
             session,
             new CommentFormValues({
               content: values.content,
               postId,
               parentId,
-            })
+            }),
+            reCaptchaToken
           );
 
           resetForm();
@@ -115,6 +126,23 @@ const CommentForm: FC<IProps> = ({
             {touched.content && errors.content && (
               <div className="mt-2 text-danger text-xs">{errors.content}</div>
             )}
+          </div>
+          <div className="text-zinc-400 text-xs self-start mt-4">
+            This site is protected by reCAPTCHA and the Google&nbsp;
+            <Link
+              href="https://policies.google.com/privacy"
+              className="text-blue-400"
+            >
+              Privacy Policy
+            </Link>
+            &nbsp;and&nbsp;
+            <Link
+              href="https://policies.google.com/terms"
+              className="text-blue-400"
+            >
+              Terms of Service
+            </Link>
+            &nbsp;apply.
           </div>
           <Button
             rounded="rounded-xl"

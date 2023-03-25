@@ -12,11 +12,14 @@ import { toast } from 'react-toastify';
 import FormikInput from '../../common/FormikInput';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
+import Link from 'next/link';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const ForgetPassword = () => {
   const { status } = useSession();
   const router = useRouter();
   const [done, setDone] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -37,7 +40,14 @@ const ForgetPassword = () => {
       })}
       onSubmit={async ({ email }) => {
         try {
-          await AuthAgent.resetPasswordRequest(email);
+          if (!executeRecaptcha) {
+            toast.error('Something went wrong', {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
+          const reCaptchaToken = await executeRecaptcha('reset-password');
+          await AuthAgent.resetPasswordRequest(email, reCaptchaToken);
           setDone(true);
           router.push(`/auth/reset-password?email=${email}`);
         } catch (error) {
@@ -93,6 +103,23 @@ const ForgetPassword = () => {
                       type="text"
                       component={FormikInput}
                     />
+                  </div>
+                  <div className="text-zinc-400 text-xs self-start mt-2">
+                    This site is protected by reCAPTCHA and the Google&nbsp;
+                    <Link
+                      href="https://policies.google.com/privacy"
+                      className="text-blue-400"
+                    >
+                      Privacy Policy
+                    </Link>
+                    &nbsp;and&nbsp;
+                    <Link
+                      href="https://policies.google.com/terms"
+                      className="text-blue-400"
+                    >
+                      Terms of Service
+                    </Link>
+                    &nbsp;apply.
                   </div>
                   <div className="flex flex-col justify-center items-center w-full mt-8 mb-6">
                     <Button
