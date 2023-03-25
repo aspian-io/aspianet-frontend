@@ -104,10 +104,13 @@ export const PostKeys = {
   SEARCH: `${ BaseURLs.API }/posts/search`,
   GET_BANNERS_LIST: `${ BaseURLs.API }/posts/banners?orderBy.createdAt=DESC&page=1&limit=3`,
   GET_BLOGS_LIST: `${ BaseURLs.API }/posts/blogs`,
+  GET_BLOG_ARTICLE: `${ BaseURLs.API }/posts/blogs`,
   GET_BLOG_STAT: `${ BaseURLs.API }/posts/blogs/statistics`,
   GET_NEWS_LIST: `${ BaseURLs.API }/posts/news`,
+  GET_NEWS_ARTICLE: `${ BaseURLs.API }/posts/news`,
   GET_NEWS_STAT: `${ BaseURLs.API }/posts/news/statistics`,
   GET_PROJECTS_LIST: `${ BaseURLs.API }/posts/projects`,
+  GET_PAGE_ARTICLE: `${ BaseURLs.API }/posts/pages`,
 } as const;
 
 // COMMENT KEYS

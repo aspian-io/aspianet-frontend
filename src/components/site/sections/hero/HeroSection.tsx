@@ -74,7 +74,7 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
             {contentData.part_3}
           </p>
         )}
-        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-16 space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-20 xl:mt-36 space-y-4 sm:space-y-0 sm:space-x-4">
           {contentData.btn1_title &&
             contentData.btn1_title.length > 0 &&
             contentData.btn1_href && (
@@ -139,11 +139,11 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
           <NextJsLogo className="w-20 h-9" />
         </div>
       </div>
-      <div className="flex justify-center items-center w-full lg:w-1/2 h-96 sm:h-[32rem] relative order-1 lg:order-2 mb-10 sm:mb-20">
-        <DotSeamlessPattern className="absolute -bottom-14 right-0 -z-10 fill-primary/10 w-60 h-60 hidden sm:inline" />
+      <div className="flex justify-center items-center w-full lg:w-1/2 h-96 sm:h-[36rem] relative order-1 lg:order-2 mb-10 sm:mb-20">
+        <DotSeamlessPattern className="absolute -bottom-16 right-0 -z-10 fill-primary/10 w-60 h-60 hidden sm:inline" />
         <div className="absolute top-2 h-96 -translate-y-6 sm:translate-x-9 sm:h-full w-60 sm:w-80 rounded-t-full rounded-b-lg bg-gradient-to-b from-primary/20"></div>
         {heroSectionData?.featuredImage && (
-          <div className="relative sm:ml-28 w-60 sm:w-80 h-96 sm:h-[33rem] rounded-t-full rounded-b-[50rem] overflow-hidden shadow-primary/10">
+          <div className="relative sm:ml-28 w-60 sm:w-80 h-96 sm:h-[36rem] rounded-t-full rounded-b-[50rem] overflow-hidden shadow-primary/10">
             <Image
               src={`${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${heroSectionData.featuredImage.key}`}
               fill

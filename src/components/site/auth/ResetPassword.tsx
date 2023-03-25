@@ -123,7 +123,7 @@ const ResetPassword: FC<IProps> = ({ email, remainingTime }) => {
                       disabled={timer <= 0 || done}
                       component={FormikInput}
                     />
-                    <div className="flex justify-center items-center py-1 w-16 text-center rounded-lg text-primary text-sm mt-4 absolute right-2 -top-3.5">
+                    <div className="flex justify-center items-center py-1 w-16 text-center rounded-lg text-primary text-sm mt-4 absolute right-2 top-0.5">
                       {resendLoading ? (
                         <LoadingSpinner className="h-4 w-4 mt-2 ml-4" />
                       ) : (

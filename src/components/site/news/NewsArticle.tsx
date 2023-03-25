@@ -1,17 +1,13 @@
-import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { toast } from 'react-toastify';
-import useSWR from 'swr';
 import { PostAgent } from '../../../lib/axios/agent';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
-import { PostKeys } from '../../../lib/swr/keys';
 import { AvatarSourceEnum } from '../../../models/auth/common';
-import { INestError } from '../../../models/common/error';
-import { IPost, IPostStat } from '../../../models/posts/post';
+import { IPost } from '../../../models/posts/post';
 import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
 import { ITaxonomy } from '../../../models/taxonomies/taxonomy';
 import Button from '../../common/Button';
@@ -27,9 +23,10 @@ import { Link as SpyLink, Element as SpyElement } from 'react-scroll';
 
 interface IProps {
   article: IPost;
+  articleLiveData?: IPost;
 }
 
-const NewsArticle: FC<IProps> = ({article}) => {
+const NewsArticle: FC<IProps> = ({article, articleLiveData}) => {
   const router = useRouter();
   const { data: session } = useSession();
   const [like, setLike] = useState(
@@ -39,13 +36,6 @@ const NewsArticle: FC<IProps> = ({article}) => {
     session && article.bookmarks
       ? article.bookmarks.includes(session?.user.id)
       : false
-  );
-
-  const fetcher = () => PostAgent.newsStatistics(article.slug);
-
-  const { data: statData, error } = useSWR<IPostStat, AxiosError<INestError>>(
-    `${PostKeys.GET_NEWS_STAT}/${article.slug}`,
-    fetcher
   );
 
   function getCommaSeparatedCategoriesString(taxonomies: ITaxonomy[]): string {
@@ -154,8 +144,8 @@ const NewsArticle: FC<IProps> = ({article}) => {
               d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
             />
           </svg>
-          {!statData && <LoadingSpinner className="w-4 h-4 text-primary" />}
-          {statData && <span>{statData.commentsNum}</span>}
+          {!articleLiveData && <LoadingSpinner className="w-4 h-4 text-primary" />}
+          {articleLiveData && <span>{articleLiveData.commentsNum}</span>}
         </SpyLink>
         <div className="flex justify-center items-center space-x-1">
           {!session && (
@@ -174,8 +164,8 @@ const NewsArticle: FC<IProps> = ({article}) => {
               />
             </svg>
           )}
-          {session &&
-            (article.likes.includes(session.user.id) ? (
+          {session && articleLiveData &&
+            (articleLiveData.likes.includes(session.user.id) ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -185,16 +175,16 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 }`}
                 onClick={async () => {
                   if (session) {
-                    if (statData) statData.likesNum -= 1;
-                    article.likes = article.likes.filter(
+                    if (articleLiveData) articleLiveData.likesNum -= 1;
+                    articleLiveData.likes = articleLiveData.likes.filter(
                       (l) => l !== session.user.id
                     );
                     setLike((prev) => !prev);
                     try {
-                      await PostAgent.like(session, article.id);
+                      await PostAgent.like(session, articleLiveData.id);
                     } catch (error) {
-                      if (statData) statData.likesNum += 1;
-                      article.likes.push(session.user.id);
+                      if (articleLiveData) articleLiveData.likesNum += 1;
+                      articleLiveData.likes.push(session.user.id);
                       toast.error(
                         'Something went wrong, please try again later.',
                         {
@@ -219,15 +209,15 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 }`}
                 onClick={async () => {
                   if (session) {
-                    if (statData) statData.likesNum += 1;
-                    article.likes.push(session.user.id);
+                    if (articleLiveData) articleLiveData.likesNum += 1;
+                    articleLiveData.likes.push(session.user.id);
                     setLike((prev) => !prev);
 
                     try {
-                      await PostAgent.like(session, article.id);
+                      await PostAgent.like(session, articleLiveData.id);
                     } catch (error) {
-                      if (statData) statData.likesNum -= 1;
-                      article.likes = article.likes.filter(
+                      if (articleLiveData) articleLiveData.likesNum -= 1;
+                      articleLiveData.likes = articleLiveData.likes.filter(
                         (l) => l !== session.user.id
                       );
                       toast.error(
@@ -247,8 +237,8 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 />
               </svg>
             ))}
-          {!statData && <LoadingSpinner className="w-4 h-4 text-primary" />}
-          {statData && <span>{statData.likesNum}</span>}
+          {!articleLiveData && <LoadingSpinner className="w-4 h-4 text-primary" />}
+          {articleLiveData && <span>{articleLiveData.likesNum}</span>}
         </div>
         <div className="flex justify-center items-center space-x-1">
           {!session && (
@@ -267,8 +257,8 @@ const NewsArticle: FC<IProps> = ({article}) => {
               />
             </svg>
           )}
-          {session &&
-            (article.bookmarks.includes(session.user.id) ? (
+          {session && articleLiveData &&
+            (articleLiveData.bookmarks.includes(session.user.id) ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -276,15 +266,15 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 className="w-4 h-4 sm:w-6 sm:h-6 text-primary cursor-pointer"
                 onClick={async () => {
                   if (session) {
-                    if (statData) statData.bookmarksNum -= 1;
-                    article.bookmarks = article.bookmarks.filter(
+                    if (articleLiveData) articleLiveData.bookmarksNum -= 1;
+                    articleLiveData.bookmarks = articleLiveData.bookmarks.filter(
                       (b) => b !== session.user.id
                     );
                     setBookmark((prev) => !prev);
                     try {
-                      await PostAgent.bookmark(session, article.id);
+                      await PostAgent.bookmark(session, articleLiveData.id);
                     } catch (error) {
-                      if (statData) statData.bookmarksNum += 1;
+                      if (articleLiveData) articleLiveData.bookmarksNum += 1;
                       article.bookmarks.push(session.user.id);
                       toast.error(
                         'Something went wrong, please try again later.',
@@ -312,15 +302,15 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 className="w-4 h-4 sm:w-6 sm:h-6 cursor-pointer"
                 onClick={async () => {
                   if (session) {
-                    if (statData) statData.bookmarksNum += 1;
-                    article.bookmarks.push(session.user.id);
+                    if (articleLiveData) articleLiveData.bookmarksNum += 1;
+                    articleLiveData.bookmarks.push(session.user.id);
                     setBookmark((prev) => !prev);
 
                     try {
-                      await PostAgent.bookmark(session, article.id);
+                      await PostAgent.bookmark(session, articleLiveData.id);
                     } catch (error) {
-                      if (statData) statData.bookmarksNum -= 1;
-                      article.bookmarks = article.bookmarks.filter(
+                      if (articleLiveData) articleLiveData.bookmarksNum -= 1;
+                      articleLiveData.bookmarks = articleLiveData.bookmarks.filter(
                         (b) => b !== session.user.id
                       );
                       toast.error(
@@ -340,8 +330,8 @@ const NewsArticle: FC<IProps> = ({article}) => {
                 />
               </svg>
             ))}
-          {!statData && <LoadingSpinner className="w-4 h-4 text-primary" />}
-          {statData && <span>{statData.bookmarksNum}</span>}
+          {!articleLiveData && <LoadingSpinner className="w-4 h-4 text-primary" />}
+          {articleLiveData && <span>{articleLiveData.bookmarksNum}</span>}
         </div>
         <div className="flex justify-center items-center space-x-1">
           <svg
@@ -443,13 +433,6 @@ const NewsArticle: FC<IProps> = ({article}) => {
           </div>
         </div>
       </div>
-      {/* <div className="mt-10 w-full">
-        <BlogRelatedArticles
-          tags={article.taxonomies.filter(
-            (t) => t.type === TaxonomyTypeEnum.TAG
-          )}
-        />
-      </div> */}
       <SpyElement className="mt-10 w-full" name="comments">
         <Comments postId={article.id} />
       </SpyElement>

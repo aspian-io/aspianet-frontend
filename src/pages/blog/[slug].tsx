@@ -8,7 +8,7 @@ import { getSiteLayout } from '../../lib/helpers/get-layout';
 import { PostKeys } from '../../lib/swr/keys';
 import { INestError } from '../../models/common/error';
 import { ISiteLayout } from '../../models/common/layout';
-import { IPost, IPostStat } from '../../models/posts/post';
+import { IPost } from '../../models/posts/post';
 
 interface IProps extends ISiteLayout {
   article: IPost;
@@ -24,12 +24,12 @@ const BlogArticlePage: NextPage<IProps> = ({
   newsletterWidgetData,
   article,
 }) => {
-  const fetcher = () => PostAgent.blogStatistics(article.slug);
+  const fetcher = () => PostAgent.blogNormalDetails(article.slug);
 
-  const { data: statData, error } = useSWR<IPostStat, AxiosError<INestError>>(
-    `${PostKeys.GET_BLOG_STAT}/${article.slug}`,
-    fetcher
-  );
+  const { data: articleLiveData, error } = useSWR<
+    IPost | undefined,
+    AxiosError<INestError>
+  >(`${PostKeys.GET_BLOG_ARTICLE}/${article.slug}`, fetcher);
 
   return (
     <>
@@ -54,7 +54,7 @@ const BlogArticlePage: NextPage<IProps> = ({
           newsletterWidgetData,
         }}
       >
-        <BlogArticle article={article} statData={statData} />
+        <BlogArticle article={article} articleLiveData={articleLiveData} />
       </SiteLayout>
     </>
   );

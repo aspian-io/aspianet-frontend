@@ -1,9 +1,12 @@
 import { AxiosError } from 'axios';
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import useSWR from 'swr';
 import SiteLayout from '../../components/site/layout/SiteLayout';
 import NewsArticle from '../../components/site/news/NewsArticle';
 import { PostAgent } from '../../lib/axios/agent';
 import { getSiteLayout } from '../../lib/helpers/get-layout';
+import { PostKeys } from '../../lib/swr/keys';
+import { INestError } from '../../models/common/error';
 import { ISiteLayout } from '../../models/common/layout';
 import { IPost } from '../../models/posts/post';
 
@@ -21,6 +24,13 @@ const BlogArticlePage: NextPage<IProps> = ({
   newsletterWidgetData,
   article,
 }) => {
+  const fetcher = () => PostAgent.newsNormalDetails(article.slug);
+
+  const { data: articleLiveData, error } = useSWR<
+    IPost | undefined,
+    AxiosError<INestError>
+  >(`${PostKeys.GET_NEWS_ARTICLE}/${article.slug}`, fetcher);
+
   return (
     <>
       <SiteLayout
@@ -44,7 +54,7 @@ const BlogArticlePage: NextPage<IProps> = ({
           newsletterWidgetData,
         }}
       >
-        <NewsArticle article={article} />
+        <NewsArticle article={article} articleLiveData={articleLiveData} />
       </SiteLayout>
     </>
   );
