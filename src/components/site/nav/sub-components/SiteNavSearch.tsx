@@ -1,6 +1,14 @@
 import { Field, Form, Formik } from 'formik';
 import Link from 'next/link';
-import React, { FC, Fragment, useState, useMemo, useRef } from 'react';
+import React, {
+  FC,
+  Fragment,
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useId,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchDebounce } from '../../../../hooks/site/useSearchDebounce';
 import { PostAgent } from '../../../../lib/axios/agent';
@@ -22,6 +30,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
   responsive,
   searchPlaceholderLabel,
 }) => {
+  const searchInputId = useId();
   const { siteNav } = useSelector(getLayoutState);
   const { isSearchOpen } = siteNav;
   const dispatch = useDispatch();
@@ -57,6 +66,11 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
     ? searchWrapperResponsiveCss
     : searchWrapperNormalCss;
 
+  useEffect(() => {
+    if (isSearchOpen) document.getElementById(searchInputId)?.focus();
+    return () => document.getElementById(searchInputId)?.blur();
+  }, [isSearchOpen, searchInputId]);
+
   return (
     <>
       <Formik initialValues={{ search: '' }} onSubmit={(values) => {}}>
@@ -77,6 +91,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
             <Form className={searchWrapperCss}>
               <Field
                 type={InputTypeEnum.text}
+                id={searchInputId}
                 name="search"
                 autoComplete="off"
                 placeholder={searchPlaceholderLabel}
@@ -136,10 +151,11 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
               )}
               {responsive && (
                 <>
-                  {!loading && !posts && (
+                  {!loading && !posts && !isSearchOpen && (
                     <button
                       type="button"
                       className="absolute -right-1 h-full text-center px-4 rounded-r-lg text-primary"
+                      onClick={() => dispatch(setIsSearchOpen(true))}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +171,7 @@ const SiteNavSearch: FC<ISiteNavSearchProps> = ({
                       </svg>
                     </button>
                   )}
-                  {!loading && posts && (
+                  {!loading && isSearchOpen && (
                     <button
                       ref={closeSearchBtnRef}
                       type="button"
