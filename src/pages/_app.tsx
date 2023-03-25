@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Session } from 'next-auth';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import { Rubik } from '@next/font/google';
+import { Rubik } from 'next/font/google';
 
 const rubik = Rubik({
   weight: ['400', '600', '700'],
