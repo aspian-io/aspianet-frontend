@@ -165,7 +165,7 @@ const Subscribe = () => {
                     </Button>
                   </div>
                   <div className="flex w-full h-full items-end justify-center mt-4 sm:pb-[6.2rem] sm:mt-auto sm:hidden">
-                    <Link href="/auth/login" className="w-full">
+                    <Link href="/newsletter/unsubscribe" className="w-full">
                       <Button
                         rounded="rounded-xl"
                         size="h-11"
