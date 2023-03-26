@@ -19,10 +19,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.googleusercontent.com',
       },
-      {
-        protocol: 'https',
-        hostname: '**.ir-thr-at1.arvanstorage.ir',
-      },
     ],
     deviceSizes: [480, 640, 768, 1024],
     imageSizes: [48, 64, 76, 100],
