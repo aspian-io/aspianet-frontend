@@ -1,6 +1,6 @@
 {
   "name": "aspianet-website",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -30,6 +30,7 @@
     "dompurify": "^2.4.1",
     "filesize": "^10.0.5",
     "formik": "^2.2.9",
+    "grapesjs": "^0.20.4",
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
     "next": "^13.2.4",

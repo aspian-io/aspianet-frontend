@@ -17,7 +17,7 @@ const SiteNavOpenSearchBtn = () => {
           ? 'opacity-0 w-0 h-0 pr-0'
           : 'transition-all duration-300 delay-200 opacity-100 w-auto h-auto'
       } `}
-      id='mainSearchBtn'
+      id="mainSearchBtn"
       onClick={() => dispatch(setIsSearchOpen(true))}
     >
       <svg
