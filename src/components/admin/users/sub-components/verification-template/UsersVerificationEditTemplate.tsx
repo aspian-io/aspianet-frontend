@@ -5,6 +5,7 @@ import Button from '../../../../common/Button';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
 import AdminCard from '../../../common/AdminCard';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { AdminPostAgent } from '../../../../../lib/axios/agent';
 import { useSession } from 'next-auth/react';
 import { SettingsKeyEnum } from '../../../../../models/settings/settings';
@@ -33,7 +34,7 @@ const UsersVerificationEditTemplate: FC<IProps> = ({
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
 
   const postDetailsFetcher = () =>
     AdminPostAgent.details(session, settingValue);

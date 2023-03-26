@@ -1,15 +1,12 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ConfirmModal from '../../common/ConfirmModal';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import {
-  AdminEmailAgent,
-  AdminNewsletterAgent,
-  AdminPostAgent,
-} from '../../../lib/axios/agent';
+import { AdminEmailAgent, AdminPostAgent } from '../../../lib/axios/agent';
 import { AxiosError } from 'axios';
 import { INestError } from '../../../models/common/error';
 import { GroupBase, StylesConfig } from 'react-select';
@@ -29,7 +26,7 @@ import {
 } from '../../../models/emails/email';
 
 const AdminSendMail = () => {
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
   const [loadBlankConfirmModalShow, setLoadBlankConfirmModalShow] =

@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import { useSession } from 'next-auth/react';
 import React, { FC, useRef, useState } from 'react';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { toast } from 'react-toastify';
 import {
   AdminNewsletterAgent,
@@ -42,7 +43,7 @@ const AdminTemplateForm: FC<IProps> = ({
   editTemplateData,
   minHeight = 850,
 }) => {
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
   const [loadBlankConfirmModalShow, setLoadBlankConfirmModalShow] =

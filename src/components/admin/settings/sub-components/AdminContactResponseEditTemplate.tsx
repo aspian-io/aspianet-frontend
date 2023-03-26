@@ -1,10 +1,11 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { FC, useRef } from 'react';
+import React, { useRef } from 'react';
 import Button from '../../../common/Button';
 import LoadingSpinner from '../../../common/LoadingSpinner';
 import AdminCard from '../../common/AdminCard';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { AdminPostAgent } from '../../../../lib/axios/agent';
 import { useSession } from 'next-auth/react';
 import { AdminPostKeys } from '../../../../lib/swr/keys';
@@ -22,7 +23,7 @@ const AdminContactResponseEditTemplate = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const templateId = router.query.id as string;
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
 
   const postDetailsFetcher = () => AdminPostAgent.details(session, templateId);
 

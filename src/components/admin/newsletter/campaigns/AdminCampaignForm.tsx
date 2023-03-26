@@ -6,6 +6,7 @@ import {
 } from '../../../../models/newsletter/admin/campaign';
 import ConfirmModal from '../../../common/ConfirmModal';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
@@ -34,7 +35,7 @@ interface IProps {
 }
 
 const AdminCampaignForm: FC<IProps> = ({ editId, editData }) => {
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
   const [loadBlankConfirmModalShow, setLoadBlankConfirmModalShow] =

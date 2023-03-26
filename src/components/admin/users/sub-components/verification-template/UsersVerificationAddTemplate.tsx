@@ -5,6 +5,7 @@ import Button from '../../../../common/Button';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
 import AdminCard from '../../../common/AdminCard';
 import EmailEditor from 'react-email-editor';
+import { EditorRef } from 'react-email-editor';
 import { useSession } from 'next-auth/react';
 import {
   SettingsKeyEnum,
@@ -35,7 +36,7 @@ interface IProps {
 const UsersVerificationAddTemplate: FC<IProps> = ({ settingKey }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const emailEditorRef = useRef<EmailEditor | null>(null);
+  const emailEditorRef = useRef<EditorRef | null>(null);
 
   function getAppropriateDesign() {
     if (settingKey == SettingsKeyEnum.USERS_EMAIL_VERIFICATION_TEMPLATE_ID)

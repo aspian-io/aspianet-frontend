@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
-    "deploy": "npm install && npm run build && npm run start"
+    "deploy": "npm ci && npm run build && npm run start"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
@@ -41,7 +41,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
-    "react-email-editor": "^1.6.3",
+    "react-email-editor": "^1.7.6",
     "react-google-recaptcha-v3": "^1.10.0",
     "react-icons": "^4.6.0",
     "react-player": "^2.11.0",
