@@ -14,15 +14,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Session } from 'next-auth';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import { Rubik } from 'next/font/google';
 import '../styles/prismjs/prism-shades-of-purple.css';
-
-const rubik = Rubik({
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  variable: '--font-rubik',
-});
 
 function MyApp({
   Component,
@@ -73,9 +65,7 @@ function MyApp({
             nonce: undefined,
           }}
         >
-          <main className={`${rubik.variable} font-sans`}>
-            <Component {...pageProps} />
-          </main>
+          <Component {...pageProps} />
         </GoogleReCaptchaProvider>
       </Provider>
     </SessionProvider>

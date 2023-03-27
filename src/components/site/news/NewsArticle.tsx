@@ -371,7 +371,7 @@ const NewsArticle: FC<IProps> = ({ article, articleLiveData }) => {
       </div>
       {article.content && (
         <div
-          className="text-zinc-700 pt-10 text-sm font-normal w-full"
+          className="text-zinc-700 pt-10 text-sm lg:text-base font-normal w-full"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
       )}

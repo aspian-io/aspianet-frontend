@@ -1,6 +1,8 @@
 body {
   font-family: 'Rubik', sans-serif;
-  font-size: 12px;
+  font-size: 12pt;
+  line-height: 1.5rem;
+  color: #333333;
 }
 
 .tinymce-rounded-none {
