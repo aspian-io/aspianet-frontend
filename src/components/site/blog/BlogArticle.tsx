@@ -2,12 +2,12 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PostAgent } from '../../../lib/axios/agent';
 import { imgPlaceholderDataURL } from '../../../lib/helpers/img-placeholder';
 import { AvatarSourceEnum } from '../../../models/auth/common';
-import { IPost, IPostStat } from '../../../models/posts/post';
+import { IPost } from '../../../models/posts/post';
 import { TaxonomyTypeEnum } from '../../../models/taxonomies/admin/taxonomy';
 import { ITaxonomy } from '../../../models/taxonomies/taxonomy';
 import Button from '../../common/Button';
@@ -21,6 +21,7 @@ import TwitterLogo from '../../common/vectors/TwitterLogo';
 import Comments from '../comments/Comments';
 import BlogRelatedArticles from './sub-components/BlogRelatedArticles';
 import { Link as SpyLink, Element as SpyElement } from 'react-scroll';
+import Prism from 'prismjs';
 
 interface IProps {
   article: IPost;
@@ -58,6 +59,13 @@ const BlogArticle: FC<IProps> = ({
 
     return '';
   }
+
+  useEffect(() => {
+    const highlight = async () => {
+      Prism.highlightAll();
+    };
+    highlight();
+  }, [article]);
 
   return (
     <div className="flex flex-col justify-center items-start mt-10 transition-all duration-300 w-full">
@@ -393,7 +401,7 @@ const BlogArticle: FC<IProps> = ({
       )}
       {article.content && (
         <div
-          className="text-zinc-700 pt-10 text-sm sm:text-base lg:text-lg"
+          className="text-zinc-700 pt-10 text-sm font-medium"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
       )}
