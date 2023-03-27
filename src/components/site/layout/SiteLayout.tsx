@@ -73,7 +73,7 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
             {og.image && (
               <meta
                 property="og:image"
-                content={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/${og.image}`}
+                content={`${process.env.NEXT_PUBLIC_STORAGE_FILE_BASE_URL}/${og.image}`}
               />
             )}
           </>
