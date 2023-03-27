@@ -24,6 +24,7 @@ const BlogPage: NextPage<IProps> = ({
         og={{
           type: 'website',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/blog`,
+          image: siteLogo?.key
         }}
         defaultMenuItemIndex={1}
         headerMenuItems={primaryMenuItems}

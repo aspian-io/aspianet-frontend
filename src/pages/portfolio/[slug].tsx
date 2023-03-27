@@ -32,7 +32,7 @@ const PortfolioDetailsPage: NextPage<IProps> = ({
           type: 'article',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/portfolio/${project.slug}`,
           image: project.featuredImage
-            ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${project.featuredImage}`
+            ? `${project.featuredImage.key}`
             : undefined,
         }}
         defaultMenuItemIndex={0}

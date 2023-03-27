@@ -70,7 +70,12 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
             <meta property="og:url" content={og.url} />
             <meta property="og:title" content={pageTitle} />
             <meta property="og:description" content={pageDescription} />
-            {og.image && <meta property="og:image" content={og.image} />}
+            {og.image && (
+              <meta
+                property="og:image"
+                content={`${process.env.NEXT_PUBLIC_APP_BASE_URL}/${og.image}`}
+              />
+            )}
           </>
         )}
 
@@ -83,6 +88,7 @@ const SiteLayout: FC<PropsWithChildren<ISiteLayoutProps>> = ({
       {bannersData &&
         bannersData.items.length > 0 &&
         bannersData.items.map((b, i) => <Banner content={b.content} key={i} />)}
+
       <SiteHeader
         defaultMenuItemIndex={defaultMenuItemIndex}
         headerMenuItems={headerMenuItems}

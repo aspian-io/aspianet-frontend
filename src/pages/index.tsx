@@ -37,6 +37,7 @@ const HomePage: NextPage<IProps> = ({
         og={{
           type: 'website',
           url: siteURL,
+          image: siteOverlayLogo?.key,
         }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}

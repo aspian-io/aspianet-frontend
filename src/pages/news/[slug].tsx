@@ -41,7 +41,7 @@ const BlogArticlePage: NextPage<IProps> = ({
           type: 'article',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/news/${article.slug}`,
           image: article.featuredImage
-            ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${article.featuredImage}`
+            ? `${article.featuredImage.key}`
             : undefined,
         }}
         defaultMenuItemIndex={0}

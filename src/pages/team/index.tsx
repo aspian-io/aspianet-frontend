@@ -29,6 +29,7 @@ const TeamPage: NextPage<IProps> = ({
         og={{
           type: 'website',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/team`,
+          image: siteLogo?.key
         }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}

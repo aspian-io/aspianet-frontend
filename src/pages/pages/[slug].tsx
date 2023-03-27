@@ -31,7 +31,7 @@ const PageDetailsPage: NextPage<IProps> = ({
           type: 'article',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/pages/${page.slug}`,
           image: page.featuredImage
-            ? `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${page.featuredImage}`
+            ? `${page.featuredImage.key}`
             : undefined,
         }}
         defaultMenuItemIndex={0}

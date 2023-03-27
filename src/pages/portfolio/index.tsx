@@ -24,6 +24,7 @@ const PortfolioPage: NextPage<IProps> = ({
         og={{
           type: 'website',
           url: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/portfolio`,
+          image: siteLogo?.key
         }}
         defaultMenuItemIndex={0}
         headerMenuItems={primaryMenuItems}
