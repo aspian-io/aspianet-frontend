@@ -68,7 +68,14 @@ const AddSubscriberForm: FC<IProps> = ({
               await onSuccess();
               resetForm();
             } catch (error) {
+              resetForm();
               const err = error as AxiosError<INestError>;
+              if (!err.response?.data.statusCode.toString().startsWith('5')) {
+                toast.error(err.response?.data.message, {
+                  className: 'bg-danger text-light text-sm',
+                });
+                return;
+              }
               toast.error('Something went wrong', {
                 className: 'bg-danger text-light',
               });

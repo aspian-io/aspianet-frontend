@@ -33,7 +33,7 @@ const Subscribe = () => {
           .email('Invalid email address')
           .required('Please enter your email address'),
       })}
-      onSubmit={async (values) => {
+      onSubmit={async (values, { resetForm }) => {
         try {
           if (!executeRecaptcha) {
             toast.error('Something went wrong', {
@@ -51,7 +51,14 @@ const Subscribe = () => {
             `/newsletter/confirm-subscription?email=${subscriber.email}`
           );
         } catch (error) {
+          resetForm();
           const err = error as AxiosError<INestError>;
+          if (!err.response?.data.statusCode.toString().startsWith('5')) {
+            toast.error(err.response?.data.message, {
+              className: 'bg-danger text-light text-sm',
+            });
+            return;
+          }
           toast.error('Something went wrong.', {
             className: 'bg-danger text-light',
           });
