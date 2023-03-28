@@ -402,7 +402,7 @@ const BlogArticle: FC<IProps> = ({
       )}
       {article.content && (
         <div
-          className="text-zinc-700 text-sm lg:text-base font-normal w-full"
+          className="no-tailwindcss-base text-zinc-700 text-sm lg:text-base font-normal w-full"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
       )}

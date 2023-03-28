@@ -66,7 +66,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-dark mt-8 mb-4 w-full truncate">
                 {getContentObject(firstSegData).content_title}
               </h3>
-              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
+              <p className="text-zinc-700 lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(firstSegData).content_description}
               </p>
             </div>
@@ -92,7 +92,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-light mt-8 mb-4 w-full truncate">
                 {getContentObject(secondSegData).content_title}
               </h3>
-              <p className="text-light line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
+              <p className="text-light lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(secondSegData).content_description}
               </p>
             </div>
@@ -118,7 +118,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-dark mt-8 mb-4 w-full truncate">
                 {getContentObject(thirdSegData).content_title}
               </h3>
-              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
+              <p className="text-zinc-700 lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(thirdSegData).content_description}
               </p>
             </div>
