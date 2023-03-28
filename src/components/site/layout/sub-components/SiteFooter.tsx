@@ -22,27 +22,28 @@ const SiteFooter: FC<ISiteFooterProps> = ({
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start w-full py-20 px-4 space-y-14 md:space-y-0">
           {contactWidgetData?.content && (
             <div
-              className="flex flex-col justify-center items-start w-full md:w-1/3 max-w-xs"
+              className="flex flex-col justify-center items-start w-full md:w-1/3 max-w-xs text-xs leading-5"
               dangerouslySetInnerHTML={{ __html: contactWidgetData?.content }}
             />
           )}
           <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3 max-w-xs">
-            <h5 className="text-dark font-bold text-base h-12 mb-4">
+            <h5 className="text-dark font-bold text-base h-12 md:mb-4">
               Important Links
             </h5>
             {linksWidgetData?.content && (
               <div
+                className="text-xs leading-5"
                 dangerouslySetInnerHTML={{ __html: linksWidgetData.content }}
               />
             )}
           </div>
           <div className="flex flex-col justify-start h-full items-start w-full md:w-1/3 max-w-xs">
-            <h5 className="text-dark font-bold text-base h-12 mb-4">
+            <h5 className="text-dark font-bold text-base h-12 md:mb-4">
               Newsletter
             </h5>
             {newsletterWidgetData?.content && (
               <div
-                className="text-zinc-500 text-sm mb-10"
+                className="text-zinc-500 text-xs mb-10 leading-5"
                 dangerouslySetInnerHTML={{
                   __html: newsletterWidgetData.content,
                 }}
@@ -50,21 +51,21 @@ const SiteFooter: FC<ISiteFooterProps> = ({
             )}
             <Button
               rounded="rounded-lg"
-              size="h-8"
+              size="h-7"
               type="button"
               variant="primary"
               onClick={() => {
                 router.push('/newsletter/subscribe');
               }}
-              extraCSSClasses="text-sm px-4"
+              extraCSSClasses="text-xs px-3"
             >
               Subscription
             </Button>
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center border-t-2 border-light px-4 py-4 space-y-1">
-        <div className="flex justify-center items-center text-zinc-400 text-xs">
+      <div className="flex flex-col justify-center items-center border-t-2 border-light px-4 py-3">
+        <div className="flex justify-center items-center text-zinc-400 text-[10px] leading-loose">
           <span className="mr-1">Made with</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +77,7 @@ const SiteFooter: FC<ISiteFooterProps> = ({
           </svg>
           <span className="ml-1">by Omid Rouhani</span>
         </div>
-        <div className="flex justify-center items-center text-zinc-400 text-xs">
+        <div className="flex justify-center items-center text-zinc-400 text-[10px] leading-loose">
           <span className="mr-1">Copyright</span>
           <span>ASPIANET</span>
           <span className="ml-1">{new Date().getFullYear()}</span>
