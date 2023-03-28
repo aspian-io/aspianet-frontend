@@ -46,7 +46,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-stretch items-stretch mt-20 w-full gap-6">
           {firstSegData && (
-            <div className="flex flex-col justify-start items-center w-full h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full xl:h-[500px] 2xl:h-[460px] border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-primary/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">
@@ -66,13 +66,13 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-dark mt-8 mb-4 w-full truncate">
                 {getContentObject(firstSegData).content_title}
               </h3>
-              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-5">
+              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(firstSegData).content_description}
               </p>
             </div>
           )}
           {secondSegData && (
-            <div className="flex flex-col justify-start items-center w-full h-96 bg-primary rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full xl:h-[500px] 2xl:h-[460px] bg-primary rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-light/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">
@@ -92,13 +92,13 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-light mt-8 mb-4 w-full truncate">
                 {getContentObject(secondSegData).content_title}
               </h3>
-              <p className="text-light line-clamp-6 sm:line-clamp-5">
+              <p className="text-light line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(secondSegData).content_description}
               </p>
             </div>
           )}
           {thirdSegData && (
-            <div className="flex flex-col justify-start items-center w-full h-96 border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
+            <div className="flex flex-col justify-start items-center w-full xl:h-[500px] 2xl:h-[460px] border-2 border-dashed border-primary bg-light rounded-3xl py-12 px-8">
               <div className="relative w-20 sm:w-24 h-20 sm:h-24">
                 <div className="absolute bottom-0 right-0 rounded-full w-16 sm:w-20 h-16 sm:h-20 bg-primary/20 z-0"></div>
                 <div className="relative w-16 sm:w-20 h-16 sm:h-20 right-2">
@@ -118,7 +118,7 @@ const ServicesSection: FC<IProps> = ({ serviceSectionData }) => {
               <h3 className="text-lg text-center sm:text-2xl font-bold text-dark mt-8 mb-4 w-full truncate">
                 {getContentObject(thirdSegData).content_title}
               </h3>
-              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-5">
+              <p className="text-zinc-700 line-clamp-6 sm:line-clamp-8 lg:line-clamp-10 2xl:line-clamp-8">
                 {getContentObject(thirdSegData).content_description}
               </p>
             </div>

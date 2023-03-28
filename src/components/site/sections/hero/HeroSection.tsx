@@ -65,16 +65,16 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
           <p className="md:text-lg">{contentData.part_1}</p>
         )}
         {contentData.part_2 && contentData.part_2.length > 0 && (
-          <p className="text-2xl md:text-5xl py-6 md:py-12 text-primary font-bold">
+          <p className="text-2xl md:text-4xl xl:text-5xl py-6 md:py-12 text-primary font-bold">
             {contentData.part_2}
           </p>
         )}
         {contentData.part_3 && contentData.part_3.length > 0 && (
-          <p className="text-zinc-400 text-xl md:text-2xl">
+          <p className="text-zinc-400 text-xl md:text-xl xl:text-2xl">
             {contentData.part_3}
           </p>
         )}
-        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-20 xl:mt-36 space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row justify-start items-center w-full mt-12 md:mt-20 lg:mt-32 xl:mt-16 2xl:mt-24 space-y-4 sm:space-y-0 sm:space-x-4">
           {contentData.btn1_title &&
             contentData.btn1_title.length > 0 &&
             contentData.btn1_href && (
@@ -128,7 +128,7 @@ const HeroSection: FC<IProps> = ({ heroSectionData }) => {
               </Button>
             )}
         </div>
-        <div className="hidden sm:flex justify-start items-center space-x-4 sm:space-x-6 fill-zinc-300 lg:mt-16 xl:mt-24">
+        <div className="hidden sm:flex justify-start items-center space-x-4 sm:space-x-6 fill-zinc-300 sm:mt-10 lg:mt-16 xl:mt-24">
           <GitHubLogo className="w-8 h-8" />
           <NodeJsLogo className="w-9 h-9" />
           <TypeScriptLogo className="w-7 h-7" />
