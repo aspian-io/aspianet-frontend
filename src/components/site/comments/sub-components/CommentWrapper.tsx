@@ -52,7 +52,7 @@ const CommentWrapper: FC<IProps> = ({
 
   return (
     <>
-      <div className="flex flex-col justify-center items-start p-8 bg-zinc-100 text-zinc-600 w-full rounded-3xl first:mt-0 mt-10">
+      <div className="flex flex-col justify-center items-start p-4 sm:p-6 bg-zinc-100 text-zinc-600 w-full rounded-2xl first:mt-0 mt-4">
         <div className="flex justify-start items-center w-full">
           <div className="relative min-w-[2.75rem] w-11 h-11 rounded-lg overflow-hidden">
             {comment.avatar && (
@@ -78,12 +78,12 @@ const CommentWrapper: FC<IProps> = ({
             )}
           </div>
 
-          <div className="flex flex-col justify-center items-start ml-4">
+          <div className="flex flex-col justify-center items-start ml-4 text-xs sm:text-sm">
             <div className="font-bold">
               {comment.firstName} {comment.lastName}
             </div>
             {postType !== PostTypeEnum.PROJECT && comment.role && (
-              <div className="bg-primary text-light px-2 rounded mt-1 text-xs">
+              <div className="bg-primary text-light px-2 rounded mt-1 text-[10px] sm:text-[11px]">
                 {comment.role}
               </div>
             )}
@@ -98,18 +98,18 @@ const CommentWrapper: FC<IProps> = ({
             {moment(comment.createdAt).fromNow()}
           </div>
         </div>
-        <div className="flex justify-start items-center mt-4">
+        <div className="flex justify-start items-center mt-4 text-xs sm:text-sm">
           {comment.content}
         </div>
         {postType !== PostTypeEnum.PROJECT && (
           <div className="flex justify-start items-center mt-4 space-x-4 xs:space-x-8">
-            <div className="flex justify-center items-center text-zinc-400 text-xs space-x-1">
+            <div className="flex justify-center items-center text-zinc-400 text-[11px] sm:text-xs space-x-1">
               {like ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className={`w-5 h-5 text-success ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 text-success ${
                     status === 'authenticated' ? 'cursor-pointer' : ''
                   }`}
                   onClick={async () => {
@@ -139,7 +139,7 @@ const CommentWrapper: FC<IProps> = ({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className={`w-5 h-5 ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 ${
                     status === 'authenticated' ? 'cursor-pointer' : ''
                   }`}
                   onClick={async () => {
@@ -174,13 +174,13 @@ const CommentWrapper: FC<IProps> = ({
               )}
               <span>{comment.likesNum}</span>
             </div>
-            <div className="flex justify-center items-center text-zinc-400 text-xs space-x-1">
+            <div className="flex justify-center items-center text-zinc-400 text-[11px] sm:text-xs space-x-1">
               {dislike ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className={`w-5 h-5 text-danger ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 text-danger ${
                     status === 'authenticated' ? 'cursor-pointer' : ''
                   }`}
                   onClick={async () => {
@@ -203,7 +203,7 @@ const CommentWrapper: FC<IProps> = ({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className={`w-5 h-5 ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 ${
                     status === 'authenticated' ? 'cursor-pointer' : ''
                   }`}
                   onClick={async () => {
@@ -236,14 +236,14 @@ const CommentWrapper: FC<IProps> = ({
                 size="h-5"
                 type="button"
                 variant="primary-outline"
-                extraCSSClasses="px-1 flex justify-center items-center space-x-1 text-xs"
+                extraCSSClasses="px-1 flex justify-center items-center space-x-1 text-[9.5px] sm:text-[10px]"
                 onClick={() => setDisplayReplyForm((prev) => !prev)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="w-3 h-3"
+                  className="w-2.5 h-2.5"
                 >
                   <path
                     fillRule="evenodd"

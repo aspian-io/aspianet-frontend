@@ -198,6 +198,7 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({
           '-'
         ).toLowerCase()}-${Date.now()}`;
         post.type = WidgetTypeEnum.SERVICE_WIDGET;
+        post.storeOldSlugToRedirect = false;
         post.order = order;
         post.content = JSON.stringify({
           content_title: values.content_title,

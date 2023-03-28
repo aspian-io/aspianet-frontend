@@ -84,6 +84,7 @@ const SegmentContentEditor: FC<ISegmentContentEditorProps> = ({ type }) => {
         post.title = WidgetTypeEnum[type];
         post.slug = WidgetTypeEnum[type].replace('_', '-').toLowerCase();
         post.type = WidgetTypeEnum[type];
+        post.storeOldSlugToRedirect = false;
 
         try {
           if (footerWidgetData[0]) {

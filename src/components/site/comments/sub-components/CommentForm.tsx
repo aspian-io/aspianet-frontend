@@ -146,12 +146,12 @@ const CommentForm: FC<IProps> = ({
           </div>
           <Button
             rounded="rounded-xl"
-            size="h-12"
+            size="h-10 sm:h-12"
             type="submit"
             variant="primary"
             block
             disabled={!(isValid && dirty) || isSubmitting}
-            extraCSSClasses="mt-4 flex justify-center items-center"
+            extraCSSClasses="mt-4 flex justify-center items-center text-sm"
           >
             {isSubmitting ? (
               <LoadingSpinner className="w-6 h-6" />

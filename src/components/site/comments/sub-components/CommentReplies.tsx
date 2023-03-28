@@ -64,7 +64,7 @@ const CommentReplies: FC<IProps> = ({ postId, ancestorId, timestamp }) => {
 
   return (
     <>
-      <div className="pl-5 sm:pl-20 mt-10 w-full">
+      <div className="pl-5 sm:pl-20 mt-4 w-full">
         {comments &&
           comments.length > 0 &&
           comments.map((c, i) => (

@@ -90,7 +90,7 @@ const Comments: FC<IProps> = ({
   );
 
   return (
-    <div className="flex flex-col justify-center items-start my-10 transition-all w-full duration-300">
+    <div className="flex flex-col justify-center items-start mt-6 mb-14 transition-all w-full duration-300">
       <div className="text-xl sm:text-2xl font-bold text-dark mb-4 sm:mb-6">
         {postType === PostTypeEnum.PROJECT ? 'Customer Comment' : 'Comments'}
       </div>

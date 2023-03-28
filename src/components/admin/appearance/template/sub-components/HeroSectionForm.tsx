@@ -15,7 +15,6 @@ import {
 } from '../../../../../models/posts/admin/post';
 import makeAnimated from 'react-select/animated';
 import LoadingSpinner from '../../../../common/LoadingSpinner';
-import TinyMce from '../../../common/text-editor/TinyMce';
 import AsyncSelect from 'react-select/async';
 import AdminSelectMediaOptions from '../../../common/react-select/AdminSelectMediaOptions';
 import { featuredImageOptionsLoader } from '../../../posts/post-react-select-loaders';
@@ -161,6 +160,7 @@ const HeroSectionForm = () => {
         const post = new PostFormValues(values);
         post.title = WidgetTypeEnum.HERO_WIDGET;
         post.slug = WidgetTypeEnum.HERO_WIDGET.replace('_', '-').toLowerCase();
+        post.storeOldSlugToRedirect = false;
         post.type = WidgetTypeEnum.HERO_WIDGET;
         post.content = JSON.stringify({
           part_1: values.part_1,
