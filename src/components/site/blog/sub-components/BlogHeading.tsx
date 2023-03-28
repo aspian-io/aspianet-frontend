@@ -248,6 +248,7 @@ const BlogHeading = () => {
                 direction="vertical"
                 loop={topPostsData.items.length > 4}
                 loopFillGroupWithBlank={topPostsData.items.length > 4}
+                allowTouchMove={false}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,

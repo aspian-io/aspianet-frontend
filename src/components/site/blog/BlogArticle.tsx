@@ -41,6 +41,7 @@ const BlogArticle: FC<IProps> = ({
   relatedArticles = true,
 }) => {
   const router = useRouter();
+  const [relatedArticlesCount, setRelatedArticlesCount] = useState(0);
   const { data: session } = useSession();
   const [like, setLike] = useState(
     session && article.likes ? article.likes.includes(session?.user.id) : false
@@ -476,13 +477,12 @@ const BlogArticle: FC<IProps> = ({
         </div>
       )}
       {relatedArticles && (
-        <div className="mt-10 w-full">
-          <BlogRelatedArticles
-            tags={article.taxonomies.filter(
-              (t) => t.type === TaxonomyTypeEnum.TAG
-            )}
-          />
-        </div>
+        <BlogRelatedArticles
+          mainArticleId={article.id}
+          tags={article.taxonomies.filter(
+            (t) => t.type === TaxonomyTypeEnum.TAG
+          )}
+        />
       )}
       {comments && (
         <SpyElement className="mt-10 w-full" name="comments">
